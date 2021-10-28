@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseAuth
-import SOTabBar
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 

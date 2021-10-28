@@ -7,15 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */; };
+		530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC969272AC38A0098407F /* LeadViewModel.swift */; };
+		530FC96C272AC3B40098407F /* LeadCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */; };
 		53120D8327284DF2002CB090 /* ATCTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53120D8227284DF2002CB090 /* ATCTextfield.swift */; };
 		5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CF65272A91C3007001A5 /* LeadViewController.swift */; };
 		5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFA3272A937D007001A5 /* TabBarViewController.swift */; };
 		5312CFA6272A9546007001A5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFA5272A9546007001A5 /* SettingsViewController.swift */; };
 		5312CFA8272A9576007001A5 /* CalenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFA7272A9576007001A5 /* CalenderViewController.swift */; };
 		5312CFAA272A95B9007001A5 /* FinanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFA9272A95B9007001A5 /* FinanceViewController.swift */; };
+		5312CFAE272AA8E4007001A5 /* SOTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFAD272AA8E4007001A5 /* SOTabBar.swift */; };
+		5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFAF272AA91D007001A5 /* SOTabBarController.swift */; };
+		5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */; };
+		5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */; };
 		533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B95272A7DDC00B2A48D /* AnimationManager.swift */; };
-		533D5B98272A83AF00B2A48D /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B97272A83AF00B2A48D /* CustomTabBar.swift */; };
-		533D5B9A272A85AA00B2A48D /* CustomTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B99272A85AA00B2A48D /* CustomTabBarViewController.swift */; };
 		5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B10E2726BD14002E5672 /* DataBaseManager.swift */; };
 		5340B1112726BD93002E5672 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1102726BD93002E5672 /* AuthManager.swift */; };
 		5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1122726CECD002E5672 /* VerifcationViewController.swift */; };
@@ -57,15 +62,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadCollectionViewCell.swift; sourceTree = "<group>"; };
+		530FC969272AC38A0098407F /* LeadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadViewModel.swift; sourceTree = "<group>"; };
+		530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		53120D8227284DF2002CB090 /* ATCTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATCTextfield.swift; sourceTree = "<group>"; };
 		5312CF65272A91C3007001A5 /* LeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadViewController.swift; sourceTree = "<group>"; };
 		5312CFA3272A937D007001A5 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		5312CFA5272A9546007001A5 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5312CFA7272A9576007001A5 /* CalenderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderViewController.swift; sourceTree = "<group>"; };
 		5312CFA9272A95B9007001A5 /* FinanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceViewController.swift; sourceTree = "<group>"; };
+		5312CFAD272AA8E4007001A5 /* SOTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBar.swift; sourceTree = "<group>"; };
+		5312CFAF272AA91D007001A5 /* SOTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarController.swift; sourceTree = "<group>"; };
+		5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarItem.swift; sourceTree = "<group>"; };
+		5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarSettings.swift; sourceTree = "<group>"; };
 		533D5B95272A7DDC00B2A48D /* AnimationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
-		533D5B97272A83AF00B2A48D /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
-		533D5B99272A85AA00B2A48D /* CustomTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarViewController.swift; sourceTree = "<group>"; };
 		5340B10E2726BD14002E5672 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		5340B1102726BD93002E5672 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		5340B1122726CECD002E5672 /* VerifcationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifcationViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +134,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		530FC966272AAAA50098407F /* SOTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				5312CFAD272AA8E4007001A5 /* SOTabBar.swift */,
+				5312CFAF272AA91D007001A5 /* SOTabBarController.swift */,
+				5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */,
+				5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */,
+			);
+			path = SOTabBar;
+			sourceTree = "<group>";
+		};
 		5340B1172726D6E3002E5672 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +213,9 @@
 				5340B11A2726D710002E5672 /* Modules */,
 				5340B11B2726D7BD002E5672 /* MainViewController.swift */,
 				5312CF65272A91C3007001A5 /* LeadViewController.swift */,
+				530FC969272AC38A0098407F /* LeadViewModel.swift */,
+				530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */,
+				530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */,
 				5340B1172726D6E3002E5672 /* Managers */,
 				53AF2A5A27268216001A359B /* Main.storyboard */,
 				53AF2A5D27268219001A359B /* Assets.xcassets */,
@@ -203,12 +227,11 @@
 				53AF2A8C27269B1C001A359B /* GradientButton.swift */,
 				53120D8227284DF2002CB090 /* ATCTextfield.swift */,
 				53EDDADB272A7B4200CEB83F /* loader.json */,
-				533D5B97272A83AF00B2A48D /* CustomTabBar.swift */,
-				533D5B99272A85AA00B2A48D /* CustomTabBarViewController.swift */,
 				5312CFA3272A937D007001A5 /* TabBarViewController.swift */,
 				5312CFA5272A9546007001A5 /* SettingsViewController.swift */,
 				5312CFA7272A9576007001A5 /* CalenderViewController.swift */,
 				5312CFA9272A95B9007001A5 /* FinanceViewController.swift */,
+				530FC966272AAAA50098407F /* SOTabBar */,
 			);
 			path = Independent;
 			sourceTree = "<group>";
@@ -426,21 +449,26 @@
 			files = (
 				5312CFA8272A9576007001A5 /* CalenderViewController.swift in Sources */,
 				5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */,
-				533D5B98272A83AF00B2A48D /* CustomTabBar.swift in Sources */,
-				533D5B9A272A85AA00B2A48D /* CustomTabBarViewController.swift in Sources */,
 				5340B1112726BD93002E5672 /* AuthManager.swift in Sources */,
 				5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */,
+				5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */,
 				5312CFA6272A9546007001A5 /* SettingsViewController.swift in Sources */,
 				53AF2A5927268216001A359B /* RegestrationViewController.swift in Sources */,
 				5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */,
 				533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */,
+				530FC96C272AC3B40098407F /* LeadCollectionViewCellViewModel.swift in Sources */,
 				5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */,
 				53AF2A8F2726A29A001A359B /* RegestrationViewModel.swift in Sources */,
 				53120D8327284DF2002CB090 /* ATCTextfield.swift in Sources */,
+				530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */,
+				5312CFAE272AA8E4007001A5 /* SOTabBar.swift in Sources */,
 				53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */,
+				5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */,
+				5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,
+				530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */,
 				5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */,
 				53AF2A5727268216001A359B /* SceneDelegate.swift in Sources */,
 				5312CFAA272A95B9007001A5 /* FinanceViewController.swift in Sources */,
