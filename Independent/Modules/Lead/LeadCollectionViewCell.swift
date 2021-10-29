@@ -19,7 +19,7 @@ class LeadCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with viewModel: LeadCollectionViewCellViewModel) {
-        itemView.makeButtonRound()
+        itemView.makeRoundCorners(radius: 20)
         typeLabel.preferredMaxLayoutWidth = self.itemView.bounds.width
         typeLabel.text = viewModel.itemTypeLabel    }
    

@@ -20,8 +20,9 @@ class VerifcationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addGesture()
         verficationViewHight.constant = self.view.bounds.height * 0.5
-        verifyButton.makeButtonRound()
+        verifyButton.makeRoundCorners(radius: 20)
         verifyTextField.attributedPlaceholder = NSAttributedString(
             string: "הקלד קוד אימות",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])

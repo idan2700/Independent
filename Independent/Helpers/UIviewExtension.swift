@@ -10,28 +10,30 @@ import UIKit
 
 extension UIView {
 
-    
     func makeTopRoundCorners() {
         layer.cornerRadius = 50
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
     
-    func makeButtonRound() {
+    func makeRightEdgesCornred() {
+        layer.cornerRadius = 10
+        layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+    }
+    
+    func makeLeftEdgesCornred() {
+        layer.cornerRadius = 20
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+    }
+    
+    func makeRoundCorners(radius: CGFloat) {
         layer.borderWidth = 1
         layer.borderColor = CGColor(gray: 0, alpha: 0)
-        layer.cornerRadius = 20
+        layer.cornerRadius = radius
         clipsToBounds = true
     }
     
     func makeRound() {
-        layer.cornerRadius = frame.height/2
-    }
-    
-    func makeTextFieldRound() {
-        layer.borderWidth = 1
-        layer.borderColor = CGColor(gray: 0, alpha: 0)
-        layer.cornerRadius = 20
-        clipsToBounds = true
+        layer.cornerRadius = bounds.size.width * 0.5
     }
     
     func addGesture() {

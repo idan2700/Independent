@@ -34,7 +34,8 @@ class TabBarViewController: SOTabBarController {
         financeVC.tabBarItem = UITabBarItem(title: "כספים", image: UIImage(systemName: "banknote"), selectedImage: nil)
         mainVC.tabBarItem = UITabBarItem(title: "ראשי", image: UIImage(systemName: "house"), selectedImage: nil)
         
-                viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
+        leadVC.viewModel = LeadViewModel(delegate: leadVC)
+        viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
     }
 }
 

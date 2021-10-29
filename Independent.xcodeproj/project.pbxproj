@@ -10,6 +10,7 @@
 		530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */; };
 		530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC969272AC38A0098407F /* LeadViewModel.swift */; };
 		530FC96C272AC3B40098407F /* LeadCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */; };
+		530FC96F272BD5900098407F /* LeadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530FC96E272BD5900098407F /* LeadTableViewCell.swift */; };
 		53120D8327284DF2002CB090 /* ATCTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53120D8227284DF2002CB090 /* ATCTextfield.swift */; };
 		5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CF65272A91C3007001A5 /* LeadViewController.swift */; };
 		5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFA3272A937D007001A5 /* TabBarViewController.swift */; };
@@ -26,6 +27,8 @@
 		5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1122726CECD002E5672 /* VerifcationViewController.swift */; };
 		5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1152726D223002E5672 /* VerifcationViewModel.swift */; };
 		5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B11B2726D7BD002E5672 /* MainViewController.swift */; };
+		535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */; };
+		535B5F78272C209F00992283 /* Lead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F77272C209F00992283 /* Lead.swift */; };
 		53AF2A5527268216001A359B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A5427268216001A359B /* AppDelegate.swift */; };
 		53AF2A5727268216001A359B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A5627268216001A359B /* SceneDelegate.swift */; };
 		53AF2A5927268216001A359B /* RegestrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A5827268216001A359B /* RegestrationViewController.swift */; };
@@ -35,7 +38,7 @@
 		53AF2A6C27268219001A359B /* IndependentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A6B27268219001A359B /* IndependentTests.swift */; };
 		53AF2A7627268219001A359B /* IndependentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A7527268219001A359B /* IndependentUITests.swift */; };
 		53AF2A7827268219001A359B /* IndependentUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A7727268219001A359B /* IndependentUITestsLaunchTests.swift */; };
-		53AF2A8927268665001A359B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A8827268665001A359B /* Helpers.swift */; };
+		53AF2A8927268665001A359B /* UIviewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A8827268665001A359B /* UIviewExtension.swift */; };
 		53AF2A8B272695ED001A359B /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A8A272695ED001A359B /* GradientView.swift */; };
 		53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A8C27269B1C001A359B /* GradientButton.swift */; };
 		53AF2A8F2726A29A001A359B /* RegestrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A8E2726A29A001A359B /* RegestrationViewModel.swift */; };
@@ -65,6 +68,7 @@
 		530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadCollectionViewCell.swift; sourceTree = "<group>"; };
 		530FC969272AC38A0098407F /* LeadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadViewModel.swift; sourceTree = "<group>"; };
 		530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		530FC96E272BD5900098407F /* LeadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadTableViewCell.swift; sourceTree = "<group>"; };
 		53120D8227284DF2002CB090 /* ATCTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATCTextfield.swift; sourceTree = "<group>"; };
 		5312CF65272A91C3007001A5 /* LeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadViewController.swift; sourceTree = "<group>"; };
 		5312CFA3272A937D007001A5 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 		5340B1142726D1AE002E5672 /* Independent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Independent.entitlements; sourceTree = "<group>"; };
 		5340B1152726D223002E5672 /* VerifcationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifcationViewModel.swift; sourceTree = "<group>"; };
 		5340B11B2726D7BD002E5672 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		535B5F77272C209F00992283 /* Lead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lead.swift; sourceTree = "<group>"; };
 		53AF2A5127268216001A359B /* Independent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Independent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53AF2A5427268216001A359B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53AF2A5627268216001A359B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,7 +103,7 @@
 		53AF2A8527268275001A359B /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		53AF2A862726827C001A359B /* he */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = he; path = he.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		53AF2A872726827D001A359B /* he */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = he; path = he.lproj/Main.storyboard; sourceTree = "<group>"; };
-		53AF2A8827268665001A359B /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		53AF2A8827268665001A359B /* UIviewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIviewExtension.swift; sourceTree = "<group>"; };
 		53AF2A8A272695ED001A359B /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		53AF2A8C27269B1C001A359B /* GradientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
 		53AF2A8E2726A29A001A359B /* RegestrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegestrationViewModel.swift; sourceTree = "<group>"; };
@@ -145,6 +151,31 @@
 			path = SOTabBar;
 			sourceTree = "<group>";
 		};
+		530FC96D272BCB7B0098407F /* Lead */ = {
+			isa = PBXGroup;
+			children = (
+				5312CF65272A91C3007001A5 /* LeadViewController.swift */,
+				530FC969272AC38A0098407F /* LeadViewModel.swift */,
+				530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */,
+				530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */,
+				530FC96E272BD5900098407F /* LeadTableViewCell.swift */,
+				535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */,
+			);
+			path = Lead;
+			sourceTree = "<group>";
+		};
+		530FC970272C16320098407F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				530FC966272AAAA50098407F /* SOTabBar */,
+				53AF2A8827268665001A359B /* UIviewExtension.swift */,
+				53AF2A8A272695ED001A359B /* GradientView.swift */,
+				53AF2A8C27269B1C001A359B /* GradientButton.swift */,
+				53120D8227284DF2002CB090 /* ATCTextfield.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		5340B1172726D6E3002E5672 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,8 +209,62 @@
 			children = (
 				5340B1182726D6EE002E5672 /* SignIn */,
 				5340B1192726D6FB002E5672 /* Verification */,
+				535B5F7B272C25C400992283 /* TabBar */,
+				535B5F7A272C25B500992283 /* Main */,
+				535B5F7D272C25E900992283 /* Calendar */,
+				535B5F7E272C25EF00992283 /* Finance */,
+				535B5F7C272C25DF00992283 /* Settings */,
+				530FC96D272BCB7B0098407F /* Lead */,
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		535B5F79272C231600992283 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				535B5F77272C209F00992283 /* Lead.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		535B5F7A272C25B500992283 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				5340B11B2726D7BD002E5672 /* MainViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		535B5F7B272C25C400992283 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				5312CFA3272A937D007001A5 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		535B5F7C272C25DF00992283 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				5312CFA5272A9546007001A5 /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		535B5F7D272C25E900992283 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				5312CFA7272A9576007001A5 /* CalenderViewController.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		535B5F7E272C25EF00992283 /* Finance */ = {
+			isa = PBXGroup;
+			children = (
+				5312CFA9272A95B9007001A5 /* FinanceViewController.swift */,
+			);
+			path = Finance;
 			sourceTree = "<group>";
 		};
 		53AF2A4827268216001A359B = {
@@ -210,28 +295,16 @@
 				5340B1142726D1AE002E5672 /* Independent.entitlements */,
 				53AF2A5427268216001A359B /* AppDelegate.swift */,
 				53AF2A5627268216001A359B /* SceneDelegate.swift */,
+				535B5F79272C231600992283 /* Models */,
 				5340B11A2726D710002E5672 /* Modules */,
-				5340B11B2726D7BD002E5672 /* MainViewController.swift */,
-				5312CF65272A91C3007001A5 /* LeadViewController.swift */,
-				530FC969272AC38A0098407F /* LeadViewModel.swift */,
-				530FC967272ABC9A0098407F /* LeadCollectionViewCell.swift */,
-				530FC96B272AC3B40098407F /* LeadCollectionViewCellViewModel.swift */,
 				5340B1172726D6E3002E5672 /* Managers */,
 				53AF2A5A27268216001A359B /* Main.storyboard */,
 				53AF2A5D27268219001A359B /* Assets.xcassets */,
 				53AF2A5F27268219001A359B /* LaunchScreen.storyboard */,
 				53AF2A6227268219001A359B /* Info.plist */,
 				53AF2A902726ABCF001A359B /* GoogleService-Info.plist */,
-				53AF2A8827268665001A359B /* Helpers.swift */,
-				53AF2A8A272695ED001A359B /* GradientView.swift */,
-				53AF2A8C27269B1C001A359B /* GradientButton.swift */,
-				53120D8227284DF2002CB090 /* ATCTextfield.swift */,
+				530FC970272C16320098407F /* Helpers */,
 				53EDDADB272A7B4200CEB83F /* loader.json */,
-				5312CFA3272A937D007001A5 /* TabBarViewController.swift */,
-				5312CFA5272A9546007001A5 /* SettingsViewController.swift */,
-				5312CFA7272A9576007001A5 /* CalenderViewController.swift */,
-				5312CFA9272A95B9007001A5 /* FinanceViewController.swift */,
-				530FC966272AAAA50098407F /* SOTabBar */,
 			);
 			path = Independent;
 			sourceTree = "<group>";
@@ -450,6 +523,7 @@
 				5312CFA8272A9576007001A5 /* CalenderViewController.swift in Sources */,
 				5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */,
 				5340B1112726BD93002E5672 /* AuthManager.swift in Sources */,
+				535B5F78272C209F00992283 /* Lead.swift in Sources */,
 				5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */,
 				5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */,
 				5312CFA6272A9546007001A5 /* SettingsViewController.swift in Sources */,
@@ -463,16 +537,18 @@
 				530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */,
 				5312CFAE272AA8E4007001A5 /* SOTabBar.swift in Sources */,
 				53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */,
+				535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */,
 				5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */,
 				5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,
+				530FC96F272BD5900098407F /* LeadTableViewCell.swift in Sources */,
 				530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */,
 				5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */,
 				53AF2A5727268216001A359B /* SceneDelegate.swift in Sources */,
 				5312CFAA272A95B9007001A5 /* FinanceViewController.swift in Sources */,
-				53AF2A8927268665001A359B /* Helpers.swift in Sources */,
+				53AF2A8927268665001A359B /* UIviewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

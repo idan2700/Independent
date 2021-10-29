@@ -60,7 +60,7 @@ class RegestrationViewController: UIViewController {
     
     func updateViewControllerUI() {
         view.addGesture()
-        sendVerifacationButton.makeButtonRound()
+        sendVerifacationButton.makeRoundCorners(radius: 20)
         signInViewHeight.constant = self.view.bounds.height * 0.6
         nameTextField.attributedPlaceholder = NSAttributedString(
             string: "שם העסק/ עוסק",
