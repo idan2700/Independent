@@ -11,7 +11,7 @@ class VerifcationViewController: UIViewController {
     @IBOutlet weak var middleView: UIView!
     @IBOutlet weak var verficationViewHight: NSLayoutConstraint!
     @IBOutlet weak var verifyTextField: ATCTextField!
-    @IBOutlet weak var verifyButton: GradientButton!
+    @IBOutlet weak var verifyButton: UIButton!
     @IBOutlet weak var codeErrorLabel: UILabel!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var connectingLabel: UILabel!
@@ -25,7 +25,7 @@ class VerifcationViewController: UIViewController {
         verifyButton.makeRoundCorners(radius: 20)
         verifyTextField.attributedPlaceholder = NSAttributedString(
             string: "הקלד קוד אימות",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
     }
     
     @IBAction func didEditCode(_ sender: ATCTextField) {
@@ -79,7 +79,7 @@ extension VerifcationViewController: VerifcationViewModelDelegate {
     
     func hideCodeError() {
         codeErrorLabel.isHidden = true
-        verifyTextField.lineColor = .white
+        verifyTextField.lineColor = UIColor(named: "50white")!
     }
     
     func moveToMainTab() {

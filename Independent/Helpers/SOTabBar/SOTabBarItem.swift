@@ -18,7 +18,7 @@ class SOTabBarItem: UIView {
         let lbl = UILabel()
         lbl.text = self.title
         lbl.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
-        lbl.textColor = UIColor.white
+        lbl.textColor = SOTabBarSetting.tabBarTitleColor
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl

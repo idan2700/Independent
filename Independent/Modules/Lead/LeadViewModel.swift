@@ -9,6 +9,8 @@ import Foundation
 
 protocol LeadViewModelDelegate: AnyObject {
     func updateCurrentMonthLabel()
+    func moveToCreateLeadVC()
+    func animateNewLeadButton(toOpen: Bool)
 }
 
 class LeadViewModel {
@@ -18,17 +20,15 @@ class LeadViewModel {
     private let dateFormatter = DateFormatter()
     private var date = Date()
     private var leads = [Lead]()
+    private var isNewLeadButtonSelected: Bool = false
+
     
     init(delegate: LeadViewModelDelegate?) {
         self.delegate = delegate
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
-        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: ""))
+        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: "", phoneNumber: ""))
+        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: "jkbds jkbcndjksc jkbn kcjdsc kjn jdshc kj kjbkjds ckj kjnbkjds ckjn kjn ckjdsnckj jckjdsnckjnkj ckdjnjkn kjnc kjsdn k", phoneNumber: ""))
+        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: "", phoneNumber: ""))
+        leads.append(Lead(fullName: "עידן לוי", date: Date(), summary: "", phoneNumber: ""))
     }
     
     var numberOfItems: Int {
@@ -61,6 +61,16 @@ class LeadViewModel {
     func didTapLastMonth() {
         date = Calendar.current.date(byAdding: .month, value: -1, to: date) ?? Date()
         delegate?.updateCurrentMonthLabel()
+    }
+    
+    func didTapCreateNewLead() {
+        isNewLeadButtonSelected = !isNewLeadButtonSelected
+        delegate?.animateNewLeadButton(toOpen: isNewLeadButtonSelected)
+    }
+
+    
+    func didTapAddManualy() {
+        delegate?.moveToCreateLeadVC()
     }
     
 }

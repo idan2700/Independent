@@ -37,14 +37,6 @@ class RegestrationViewModel {
     private var isNameVerifyd: Bool = false
     private var isPhoneVerifyd: Bool = false
     private var isLoading: Bool = false
-//        didSet {
-//            if self.isLoading {
-//                return
-//            } else {
-//                delegate?.hideLoader()
-//            }
-//        }
-    
     private var cancellables = Set<AnyCancellable>()
     
     init(delegate: RegestrationViewModelDelegate?) {
@@ -102,15 +94,21 @@ class RegestrationViewModel {
         case true:
             if name.count == 0 {
                 self.delegate?.presentNameError(message: "לא הכנסת שם")
+                return
             }
             if phone.count == 0 {
                 self.delegate?.presentPhoneError(message: "לא הכנסת טלפון")
+                return
             }
             if allUsers.contains(phone) {
                 self.delegate?.presentError(message: "המשתמש קיים במערכת עבור למסך הכניסה למערכת")
                 return
             }
         case false:
+            if phone.count == 0 {
+                self.delegate?.presentPhoneError(message: "לא הכנסת טלפון")
+                return
+            }
             if !allUsers.contains(phone) {
                 self.delegate?.presentError(message: "המשתמש לא קיים במערכת, עבור למסך ההרשמה")
                 return
@@ -136,9 +134,8 @@ class RegestrationViewModel {
                     }
                 }
             }
-        
     }
-    
+ 
     func didTapLogin() {
         if isUserRegisteredBefore {
             delegate?.hideError()

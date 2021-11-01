@@ -20,6 +20,10 @@ class DataBaseManager {
     private init() {}
     
     func saveUser(user: String, complition: @escaping (Result <String?,Error>) -> Void) {
+        if allUsers.contains(user) {
+            complition(.success(nil))
+            return
+        }
         db.collection("AllUsers").addDocument(data: ["user": user]) { error in
             DispatchQueue.main.async {
                 if let error = error {

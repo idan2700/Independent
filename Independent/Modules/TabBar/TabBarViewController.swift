@@ -13,10 +13,13 @@ class TabBarViewController: SOTabBarController {
     override func loadView() {
            super.loadView()
         SOTabBarSetting.tabBarHeight = 50
-        SOTabBarSetting.tabBarTintColor = UIColor.white
-        SOTabBarSetting.tabBarBackground = UIColor(named: "darkblue") ?? .systemBlue
+        SOTabBarSetting.tabBarTintColor = UIColor(named: "gold")!
+        SOTabBarSetting.tabBarBackground = .black
         SOTabBarSetting.tabBarCircleSize = CGSize(width: 60.0, height: 60.0)
-        SOTabBarSetting.tabBarSelectedImageColor = UIColor(named: "darkblue") ?? .systemBlue
+        SOTabBarSetting.tabBarSelectedImageColor = .black
+        SOTabBarSetting.tabBarImageColor = UIColor(named: "gold")!
+        SOTabBarSetting.tabBarShadowColor = UIColor(named: "10white")!.cgColor
+        SOTabBarSetting.tabBarTitleColor = UIColor(named: "gold")!
         UIView.appearance().semanticContentAttribute = .forceLeftToRight
        }
 

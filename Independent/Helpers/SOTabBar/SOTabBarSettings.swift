@@ -21,5 +21,6 @@ public struct SOTabBarSetting {
     public static var tabBarAnimationDurationTime: Double = 0.4
     public static var tabBarImageColor: UIColor = UIColor.white
     public static var tabBarSelectedImageColor: UIColor = UIColor.white
+    public static var tabBarTitleColor: UIColor = UIColor.systemIndigo
     
 }

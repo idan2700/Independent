@@ -21,6 +21,7 @@
 		5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFAF272AA91D007001A5 /* SOTabBarController.swift */; };
 		5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */; };
 		5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */; };
+		5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */; };
 		533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B95272A7DDC00B2A48D /* AnimationManager.swift */; };
 		5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B10E2726BD14002E5672 /* DataBaseManager.swift */; };
 		5340B1112726BD93002E5672 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1102726BD93002E5672 /* AuthManager.swift */; };
@@ -79,6 +80,7 @@
 		5312CFAF272AA91D007001A5 /* SOTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarController.swift; sourceTree = "<group>"; };
 		5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarItem.swift; sourceTree = "<group>"; };
 		5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarSettings.swift; sourceTree = "<group>"; };
+		5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLeadViewController.swift; sourceTree = "<group>"; };
 		533D5B95272A7DDC00B2A48D /* AnimationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
 		5340B10E2726BD14002E5672 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		5340B1102726BD93002E5672 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				53AF2A902726ABCF001A359B /* GoogleService-Info.plist */,
 				530FC970272C16320098407F /* Helpers */,
 				53EDDADB272A7B4200CEB83F /* loader.json */,
+				5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */,
 			);
 			path = Independent;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */,
 				5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */,
 				5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */,
+				5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,

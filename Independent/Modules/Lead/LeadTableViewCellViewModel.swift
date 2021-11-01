@@ -20,14 +20,21 @@ class LeadTableViewCellViewModel {
         self.lead = lead
     }
     
-    var nameLabel: String {
+    var name: String {
         return lead.fullName
     }
     
-    var dateLabel: String {
+    var date: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM"
         dateFormatter.locale = Locale(identifier: "He")
         return dateFormatter.string(from: lead.date)
+    }
+    
+    var summry: String {
+        if lead.summary == "" {
+            return "אין תקציר"
+        }
+        return lead.summary
     }
 }

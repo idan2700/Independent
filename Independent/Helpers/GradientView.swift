@@ -11,28 +11,28 @@ import UIKit
 @IBDesignable
 class GradientView: UIView {
     let gradientLayer = CAGradientLayer()
-    
+
     @IBInspectable
     var topGradientColor: UIColor? {
         didSet {
             setGradient(topGradientColor: topGradientColor, bottomGradientColor: bottomGradientColor)
         }
     }
-    
+
     @IBInspectable
     var bottomGradientColor: UIColor? {
         didSet {
             setGradient(topGradientColor: topGradientColor, bottomGradientColor: bottomGradientColor)
         }
     }
-    
+
     @IBInspectable
     var isHorizontal: Bool = true {
        didSet {
           updateDirection()
        }
     }
-    
+
     private func setGradient(topGradientColor: UIColor?, bottomGradientColor: UIColor?) {
         if let topGradientColor = topGradientColor, let bottomGradientColor = bottomGradientColor {
             gradientLayer.frame = bounds
@@ -45,7 +45,7 @@ class GradientView: UIView {
             gradientLayer.removeFromSuperlayer()
         }
     }
-    
+
     private func updateDirection() {
         if (self.isHorizontal) {
             gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)

@@ -10,7 +10,9 @@ import Lottie
 
 class RegestrationViewController: UIViewController {
     
-    @IBOutlet weak var titleHeight: NSLayoutConstraint!
+
+ 
+
     @IBOutlet weak var titleLabelStack: UIStackView!
     @IBOutlet weak var middleView: UIView!
     @IBOutlet weak var signInViewHeight: NSLayoutConstraint!
@@ -64,10 +66,10 @@ class RegestrationViewController: UIViewController {
         signInViewHeight.constant = self.view.bounds.height * 0.6
         nameTextField.attributedPlaceholder = NSAttributedString(
             string: "שם העסק/ עוסק",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         phoneNumberTextField.attributedPlaceholder = NSAttributedString(
             string: "טלפון",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
     }
 }
 
@@ -89,12 +91,12 @@ extension RegestrationViewController: RegestrationViewModelDelegate {
     
     func hidePhoneError() {
         phoneErrorLabel.isHidden = true
-        phoneNumberTextField.lineColor = .white
+        phoneNumberTextField.lineColor = UIColor(named: "50white") ?? .white
     }
     
     func hideNameError() {
         nameErrorLabel.isHidden = true
-        nameTextField.lineColor = .white
+        nameTextField.lineColor = UIColor(named: "50white") ?? .white
     }
     
     func presentNameError(message: String) {
