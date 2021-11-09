@@ -96,7 +96,7 @@ class VerifcationViewModel {
                     return
                 } else {
                     if let phone = UserDefaults.standard.string(forKey: "phone") {
-                        DataBaseManager.shared.saveUser(user: phone) { [weak self] result in
+                        DataBaseManager.shared.saveUser(userName: name, phone: phone) { [weak self] result in
                             guard let self = self else {return}
                             DispatchQueue.main.async {
                                 switch result {

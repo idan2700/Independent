@@ -8,6 +8,7 @@
 import Foundation
 import Firebase
 import Combine
+import UIKit
 
 class DataBaseManager {
     
@@ -19,25 +20,37 @@ class DataBaseManager {
     
     private init() {}
     
-    func saveUser(user: String, complition: @escaping (Result <String?,Error>) -> Void) {
-        if allUsers.contains(user) {
-            complition(.success(nil))
+    func saveUser(userName: String, phone: String, complition: @escaping (Result <Void,Error>) -> Void) {
+        if allUsers.contains(phone) {
+            complition(.success(()))
             return
         }
-        db.collection("AllUsers").addDocument(data: ["user": user]) { error in
+        db.collection("Users").document(userName).setData(["phone": phone]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
                 } else {
-                    complition(.success(nil))
+                    complition(.success(()))
                 }
             }
         }
     }
     
-    func loadData() {
+    func saveLead(lead: Lead, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
+        db.collection("lead").document(userName).collection("lead").document(String(lead.leadID)).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date]) { error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    complition(.failure(error))
+                } else {
+                    complition(.success(()))
+                }
+            }
+        }
+    }
+    
+    func loadData(collection: String) {
         isLoading = true
-        db.collection("AllUsers").getDocuments { [weak self] (querySnapshot, error) in
+        db.collection(collection).getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
             self.isLoading = false
             DispatchQueue.main.async {
@@ -47,12 +60,51 @@ class DataBaseManager {
                 }
                 if let query = querySnapshot {
                     for document in query.documents {
-                        let user = document.get("user") as? String
+                        let user = document.get("phone") as? String
                         if let user = user {
                             self.allUsers.append(user)
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    func loadLeadCollection(userId: String, complition: @escaping (Result<[Lead], Error>)-> Void) {
+        var leads = [Lead]()
+        isLoading = true
+        db.collection("lead").document(userId).collection("lead").getDocuments { [weak self] (querySnapshot, error) in
+            guard let self = self else {return}
+            self.isLoading = false
+            DispatchQueue.main.async {
+                if let error = error {
+                    complition(.failure(error))
+                    return
+                }
+                if let query = querySnapshot {
+                    for document in query.documents {
+                        let leadID = document.documentID
+                        if let name = document.get("name") as? String,
+                           let phone = document.get("phone") as? String,
+                           let summary = document.get("summry") as? String,
+                           let timeStamp = document.get("date") as? Timestamp {
+                           let date = timeStamp.dateValue()
+                            let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: Int(leadID) ?? 0)
+                            leads.append(newLead)
+                        }
+                    }
+                }
+                complition(.success(leads))
+            }
+        }
+    }
+    
+    func deleteLead(leadId: String, userID: String, complition: @escaping (Result<Void, Error>)-> Void) {
+        db.collection("lead").document(userID).collection("lead").document(leadId).delete() { error in
+            if let error = error {
+                complition(.failure(error))
+            } else {
+                complition(.success(()))
             }
         }
     }

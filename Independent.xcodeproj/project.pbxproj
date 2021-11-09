@@ -28,6 +28,8 @@
 		5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1122726CECD002E5672 /* VerifcationViewController.swift */; };
 		5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1152726D223002E5672 /* VerifcationViewModel.swift */; };
 		5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B11B2726D7BD002E5672 /* MainViewController.swift */; };
+		535B21352737DD2000ADABAE /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 535B21342737DD2000ADABAE /* CloudKit.framework */; };
+		535B213C2738008D00ADABAE /* CreateLeadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B213B2738008D00ADABAE /* CreateLeadViewModel.swift */; };
 		535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */; };
 		535B5F78272C209F00992283 /* Lead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F77272C209F00992283 /* Lead.swift */; };
 		53AF2A5527268216001A359B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A5427268216001A359B /* AppDelegate.swift */; };
@@ -88,6 +90,8 @@
 		5340B1142726D1AE002E5672 /* Independent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Independent.entitlements; sourceTree = "<group>"; };
 		5340B1152726D223002E5672 /* VerifcationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifcationViewModel.swift; sourceTree = "<group>"; };
 		5340B11B2726D7BD002E5672 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		535B21342737DD2000ADABAE /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		535B213B2738008D00ADABAE /* CreateLeadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLeadViewModel.swift; sourceTree = "<group>"; };
 		535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B5F77272C209F00992283 /* Lead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lead.swift; sourceTree = "<group>"; };
 		53AF2A5127268216001A359B /* Independent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Independent.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7603209FB83ECD820F31D8DB /* Pods_Independent.framework in Frameworks */,
+				535B21352737DD2000ADABAE /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,8 +222,18 @@
 				535B5F7E272C25EF00992283 /* Finance */,
 				535B5F7C272C25DF00992283 /* Settings */,
 				530FC96D272BCB7B0098407F /* Lead */,
+				535B213D273A5ECF00ADABAE /* CreateLead */,
 			);
 			path = Modules;
+			sourceTree = "<group>";
+		};
+		535B213D273A5ECF00ADABAE /* CreateLead */ = {
+			isa = PBXGroup;
+			children = (
+				5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */,
+				535B213B2738008D00ADABAE /* CreateLeadViewModel.swift */,
+			);
+			path = CreateLead;
 			sourceTree = "<group>";
 		};
 		535B5F79272C231600992283 /* Models */ = {
@@ -307,7 +322,6 @@
 				53AF2A902726ABCF001A359B /* GoogleService-Info.plist */,
 				530FC970272C16320098407F /* Helpers */,
 				53EDDADB272A7B4200CEB83F /* loader.json */,
-				5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */,
 			);
 			path = Independent;
 			sourceTree = "<group>";
@@ -341,6 +355,7 @@
 		FD636893DDF852A6CC999BBE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				535B21342737DD2000ADABAE /* CloudKit.framework */,
 				8B17269E3B8AE32E90BE90E5 /* Pods_Independent.framework */,
 			);
 			name = Frameworks;
@@ -552,6 +567,7 @@
 				5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */,
 				53AF2A5727268216001A359B /* SceneDelegate.swift in Sources */,
 				5312CFAA272A95B9007001A5 /* FinanceViewController.swift in Sources */,
+				535B213C2738008D00ADABAE /* CreateLeadViewModel.swift in Sources */,
 				53AF2A8927268665001A359B /* UIviewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

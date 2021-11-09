@@ -24,7 +24,5 @@ class LeadCollectionViewCell: UICollectionViewCell {
     func configure(with viewModel: LeadCollectionViewCellViewModel) {
         typeLabel.preferredMaxLayoutWidth = self.itemView.bounds.width
         typeLabel.text = viewModel.itemTypeLabel
-        
     }
-   
 }

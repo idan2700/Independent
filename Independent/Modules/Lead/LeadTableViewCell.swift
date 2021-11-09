@@ -7,8 +7,11 @@
 
 import UIKit
 
-protocol LeadTableViewCellProtocol: AnyObject {
+protocol LeadTableViewCellDelegate: AnyObject {
     func didTapInfo(cell: LeadTableViewCell, isInfoButtonOpen: Bool)
+    func didTapDelete(cell: LeadTableViewCell)
+    func didTapWhatsapp(cell: LeadTableViewCell)
+    func didTapCall(cell: LeadTableViewCell)
 }
 
 class LeadTableViewCell: UITableViewCell {
@@ -21,9 +24,10 @@ class LeadTableViewCell: UITableViewCell {
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var whatsappButton: UIButton!
     @IBOutlet weak var summryLabel: UILabel!
-    weak var delegate: LeadTableViewCellProtocol?
+    weak var delegate: LeadTableViewCellDelegate?
     private var isInfoButtonOpen: Bool = false
   
+    var viewModel: LeadTableViewCellViewModel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -52,6 +56,7 @@ class LeadTableViewCell: UITableViewCell {
     }
     
     func configure(with viewModel: LeadTableViewCellViewModel) {
+        self.viewModel = viewModel
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
         summryLabel.text = viewModel.summry
@@ -60,50 +65,57 @@ class LeadTableViewCell: UITableViewCell {
     @objc func handleSwipeRight() {
         UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .beginFromCurrentState, animations: {
             self.cellView.frame.origin.x = self.deleteLeadButton.frame.origin.x + 50
-            self.callButton.alpha = 1
-            self.deleteLeadButton.alpha = 1
-            self.whatsappButton.alpha = 1
-            self.closeDealButton.alpha = 1
+            self.presentButtons()
         })
     }
     
     @objc func handleTap() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .beginFromCurrentState, animations: {
             self.cellView.frame.origin.x = self.closeDealButton.frame.origin.x - 10
-            self.callButton.alpha = 0
-            self.deleteLeadButton.alpha = 0
-            self.whatsappButton.alpha = 0
-            self.closeDealButton.alpha = 0
+            self.disappearButtons()
         })
     }
+    
     @IBAction func didTapCloseDeal(_ sender: UIButton) {
         print("close deal")
     }
     
     @IBAction func didTapCall(_ sender: UIButton) {
-      
+        handleTap()
+        delegate?.didTapCall(cell: self)
     }
     
     @IBAction func didTapSendWhatsapp(_ sender: UIButton) {
-        
+        handleTap()
+        delegate?.didTapWhatsapp(cell: self)
     }
     
     @IBAction func didTapDelete(_ sender: UIButton) {
-   
+        delegate?.didTapDelete(cell: self)
     }
     
     @IBAction func didTapInfo(_ sender: UIButton) {
-        if isInfoButtonOpen {
-            isInfoButtonOpen = false
-        } else {
-            isInfoButtonOpen = true
-        }
+        isInfoButtonOpen = !isInfoButtonOpen
         delegate?.didTapInfo(cell: self, isInfoButtonOpen: self.isInfoButtonOpen)
     }
     
     func configureCellExpend(toExpand: Bool) {
         summryLabel.isHidden = toExpand
         infoButton.setImage(toExpand ? UIImage(systemName: "chevron.down") : UIImage(systemName: "chevron.up"), for: .normal)
+    }
+    
+    private func disappearButtons() {
+        self.callButton.alpha = 0
+        self.deleteLeadButton.alpha = 0
+        self.whatsappButton.alpha = 0
+        self.closeDealButton.alpha = 0
+    }
+    
+    private func presentButtons() {
+        self.callButton.alpha = 1
+        self.deleteLeadButton.alpha = 1
+        self.whatsappButton.alpha = 1
+        self.closeDealButton.alpha = 1
     }
 }
 

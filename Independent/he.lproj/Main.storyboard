@@ -516,23 +516,23 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="un0-qU-el6">
                                         <rect key="frame" x="0.0" y="0.0" width="256.5" height="40"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Px-F3-7mW">
-                                                <rect key="frame" x="10" y="4.5" width="36" height="31"/>
-                                                <color key="tintColor" red="0.81960784310000001" green="0.69019607839999997" blue="0.4549019608" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QnI-4K-2Zj">
+                                                <rect key="frame" x="0.0" y="4.5" width="36" height="31"/>
+                                                <color key="tintColor" name="gold"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.left" catalog="system"/>
                                                 <connections>
-                                                    <action selector="didTapNextMonth:" destination="DMQ-Pa-rWG" eventType="touchUpInside" id="wui-z3-8pS"/>
+                                                    <action selector="didTapNextMonth:" destination="DMQ-Pa-rWG" eventType="touchUpInside" id="DT5-2q-MVC"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R3m-Oz-kLW">
-                                                <rect key="frame" x="104" y="11" width="49" height="21.5"/>
-                                                <fontDescription key="fontDescription" name="ArialHebrew" family="Arial Hebrew" pointSize="20"/>
+                                                <rect key="frame" x="107.5" y="11" width="42" height="18.5"/>
+                                                <fontDescription key="fontDescription" name="ArialHebrew" family="Arial Hebrew" pointSize="17"/>
                                                 <color key="textColor" red="0.81960784310000001" green="0.69019607839999997" blue="0.4549019608" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eLJ-nN-hoy">
-                                                <rect key="frame" x="210.5" y="4.5" width="36" height="31"/>
+                                                <rect key="frame" x="220.5" y="4.5" width="36" height="31"/>
                                                 <color key="tintColor" red="0.81960784310000001" green="0.69019607839999997" blue="0.4549019608" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
@@ -543,12 +543,12 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="0.10055360099337748" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="8Px-F3-7mW" firstAttribute="leading" secondItem="un0-qU-el6" secondAttribute="leading" constant="10" id="5Vz-l7-Vu3"/>
-                                            <constraint firstItem="R3m-Oz-kLW" firstAttribute="centerX" secondItem="un0-qU-el6" secondAttribute="centerX" id="J7z-bN-1HK"/>
-                                            <constraint firstItem="eLJ-nN-hoy" firstAttribute="centerY" secondItem="un0-qU-el6" secondAttribute="centerY" id="bzC-v7-Y8v"/>
-                                            <constraint firstAttribute="trailing" secondItem="eLJ-nN-hoy" secondAttribute="trailing" constant="10" id="dMi-o9-VmY"/>
-                                            <constraint firstItem="8Px-F3-7mW" firstAttribute="centerY" secondItem="un0-qU-el6" secondAttribute="centerY" id="dtp-jx-A7w"/>
-                                            <constraint firstItem="R3m-Oz-kLW" firstAttribute="top" secondItem="un0-qU-el6" secondAttribute="top" constant="11" id="fmE-Q7-kKv"/>
+                                            <constraint firstItem="QnI-4K-2Zj" firstAttribute="centerY" secondItem="un0-qU-el6" secondAttribute="centerY" id="1CL-Fx-xJr"/>
+                                            <constraint firstAttribute="trailing" secondItem="eLJ-nN-hoy" secondAttribute="trailing" id="6x1-Dq-L3c"/>
+                                            <constraint firstItem="R3m-Oz-kLW" firstAttribute="centerX" secondItem="un0-qU-el6" secondAttribute="centerX" id="8pD-F0-iEr"/>
+                                            <constraint firstItem="R3m-Oz-kLW" firstAttribute="top" secondItem="un0-qU-el6" secondAttribute="top" constant="11" id="KiN-Y4-mKb"/>
+                                            <constraint firstItem="eLJ-nN-hoy" firstAttribute="centerY" secondItem="un0-qU-el6" secondAttribute="centerY" id="bzC-nZ-SHJ"/>
+                                            <constraint firstItem="QnI-4K-2Zj" firstAttribute="leading" secondItem="un0-qU-el6" secondAttribute="leading" id="yxS-ck-Sqe"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -806,6 +806,17 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="bxC-7J-MYN">
+                                <rect key="frame" x="197" y="563" width="20" height="20"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="אין לך מתעניינים" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4bP-Va-RHY">
+                                <rect key="frame" x="118" y="422" width="84" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" name="50white"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MOd-oZ-ddK"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -813,8 +824,11 @@
                             <constraint firstItem="8Ff-KY-z5L" firstAttribute="leading" secondItem="MOd-oZ-ddK" secondAttribute="leading" constant="20" id="0zT-27-h6O"/>
                             <constraint firstItem="YEQ-OH-88i" firstAttribute="leading" secondItem="MOd-oZ-ddK" secondAttribute="leading" constant="30" id="1p4-4l-o9e"/>
                             <constraint firstItem="hau-IX-uul" firstAttribute="leading" secondItem="YEQ-OH-88i" secondAttribute="trailing" constant="10" id="3H4-BN-xW6"/>
+                            <constraint firstItem="bxC-7J-MYN" firstAttribute="centerY" secondItem="ZL1-Q7-XaS" secondAttribute="centerY" id="3HZ-mC-ZZX"/>
                             <constraint firstItem="YEQ-OH-88i" firstAttribute="centerY" secondItem="ncM-eC-rcD" secondAttribute="centerY" id="5On-f7-oG6"/>
                             <constraint firstItem="MOd-oZ-ddK" firstAttribute="trailing" secondItem="ZL1-Q7-XaS" secondAttribute="trailing" constant="10" id="Bwk-Gd-9JW"/>
+                            <constraint firstItem="4bP-Va-RHY" firstAttribute="centerY" secondItem="ZL1-Q7-XaS" secondAttribute="centerY" id="EJG-4O-jvP"/>
+                            <constraint firstItem="bxC-7J-MYN" firstAttribute="centerX" secondItem="ZL1-Q7-XaS" secondAttribute="centerX" id="ExM-m4-2l2"/>
                             <constraint firstItem="2Rc-4s-xDj" firstAttribute="leading" secondItem="MOd-oZ-ddK" secondAttribute="leading" constant="20" id="H12-iR-DFW"/>
                             <constraint firstItem="MOd-oZ-ddK" firstAttribute="trailing" secondItem="ncM-eC-rcD" secondAttribute="trailing" constant="20" id="Kl5-Qd-zkA"/>
                             <constraint firstItem="28t-B2-Mpi" firstAttribute="top" secondItem="8Ff-KY-z5L" secondAttribute="bottom" constant="10" id="QN5-Vm-ai6"/>
@@ -826,6 +840,7 @@
                             <constraint firstItem="ZL1-Q7-XaS" firstAttribute="leading" secondItem="MOd-oZ-ddK" secondAttribute="leading" constant="10" id="gBz-bv-9cs"/>
                             <constraint firstItem="ZL1-Q7-XaS" firstAttribute="top" secondItem="ncM-eC-rcD" secondAttribute="bottom" constant="10" id="gVd-nF-VjE"/>
                             <constraint firstItem="hau-IX-uul" firstAttribute="centerY" secondItem="ncM-eC-rcD" secondAttribute="centerY" id="lh6-ML-mm3"/>
+                            <constraint firstItem="4bP-Va-RHY" firstAttribute="centerX" secondItem="ZL1-Q7-XaS" secondAttribute="centerX" id="nJj-c9-QxO"/>
                             <constraint firstItem="MOd-oZ-ddK" firstAttribute="trailing" secondItem="8Ff-KY-z5L" secondAttribute="trailing" constant="20" id="qYt-n8-Bku"/>
                             <constraint firstItem="8Ff-KY-z5L" firstAttribute="top" secondItem="MOd-oZ-ddK" secondAttribute="top" constant="10" id="rOC-Dg-JEQ"/>
                             <constraint firstItem="ncM-eC-rcD" firstAttribute="top" secondItem="28t-B2-Mpi" secondAttribute="bottom" constant="10" id="sd5-gZ-L1L"/>
@@ -841,7 +856,6 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="k4b-wZ-yCx"/>
                     <connections>
                         <outlet property="addFromContactsButton" destination="YEQ-OH-88i" id="gjR-S6-vF4"/>
                         <outlet property="addManualyButton" destination="hau-IX-uul" id="Wzj-bd-PYC"/>
@@ -849,11 +863,13 @@
                         <outlet property="collectionView" destination="28t-B2-Mpi" id="ALG-SP-XAk"/>
                         <outlet property="currentMonthLabel" destination="R3m-Oz-kLW" id="WWd-nw-yrQ"/>
                         <outlet property="lastMonthButton" destination="eLJ-nN-hoy" id="rrZ-5u-K9n"/>
+                        <outlet property="leadsLoader" destination="bxC-7J-MYN" id="MDo-Jc-c2i"/>
                         <outlet property="monthPickerView" destination="un0-qU-el6" id="8tZ-ll-Jf2"/>
                         <outlet property="monthView" destination="8Ff-KY-z5L" id="ktB-2h-BDV"/>
                         <outlet property="newLeadButton" destination="ncM-eC-rcD" id="3U5-GV-15J"/>
                         <outlet property="newLeadButtonX" destination="W5x-Bf-afo" id="mZM-E3-dag"/>
-                        <outlet property="nextMonthButton" destination="8Px-F3-7mW" id="eho-cq-frU"/>
+                        <outlet property="nextMonthButton" destination="QnI-4K-2Zj" id="4sP-h4-rxM"/>
+                        <outlet property="noLeadsLabel" destination="4bP-Va-RHY" id="8w0-Bs-aBZ"/>
                         <outlet property="tableView" destination="ZL1-Q7-XaS" id="hgi-4y-eeC"/>
                     </connections>
                 </viewController>
@@ -1245,9 +1261,6 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="7P1-r1-aH0">
-            <size key="intrinsicContentSize" width="64" height="30"/>
-        </designable>
         <designable name="SM8-la-1yt"/>
         <designable name="nvM-on-7Qo">
             <size key="intrinsicContentSize" width="74.5" height="30"/>
@@ -1262,16 +1275,16 @@
         <image name="phone" catalog="system" width="128" height="115"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <namedColor name="10white">
-            <color white="1" alpha="0.10445985100000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color white="1" alpha="0.10400000214576721" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
         <namedColor name="30white">
-            <color white="1" alpha="0.29894453640000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color white="1" alpha="0.29899999499320984" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
         <namedColor name="50white">
             <color white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
         <namedColor name="gold">
-            <color red="0.81960784310000001" green="0.69019607839999997" blue="0.4549019608" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.81999999284744263" green="0.68999999761581421" blue="0.45500001311302185" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

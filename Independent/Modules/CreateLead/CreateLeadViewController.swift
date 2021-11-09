@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CreateLeadViewControllerDelegate: AnyObject {
+    func didPick(newLead: Lead)
+}
+
 class CreateLeadViewController: UIViewController {
 
     @IBOutlet weak var addLeadButton: UIButton!
@@ -17,6 +21,8 @@ class CreateLeadViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
+    weak var delegate: CreateLeadViewControllerDelegate?
+    var viewModel: CreateLeadViewModel!
     
     
     override func viewDidLoad() {
@@ -33,6 +39,19 @@ class CreateLeadViewController: UIViewController {
     @IBAction func didTapCancel(_ sender: UIButton) {
         dismiss(animated: true)
     }
+    
     @IBAction func didTapAdd(_ sender: UIButton) {
+        viewModel.didTapAdd(name: nameTextField.text ?? "", date: Date(), summary: summryTextView.text, phoneNumber: phoneTextField.text ?? "")
+    }
+}
+
+extension CreateLeadViewController: CreateLeadViewModelDelegate {
+    func returnToLeadVC(with newLead: Lead) {
+        self.delegate?.didPick(newLead: newLead)
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func presentAlert(message: String) {
+        
     }
 }

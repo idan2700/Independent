@@ -10,6 +10,7 @@ import Foundation
 struct Lead {
     var fullName: String
     var date: Date
-    var summary: String
+    var summary: String?
     var phoneNumber: String
+    var leadID: Int
 }

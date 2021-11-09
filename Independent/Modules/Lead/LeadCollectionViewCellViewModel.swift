@@ -22,6 +22,17 @@ enum leadItems: Int, CaseIterable {
             return "אחוז סגירות"
         }
     }
+    
+//    var amount: String {
+//        switch self {
+//        case .precentOfSales:
+//            
+//        case .numberOfSales:
+//            
+//        case .numberOfLeads:
+//            
+//        }
+//    }
 }
 
 class LeadCollectionViewCellViewModel {
@@ -32,7 +43,6 @@ class LeadCollectionViewCellViewModel {
         self.itemType = itemType
     }
    
-    
     var itemTypeLabel: String {
         return itemType?.itemTypeLabel ?? ""
     }

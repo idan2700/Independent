@@ -21,19 +21,22 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var addManualyButton: UIButton!
     @IBOutlet weak var newLeadButtonX: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
-
+    @IBOutlet weak var leadsLoader: UIActivityIndicatorView!
+    @IBOutlet weak var noLeadsLabel: UILabel!
+    
     var viewModel: LeadViewModel!
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.start()
         collectionView.dataSource = self
         collectionView.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
         buttonView.makeRoundCorners(radius: 10)
         currentMonthLabel.text = viewModel.stringDate
-        nextMonthButton.setTitle("", for: .normal)
         lastMonthButton.setTitle("", for: .normal)
+        nextMonthButton.setTitle("", for: .normal)
         addFromContactsButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
         addManualyButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
         newLeadButton.makeRoundCorners(radius: 10)
@@ -44,9 +47,8 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         addFromContactsButton.layer.cornerRadius = 10
     }
     
- 
     @IBAction func didTapNextMonth(_ sender: UIButton) {
-        viewModel.didTapNextMonth()
+        viewModel.didTapNextMonth(currentPresentedMonth: currentMonthLabel.text ?? "")
     }
     
     @IBAction func didTapLastMonth(_ sender: UIButton) {
@@ -108,6 +110,38 @@ extension LeadViewController: UITableViewDelegate {
 }
 
 extension LeadViewController: LeadViewModelDelegate {
+    func setNextMonthButtonState(isHidden: Bool) {
+        nextMonthButton.isHidden = isHidden
+    }
+    
+    func removeCell(at indexPath: IndexPath) {
+        tableView.beginUpdates()
+        tableView.deleteRows(at: [indexPath], with: .right)
+        tableView.endUpdates()
+    }
+    
+    func setNoLeadsLabelState(isHidden: Bool) {
+        noLeadsLabel.isHidden = isHidden
+    }
+    
+    func setLeadLoaderState(isHidden: Bool) {
+        leadsLoader.isHidden = isHidden
+        if isHidden {
+            tableView.isHidden = false
+        } else {
+            tableView.isHidden = true
+        }
+    }
+    
+    func presentAlert(message: String) {
+        
+    }
+    
+    func reloadData() {
+        tableView.reloadData()
+        collectionView.reloadData()
+    }
+    
     func updateCurrentMonthLabel() {
         currentMonthLabel.text = viewModel.stringDate
     }
@@ -115,6 +149,8 @@ extension LeadViewController: LeadViewModelDelegate {
     func moveToCreateLeadVC() {
         if let createLeadVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateLeadViewController") as? CreateLeadViewController {
             createLeadVC.modalPresentationStyle = .overFullScreen
+            createLeadVC.delegate = self
+            createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.leads)
         self.present(createLeadVC, animated: true, completion: nil)
         }
     }
@@ -134,10 +170,31 @@ extension LeadViewController: LeadViewModelDelegate {
     }
 }
 
-extension LeadViewController: LeadTableViewCellProtocol {
+extension LeadViewController: LeadTableViewCellDelegate {
+    func didTapCall(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapCall(at: indexPath)
+    }
+    
+    func didTapWhatsapp(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapSendWhatsapp(at: indexPath)
+    }
+    
+    func didTapDelete(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapDelete(at: indexPath)
+    }
+    
     func didTapInfo(cell: LeadTableViewCell, isInfoButtonOpen: Bool) {
         self.tableView.beginUpdates()
         cell.configureCellExpend(toExpand: isInfoButtonOpen ? false : true)
         self.tableView.endUpdates()
+    }
+}
+
+extension LeadViewController: CreateLeadViewControllerDelegate {
+    func didPick(newLead: Lead) {
+        viewModel.didPickNewLead(lead: newLead)
     }
 }
