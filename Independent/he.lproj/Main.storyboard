@@ -498,8 +498,8 @@
                                         <size key="customSize" width="135" height="128"/>
                                         <connections>
                                             <outlet property="amountLabel" destination="vSS-b4-ZEW" id="XTa-C9-tCO"/>
+                                            <outlet property="itemLabel" destination="Ice-la-pB0" id="Lh1-wP-aIK"/>
                                             <outlet property="itemView" destination="FNX-dE-ncT" id="FQY-ED-R5f"/>
-                                            <outlet property="typeLabel" destination="Ice-la-pB0" id="Lh1-wP-aIK"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -581,6 +581,9 @@
                                     </attributedString>
                                     <color key="baseForegroundColor" name="gold"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapAddFromContacts:" destination="DMQ-Pa-rWG" eventType="touchUpInside" id="vua-xr-hFk"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hau-IX-uul">
                                 <rect key="frame" x="110" y="236.5" width="70" height="35"/>
@@ -651,6 +654,14 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o3w-zl-Vk6">
                                                             <rect key="frame" x="0.0" y="0.0" width="384" height="86"/>
                                                             <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y8V-cZ-rLA">
+                                                                    <rect key="frame" x="10" y="23" width="40" height="40"/>
+                                                                    <color key="tintColor" red="0.42352941176470588" green="0.015686274509803921" blue="0.019607843137254902" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="40" id="Nfa-EG-yIV"/>
+                                                                        <constraint firstAttribute="height" constant="40" id="aEm-Wy-8x9"/>
+                                                                    </constraints>
+                                                                </imageView>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="OEB-8a-5tK">
                                                                     <rect key="frame" x="181" y="33" width="123" height="20.5"/>
                                                                     <subviews>
@@ -688,9 +699,11 @@
                                                             <constraints>
                                                                 <constraint firstItem="Ei0-lN-F9Q" firstAttribute="top" secondItem="o3w-zl-Vk6" secondAttribute="top" id="Da8-AY-hbs"/>
                                                                 <constraint firstItem="Ei0-lN-F9Q" firstAttribute="leading" secondItem="OEB-8a-5tK" secondAttribute="trailing" constant="30" id="FfM-UK-Ke9"/>
+                                                                <constraint firstItem="y8V-cZ-rLA" firstAttribute="leading" secondItem="o3w-zl-Vk6" secondAttribute="leading" constant="10" id="InI-ly-Stu"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Ei0-lN-F9Q" secondAttribute="bottom" id="bMV-6M-yJD"/>
                                                                 <constraint firstItem="OEB-8a-5tK" firstAttribute="centerY" secondItem="o3w-zl-Vk6" secondAttribute="centerY" id="e9x-02-cXa"/>
                                                                 <constraint firstAttribute="height" constant="60" id="kaN-uS-uu0"/>
+                                                                <constraint firstItem="y8V-cZ-rLA" firstAttribute="centerY" secondItem="o3w-zl-Vk6" secondAttribute="centerY" id="uRH-Kb-qyo"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Ei0-lN-F9Q" secondAttribute="trailing" id="vPQ-gZ-xHe"/>
                                                             </constraints>
                                                         </view>
@@ -737,7 +750,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ved-3m-I1s">
-                                                    <rect key="frame" x="180" y="25.5" width="40" height="40"/>
+                                                    <rect key="frame" x="334" y="25.5" width="40" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="O1Y-2D-aQD"/>
                                                         <constraint firstAttribute="width" constant="40" id="ncg-5W-DyI"/>
@@ -749,6 +762,21 @@
                                                     </buttonConfiguration>
                                                     <connections>
                                                         <action selector="didTapDelete:" destination="fTH-wP-efi" eventType="touchUpInside" id="igy-WX-jpe"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4a9-dh-HXC">
+                                                    <rect key="frame" x="180" y="25.5" width="40" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="QLU-Jb-8Sw"/>
+                                                        <constraint firstAttribute="height" constant="40" id="nN6-L3-k0l"/>
+                                                    </constraints>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="filled" image="lock" catalog="system">
+                                                        <color key="baseForegroundColor" name="gold"/>
+                                                    </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="didTapLockLead:" destination="fTH-wP-efi" eventType="touchUpInside" id="iIn-Rf-ZX5"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ixM-A4-y7j">
@@ -779,16 +807,18 @@
                                             <constraints>
                                                 <constraint firstItem="suN-la-m8h" firstAttribute="centerY" secondItem="BuW-Y4-dsr" secondAttribute="centerY" id="3oX-7C-uDN"/>
                                                 <constraint firstItem="ixM-A4-y7j" firstAttribute="centerY" secondItem="BuW-Y4-dsr" secondAttribute="centerY" id="6jN-9Z-S2j"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Ved-3m-I1s" secondAttribute="trailing" id="AUz-HY-h79"/>
                                                 <constraint firstItem="Ved-3m-I1s" firstAttribute="centerY" secondItem="BuW-Y4-dsr" secondAttribute="centerY" id="Fov-t0-HBL"/>
                                                 <constraint firstAttribute="trailing" secondItem="ps8-lt-6Cg" secondAttribute="trailing" constant="5" id="GOq-ct-JBj"/>
                                                 <constraint firstItem="suN-la-m8h" firstAttribute="leading" secondItem="ixM-A4-y7j" secondAttribute="trailing" constant="10" id="J3T-dX-CeU"/>
                                                 <constraint firstItem="ps8-lt-6Cg" firstAttribute="top" secondItem="BuW-Y4-dsr" secondAttribute="top" constant="5" id="O7e-MR-sH9"/>
+                                                <constraint firstItem="4a9-dh-HXC" firstAttribute="leading" secondItem="6Bs-Go-fDp" secondAttribute="trailing" constant="10" id="TB4-3z-db7"/>
                                                 <constraint firstAttribute="bottom" secondItem="ps8-lt-6Cg" secondAttribute="bottom" id="Wkj-uC-LT5"/>
                                                 <constraint firstItem="ps8-lt-6Cg" firstAttribute="leading" secondItem="BuW-Y4-dsr" secondAttribute="leading" constant="5" id="Yj6-Wi-6Ax"/>
                                                 <constraint firstItem="ixM-A4-y7j" firstAttribute="leading" secondItem="BuW-Y4-dsr" secondAttribute="leading" constant="10" id="el9-kf-843"/>
                                                 <constraint firstItem="6Bs-Go-fDp" firstAttribute="leading" secondItem="suN-la-m8h" secondAttribute="trailing" constant="10" id="hbh-uA-VtP"/>
                                                 <constraint firstItem="6Bs-Go-fDp" firstAttribute="centerY" secondItem="BuW-Y4-dsr" secondAttribute="centerY" id="knL-fU-ufo"/>
-                                                <constraint firstItem="Ved-3m-I1s" firstAttribute="leading" secondItem="6Bs-Go-fDp" secondAttribute="trailing" constant="10" id="lYv-b9-VsZ"/>
+                                                <constraint firstItem="4a9-dh-HXC" firstAttribute="centerY" secondItem="BuW-Y4-dsr" secondAttribute="centerY" id="zMa-CO-bX6"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -799,7 +829,9 @@
                                             <outlet property="dateLabel" destination="jdm-00-4lu" id="NLJ-G2-k2G"/>
                                             <outlet property="deleteLeadButton" destination="Ved-3m-I1s" id="STC-An-ZtK"/>
                                             <outlet property="infoButton" destination="Ei0-lN-F9Q" id="5pK-jC-ndQ"/>
+                                            <outlet property="lockLeadButton" destination="4a9-dh-HXC" id="oBI-uc-kN8"/>
                                             <outlet property="nameLabel" destination="f2z-T1-DkT" id="QU7-Mk-yMc"/>
+                                            <outlet property="statusImageView" destination="y8V-cZ-rLA" id="fq0-dh-rZf"/>
                                             <outlet property="summryLabel" destination="gNn-N8-eGr" id="kjo-Ke-ey9"/>
                                             <outlet property="whatsappButton" destination="6Bs-Go-fDp" id="8vN-qg-ijq"/>
                                         </connections>
@@ -1271,6 +1303,7 @@
         <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="envelope" catalog="system" width="128" height="93"/>
+        <image name="lock" catalog="system" width="128" height="128"/>
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="phone" catalog="system" width="128" height="115"/>
         <image name="trash" catalog="system" width="121" height="128"/>

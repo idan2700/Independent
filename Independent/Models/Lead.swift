@@ -13,4 +13,22 @@ struct Lead {
     var summary: String?
     var phoneNumber: String
     var leadID: Int
+    var status: Status
+}
+
+enum Status {
+    case open
+    case closed
+    case deal
+    
+    var statusString: String {
+        switch self {
+        case .open:
+            return "פתוח"
+        case .closed:
+            return "סגור"
+        case .deal:
+            return "עסקה"
+        }
+    }
 }

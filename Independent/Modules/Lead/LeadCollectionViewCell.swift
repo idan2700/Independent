@@ -9,7 +9,7 @@ import UIKit
 
 class LeadCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var typeLabel: UILabel!
+    @IBOutlet weak var itemLabel: UILabel!
     @IBOutlet weak var itemView: UIView!
     @IBOutlet weak var amountLabel: UILabel!
 
@@ -22,7 +22,8 @@ class LeadCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with viewModel: LeadCollectionViewCellViewModel) {
-        typeLabel.preferredMaxLayoutWidth = self.itemView.bounds.width
-        typeLabel.text = viewModel.itemTypeLabel
+        itemLabel.preferredMaxLayoutWidth = self.itemView.bounds.width
+        itemLabel.text = viewModel.itemLabel
+        amountLabel.text = viewModel.amount
     }
 }

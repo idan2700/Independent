@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
 
 class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
 
@@ -63,6 +65,10 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func didTapAddManualy(_ sender: UIButton) {
         viewModel.didTapAddManualy()
     }
+    
+    @IBAction func didTapAddFromContacts(_ sender: UIButton) {
+        viewModel.didTapAddFromContacts()
+    }
 }
 
 extension LeadViewController: UICollectionViewDataSource {
@@ -109,7 +115,28 @@ extension LeadViewController: UITableViewDelegate {
     }
 }
 
+extension LeadViewController: CNContactPickerDelegate {
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        picker.dismiss(animated: true) {
+            self.viewModel.didSelectContact(contact: contact)
+        }
+    }
+}
+
 extension LeadViewController: LeadViewModelDelegate {
+    func moveToContactsVC() {
+        let ContactsVC = CNContactPickerViewController()
+        ContactsVC.delegate = self
+        ContactsVC.modalPresentationStyle = .overFullScreen
+        self.present(ContactsVC, animated: true, completion: nil)
+    }
+    
+    func changeNewLeadButtonState(isEnabled: Bool) {
+        newLeadButton.isEnabled = isEnabled
+        addManualyButton.isEnabled = isEnabled
+        addFromContactsButton.isEnabled = isEnabled
+    }
+    
     func setNextMonthButtonState(isHidden: Bool) {
         nextMonthButton.isHidden = isHidden
     }
@@ -146,11 +173,13 @@ extension LeadViewController: LeadViewModelDelegate {
         currentMonthLabel.text = viewModel.stringDate
     }
     
-    func moveToCreateLeadVC() {
+    func moveToCreateLeadVC(name: String?, phone: String?) {
         if let createLeadVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateLeadViewController") as? CreateLeadViewController {
             createLeadVC.modalPresentationStyle = .overFullScreen
             createLeadVC.delegate = self
-            createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.leads)
+            createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.currentMonthLeads)
+            createLeadVC.viewModel.nameFromContact = name
+            createLeadVC.viewModel.phoneFromContact = phone
         self.present(createLeadVC, animated: true, completion: nil)
         }
     }
@@ -171,6 +200,21 @@ extension LeadViewController: LeadViewModelDelegate {
 }
 
 extension LeadViewController: LeadTableViewCellDelegate {
+    func didTapOpenLead(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapOpenLead(at: indexPath)
+    }
+    
+    func didTapMakeDeal(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapMakeDeal(at: indexPath)
+    }
+    
+    func didTapLockLead(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapLockLead(at: indexPath)
+    }
+    
     func didTapCall(cell: LeadTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {return}
         viewModel.didTapCall(at: indexPath)

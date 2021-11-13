@@ -18,6 +18,8 @@ class CreateLeadViewModel {
     private var leadId = 0
     private var leads: [Lead]
     weak var delegate: CreateLeadViewModelDelegate?
+    var nameFromContact: String?
+    var phoneFromContact: String?
     
     init(delegate: CreateLeadViewModelDelegate?, leads: [Lead]) {
         self.delegate = delegate
@@ -31,7 +33,7 @@ class CreateLeadViewModel {
     
     func didTapAdd(name: String, date: Date, summary: String?, phoneNumber: String) {
         guard let currentUser = Auth.auth().currentUser?.uid else {return}
-        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: genrateLeadID())
+        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: genrateLeadID(), status: .open)
         DataBaseManager.shared.saveLead(lead: lead, userName: currentUser) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {

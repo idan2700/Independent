@@ -27,6 +27,8 @@ class CreateLeadViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        nameTextField.text = viewModel.nameFromContact ?? ""
+        phoneTextField.text = viewModel.phoneFromContact ?? ""
         summryTextView.layer.cornerRadius = 10
         nameTextField.layer.cornerRadius = 10
         phoneTextField.layer.cornerRadius = 10

@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import UIKit
 
 protocol LeadTableViewCellViewModelDelegate: AnyObject {
-    
+    func changeCellView(status: Status)
 }
 
 class LeadTableViewCellViewModel {
     
     weak var delegate: LeadTableViewCellViewModelDelegate?
-    private var lead: Lead
+    var lead: Lead
     
     init(lead: Lead) {
         self.lead = lead
