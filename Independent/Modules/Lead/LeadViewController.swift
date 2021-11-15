@@ -21,10 +21,15 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addFromContactsButton: UIButton!
     @IBOutlet weak var addManualyButton: UIButton!
-    @IBOutlet weak var newLeadButtonX: NSLayoutConstraint!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var leadsLoader: UIActivityIndicatorView!
     @IBOutlet weak var noLeadsLabel: UILabel!
+    @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var addleadButtonsWidth: NSLayoutConstraint!
+    @IBOutlet weak var searchBarWidth: NSLayoutConstraint!
+    @IBOutlet weak var presentByButtonsView: UIStackView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet var presentByButtons: [UIButton]!
     
     var viewModel: LeadViewModel!
  
@@ -35,18 +40,8 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         collectionView.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
-        buttonView.makeRoundCorners(radius: 10)
-        currentMonthLabel.text = viewModel.stringDate
-        lastMonthButton.setTitle("", for: .normal)
-        nextMonthButton.setTitle("", for: .normal)
-        addFromContactsButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
-        addManualyButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
-        newLeadButton.makeRoundCorners(radius: 10)
-        monthPickerView.makeRoundCorners(radius: 10)
-        monthView.makeRoundCorners(radius: 10)
-        tableView.makeTopRoundCorners()
-        addManualyButton.layer.cornerRadius = 10
-        addFromContactsButton.layer.cornerRadius = 10
+        searchBar.delegate = self
+        updateUI()
     }
     
     @IBAction func didTapNextMonth(_ sender: UIButton) {
@@ -68,6 +63,37 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBAction func didTapAddFromContacts(_ sender: UIButton) {
         viewModel.didTapAddFromContacts()
+    }
+    
+    @IBAction func didTapPresentBy(_ sender: UIButton) {
+        if let titleLabel = sender.titleLabel?.text {
+        viewModel.didTapPresentBy(presentByTitle: titleLabel)
+        }
+    }
+    
+    private func updateUI() {
+        buttonView.makeRoundCorners(radius: 10)
+        currentMonthLabel.text = viewModel.stringDate
+        lastMonthButton.setTitle("", for: .normal)
+        nextMonthButton.setTitle("", for: .normal)
+        newLeadButton.setTitle("", for: .normal)
+        addFromContactsButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
+        addManualyButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
+        newLeadButton.makeRoundCorners(radius: 10)
+        monthPickerView.makeRoundCorners(radius: 10)
+        monthView.makeRoundCorners(radius: 10)
+        tableView.makeTopRoundCorners()
+        addManualyButton.layer.cornerRadius = 10
+        addFromContactsButton.layer.cornerRadius = 10
+        collectionViewHeight.constant = (view.frame.width - 51) / 3
+        addleadButtonsWidth.constant = 0
+        searchBarWidth.constant = self.view.frame.width - 70
+        presentByButtonsView.makeRoundCorners(radius: 10)
+        if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
+            let atrbString = NSAttributedString(string: "חפש ליד", attributes: [.foregroundColor : UIColor(named: "30white")!, .font : UIFont.systemFont(ofSize: 10)])
+            textfield.attributedPlaceholder = atrbString
+            textfield.textColor = UIColor(named: "50white") ?? .white
+        }
     }
 }
 
@@ -123,7 +149,42 @@ extension LeadViewController: CNContactPickerDelegate {
     }
 }
 
+extension LeadViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if let text = searchBar.text {
+            viewModel.didSearchForLead(text: text)
+        }
+    }
+}
+
 extension LeadViewController: LeadViewModelDelegate {
+    func expandUpdatedCell(lead: Lead) {
+        guard let index = viewModel.currentMonthLeads.firstIndex(where: {$0.phoneNumber == lead.phoneNumber}) else {return}
+        let indexPath = IndexPath(row: index, section: 0)
+        guard let cell = tableView.cellForRow(at: indexPath) as? LeadTableViewCell else {return}
+        cell.didTapInfo(cell.infoButton)
+    }
+    
+    func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath, leadManager: LeadManager) {
+        let editSummryVC: EditLeadSummryViewController = storyBoard.instantiateViewController()
+        editSummryVC.viewModel = EditLeadSummryViewModel(lead: lead, delegate: editSummryVC, indexPath: indexPath, leadManager: leadManager)
+        editSummryVC.delegate = self
+        editSummryVC.modalPresentationStyle = .overFullScreen
+        self.present(editSummryVC, animated: true, completion: nil)
+    }
+    
+    func changePresentByButtonUI(currentSelectedButton: String) {
+        for button in presentByButtons {
+            if button.titleLabel?.text == currentSelectedButton {
+                button.backgroundColor = UIColor(named: "10white") ?? .white
+                button.tintColor = UIColor(named: "gold") ?? .white
+            } else {
+                button.backgroundColor = UIColor(named: "5white") ?? .white
+                button.tintColor = UIColor(named: "30white") ?? .white
+            }
+        }
+    }
+    
     func moveToContactsVC() {
         let ContactsVC = CNContactPickerViewController()
         ContactsVC.delegate = self
@@ -161,7 +222,7 @@ extension LeadViewController: LeadViewModelDelegate {
     }
     
     func presentAlert(message: String) {
-        
+        self.presentErrorAlert(with: message)
     }
     
     func reloadData() {
@@ -173,25 +234,26 @@ extension LeadViewController: LeadViewModelDelegate {
         currentMonthLabel.text = viewModel.stringDate
     }
     
-    func moveToCreateLeadVC(name: String?, phone: String?) {
-        if let createLeadVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CreateLeadViewController") as? CreateLeadViewController {
-            createLeadVC.modalPresentationStyle = .overFullScreen
-            createLeadVC.delegate = self
-            createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.currentMonthLeads)
-            createLeadVC.viewModel.nameFromContact = name
-            createLeadVC.viewModel.phoneFromContact = phone
+    func moveToCreateLeadVC(name: String?, phone: String?, leadManager: LeadManager) {
+        let createLeadVC: CreateLeadViewController = storyBoard.instantiateViewController()
+        createLeadVC.modalPresentationStyle = .overFullScreen
+        createLeadVC.delegate = self
+        createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.currentMonthLeads, leadManager: leadManager)
+        createLeadVC.viewModel.nameFromContact = name
+        createLeadVC.viewModel.phoneFromContact = phone
         self.present(createLeadVC, animated: true, completion: nil)
-        }
     }
     
     func animateNewLeadButton(toOpen: Bool) {
         if toOpen {
-            newLeadButtonX.constant = addManualyButton.frame.maxX + 10
+            addleadButtonsWidth.constant = 150
+            searchBarWidth.constant = self.view.frame.width - 70 - addleadButtonsWidth.constant - 5
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
             }
         } else {
-            newLeadButtonX.constant = 20
+            addleadButtonsWidth.constant = 0
+            searchBarWidth.constant = self.view.frame.width - 70
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
             }
@@ -200,6 +262,11 @@ extension LeadViewController: LeadViewModelDelegate {
 }
 
 extension LeadViewController: LeadTableViewCellDelegate {
+    func didTapEditSummry(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapEditLeadSummry(at: indexPath)
+    }
+    
     func didTapOpenLead(cell: LeadTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {return}
         viewModel.didTapOpenLead(at: indexPath)
@@ -240,5 +307,11 @@ extension LeadViewController: LeadTableViewCellDelegate {
 extension LeadViewController: CreateLeadViewControllerDelegate {
     func didPick(newLead: Lead) {
         viewModel.didPickNewLead(lead: newLead)
+    }
+}
+
+extension LeadViewController: EditLeadSummryViewControllerDelegate {
+    func didPick(updatedLead: Lead, indexPath: IndexPath) {
+        viewModel.didPickUpdatedLead(lead: updatedLead, indexPath: indexPath)
     }
 }

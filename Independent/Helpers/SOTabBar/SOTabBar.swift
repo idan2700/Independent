@@ -35,12 +35,14 @@ public class SOTabBar: UIView {
         stackView.alignment = .center
         stackView.clipsToBounds = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.semanticContentAttribute = .forceLeftToRight
         return stackView
     }()
     
     private let innerCircleView: UIView = {
         let view = UIView()
         view.backgroundColor = SOTabBarSetting.tabBarBackground
+        view.semanticContentAttribute = .forceLeftToRight
         return view
     }()
     
@@ -48,12 +50,14 @@ public class SOTabBar: UIView {
         let view = UIView()
         view.backgroundColor = SOTabBarSetting.tabBarTintColor
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.semanticContentAttribute = .forceLeftToRight
         return view
     }()
     
     private let tabSelectedImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.semanticContentAttribute = .forceLeftToRight
         return imageView
     }()
     
@@ -65,6 +69,7 @@ public class SOTabBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         dropShadow()
+        self.semanticContentAttribute = .forceLeftToRight
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -86,6 +91,7 @@ public class SOTabBar: UIView {
             barView.heightAnchor.constraint(equalToConstant: SOTabBarSetting.tabBarHeight).isActive = true
             barView.translatesAutoresizingMaskIntoConstraints = false
             barView.isUserInteractionEnabled = false
+            barView.semanticContentAttribute = .forceLeftToRight
             self.stackView.addArrangedSubview(barView)
         }
     }

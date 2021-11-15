@@ -16,6 +16,7 @@ protocol LeadTableViewCellDelegate: AnyObject {
     func didTapMakeDeal(cell: LeadTableViewCell)
     func didTapLockLead(cell: LeadTableViewCell)
     func didTapOpenLead(cell: LeadTableViewCell)
+    func didTapEditSummry(cell: LeadTableViewCell)
 }
 
 class LeadTableViewCell: UITableViewCell {
@@ -37,31 +38,7 @@ class LeadTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        cellView.makeRoundCorners(radius: 10)
-        disappearSwipeRightButtons()
-        disappearSwipeLeftButton()
-        closeDealButton.makeRoundCorners(radius: 10)
-        callButton.setTitle("", for: .normal)
-        deleteLeadButton.setTitle("", for: .normal)
-        whatsappButton.setTitle("", for: .normal)
-        infoButton.setTitle("", for: .normal)
-        lockLeadButton.setTitle("", for: .normal)
-        closeDealButton.setTitle("סגור עסקה", for: .normal)
-        let swipeRightRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeRight))
-        swipeRightRegongnizer.direction = .right
-        swipeRightRegongnizer.delegate = self
-        cellView.addGestureRecognizer(swipeRightRegongnizer)
-        let swipeLeftRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeLeft))
-        swipeLeftRegongnizer.direction = .left
-        swipeLeftRegongnizer.delegate = self
-        cellView.addGestureRecognizer(swipeLeftRegongnizer)
-        let tapRegongnizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
-        tapRegongnizer.delegate = self
-        cellView.addGestureRecognizer(tapRegongnizer)
-        let longPressRegongnizer = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress))
-        longPressRegongnizer.delegate = self
-        statusImageView.addGestureRecognizer(longPressRegongnizer)
-        statusImageView.isUserInteractionEnabled = true
+        updateUI()
     }
     
     func configure(with viewModel: LeadTableViewCellViewModel) {
@@ -69,10 +46,32 @@ class LeadTableViewCell: UITableViewCell {
         handleCellView()
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
-        summryLabel.text = viewModel.summry
+        let summryAttributed = NSMutableAttributedString(string: viewModel.summry)
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "pencil")
+        imageAttachment.image = imageAttachment.image?.withTintColor(UIColor(named: "gold")!)
+        let imageString = NSAttributedString(attachment: imageAttachment)
+        summryAttributed.append(imageString)
+        self.summryLabel.attributedText = summryAttributed
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTextEditTap))
+        summryLabel.addGestureRecognizer(tapGesture)
+        summryLabel.isUserInteractionEnabled = true
+    }
+    
+    func configureCellExpend(toExpand: Bool) {
+        summryLabel.isHidden = toExpand
+        infoButton.setImage(toExpand ? UIImage(systemName: "chevron.down") : UIImage(systemName: "chevron.up"), for: .normal)
+    }
+    
+    @objc func handleTextEditTap() {
+        delegate?.didTapEditSummry(cell: self)
+        didTapInfo(infoButton)
     }
     
     @objc func handleSwipeRight() {
+        if viewModel.lead.status == .closed || viewModel.lead.status == .deal {
+            return
+        }
         UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .beginFromCurrentState, animations: {
             self.cellView.frame.origin.x = self.lockLeadButton.frame.origin.x + 50
             self.presentSwipeRightButtons()
@@ -81,6 +80,9 @@ class LeadTableViewCell: UITableViewCell {
     }
     
     @objc func handleSwipeLeft() {
+        if viewModel.lead.status == .closed || viewModel.lead.status == .deal {
+            return
+        }
         UIView.animate(withDuration: 1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .beginFromCurrentState, animations: {
             self.cellView.frame.origin.x = -70
             self.presentSwipeLeftButton()
@@ -131,11 +133,6 @@ class LeadTableViewCell: UITableViewCell {
         delegate?.didTapInfo(cell: self, isInfoButtonOpen: self.isInfoButtonOpen)
     }
     
-    func configureCellExpend(toExpand: Bool) {
-        summryLabel.isHidden = toExpand
-        infoButton.setImage(toExpand ? UIImage(systemName: "chevron.down") : UIImage(systemName: "chevron.up"), for: .normal)
-    }
-    
     private func disappearSwipeRightButtons() {
         self.callButton.alpha = 0
         self.whatsappButton.alpha = 0
@@ -172,6 +169,34 @@ class LeadTableViewCell: UITableViewCell {
             statusImageView.tintColor = UIColor(named: "50darkgreen") ?? .green
             infoButton.tintColor = UIColor(named: "50darkgreen") ?? .green
         }
+    }
+    
+    private func updateUI() {
+        cellView.makeRoundCorners(radius: 10)
+        disappearSwipeRightButtons()
+        disappearSwipeLeftButton()
+        closeDealButton.makeRoundCorners(radius: 10)
+        callButton.setTitle("", for: .normal)
+        deleteLeadButton.setTitle("", for: .normal)
+        whatsappButton.setTitle("", for: .normal)
+        infoButton.setTitle("", for: .normal)
+        lockLeadButton.setTitle("", for: .normal)
+        closeDealButton.setTitle("סגור עסקה", for: .normal)
+        let swipeRightRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeRight))
+        swipeRightRegongnizer.direction = .right
+        swipeRightRegongnizer.delegate = self
+        cellView.addGestureRecognizer(swipeRightRegongnizer)
+        let swipeLeftRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeLeft))
+        swipeLeftRegongnizer.direction = .left
+        swipeLeftRegongnizer.delegate = self
+        cellView.addGestureRecognizer(swipeLeftRegongnizer)
+        let tapRegongnizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
+        tapRegongnizer.delegate = self
+        cellView.addGestureRecognizer(tapRegongnizer)
+        let longPressRegongnizer = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPress))
+        longPressRegongnizer.delegate = self
+        statusImageView.addGestureRecognizer(longPressRegongnizer)
+        statusImageView.isUserInteractionEnabled = true
     }
 }
 

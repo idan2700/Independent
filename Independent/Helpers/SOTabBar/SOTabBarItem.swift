@@ -40,6 +40,7 @@ class SOTabBarItem: UIView {
         self.title = item.title ?? ""
         super.init(frame: .zero)
         drawConstraints()
+        self.semanticContentAttribute = .forceLeftToRight
     }
     
     private func drawConstraints() {

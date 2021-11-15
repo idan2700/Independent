@@ -14,16 +14,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let signInVC = storyBoard.instantiateViewController(withIdentifier: "regestrationVC") as? RegestrationViewController
-        let mainTabVC = storyBoard.instantiateViewController(withIdentifier: "tabBarVC") as? SOTabBarController
+        let regestrationVC: RegestrationViewController = storyBoard.instantiateViewController()
+        let tabBarVC: TabBarViewController = storyBoard.instantiateViewController()
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
         self.window = window
         if Auth.auth().currentUser != nil {
-            self.window?.rootViewController = mainTabVC
+            self.window?.rootViewController = tabBarVC
           // ...
         } else {
-            self.window?.rootViewController = signInVC
+            self.window?.rootViewController = regestrationVC
         }
         self.window?.makeKeyAndVisible()
     }

@@ -29,13 +29,7 @@ class CreateLeadViewController: UIViewController {
         super.viewDidLoad()
         nameTextField.text = viewModel.nameFromContact ?? ""
         phoneTextField.text = viewModel.phoneFromContact ?? ""
-        summryTextView.layer.cornerRadius = 10
-        nameTextField.layer.cornerRadius = 10
-        phoneTextField.layer.cornerRadius = 10
-        addLeadButton.makeRoundCorners(radius: 10)
-        addLeadView.makeRoundCorners(radius: 10)
-        nameTextField.attributedPlaceholder = NSAttributedString(string: "שם מלא", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
-        phoneTextField.attributedPlaceholder = NSAttributedString(string: "טלפון", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
+        updateUI()
     }
 
     @IBAction func didTapCancel(_ sender: UIButton) {
@@ -44,6 +38,16 @@ class CreateLeadViewController: UIViewController {
     
     @IBAction func didTapAdd(_ sender: UIButton) {
         viewModel.didTapAdd(name: nameTextField.text ?? "", date: Date(), summary: summryTextView.text, phoneNumber: phoneTextField.text ?? "")
+    }
+    
+    private func updateUI() {
+        summryTextView.layer.cornerRadius = 10
+        nameTextField.layer.cornerRadius = 10
+        phoneTextField.layer.cornerRadius = 10
+        addLeadButton.makeRoundCorners(radius: 10)
+        addLeadView.makeTopRoundCorners()
+        nameTextField.attributedPlaceholder = NSAttributedString(string: "שם מלא", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
+        phoneTextField.attributedPlaceholder = NSAttributedString(string: "טלפון", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
     }
 }
 
@@ -54,6 +58,6 @@ extension CreateLeadViewController: CreateLeadViewModelDelegate {
     }
     
     func presentAlert(message: String) {
-        
+        self.presentErrorAlert(with: message)
     }
 }

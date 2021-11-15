@@ -46,6 +46,7 @@ open class SOTabBarController: UIViewController, SOTabBarDelegate {
         self.view.addSubview(tabBar)
         self.view.bringSubviewToFront(tabBar)
         self.drawConstraint()
+        self.view.semanticContentAttribute = .forceLeftToRight
     }
     
     private func drawConstraint() {
@@ -94,3 +95,4 @@ open class SOTabBarController: UIViewController, SOTabBarDelegate {
     }
     
 }
+

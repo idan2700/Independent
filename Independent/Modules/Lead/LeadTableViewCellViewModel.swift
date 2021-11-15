@@ -34,7 +34,7 @@ class LeadTableViewCellViewModel {
     
     var summry: String {
         if lead.summary == "" {
-            return "אין תקציר"
+            return "אין תקציר "
         } else {
         return lead.summary ?? ""
         }

@@ -17,13 +17,15 @@ class CreateLeadViewModel {
     
     private var leadId = 0
     private var leads: [Lead]
+    private var leadManager: LeadManager
     weak var delegate: CreateLeadViewModelDelegate?
     var nameFromContact: String?
     var phoneFromContact: String?
     
-    init(delegate: CreateLeadViewModelDelegate?, leads: [Lead]) {
+    init(delegate: CreateLeadViewModelDelegate?, leads: [Lead], leadManager: LeadManager) {
         self.delegate = delegate
         self.leads = leads
+        self.leadManager = leadManager
         if let leadID = UserDefaults.standard.value(forKey: "leadID") as? Int {
             self.leadId = leadID
         } else if let maxId = leads.max(by: {$0.leadID < $1.leadID})?.leadID {
@@ -34,7 +36,7 @@ class CreateLeadViewModel {
     func didTapAdd(name: String, date: Date, summary: String?, phoneNumber: String) {
         guard let currentUser = Auth.auth().currentUser?.uid else {return}
         let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: genrateLeadID(), status: .open)
-        DataBaseManager.shared.saveLead(lead: lead, userName: currentUser) { [weak self] result in
+        leadManager.saveLead(lead: lead, userName: currentUser) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {

@@ -25,5 +25,6 @@ class LeadCollectionViewCell: UICollectionViewCell {
         itemLabel.preferredMaxLayoutWidth = self.itemView.bounds.width
         itemLabel.text = viewModel.itemLabel
         amountLabel.text = viewModel.amount
+        amountLabel.textColor = viewModel.amountLabelColor
     }
 }

@@ -14,7 +14,7 @@ import Contacts
 
 protocol LeadViewModelDelegate: AnyObject {
     func updateCurrentMonthLabel()
-    func moveToCreateLeadVC(name: String?, phone: String?)
+    func moveToCreateLeadVC(name: String?, phone: String?, leadManager: LeadManager)
     func animateNewLeadButton(toOpen: Bool)
     func presentAlert(message: String)
     func setLeadLoaderState(isHidden: Bool)
@@ -22,6 +22,9 @@ protocol LeadViewModelDelegate: AnyObject {
     func setNextMonthButtonState(isHidden: Bool)
     func removeCell(at indexPath: IndexPath)
     func changeNewLeadButtonState(isEnabled: Bool)
+    func changePresentByButtonUI(currentSelectedButton: String)
+    func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath, leadManager: LeadManager)
+    func expandUpdatedCell(lead: Lead)
     func moveToContactsVC()
     func reloadData()
 }
@@ -31,8 +34,10 @@ class LeadViewModel {
     weak var delegate: LeadViewModelDelegate?
     
     private let dateFormatter = DateFormatter()
+    private let leadManager: LeadManager
     private var date = Date()
     private var allLeads = [Lead]()
+    private var leadsHolder = [Lead]()
     private var isNewLeadButtonSelected: Bool = false
     private var cancellables = Set<AnyCancellable>()
     
@@ -56,14 +61,15 @@ class LeadViewModel {
          return dateFormatter.string(from: date)
     }
 
-    init(delegate: LeadViewModelDelegate?) {
+    init(delegate: LeadViewModelDelegate?, leadManager: LeadManager) {
         self.delegate = delegate
+        self.leadManager = leadManager
     }
     
     func start() {
         delegate?.setLeadLoaderState(isHidden: false)
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        DataBaseManager.shared.loadLeadCollection(userId: currentUserID) { [weak self] result in
+        leadManager.loadLeadCollection(userId: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 self.delegate?.setLeadLoaderState(isHidden: true)
@@ -83,7 +89,7 @@ class LeadViewModel {
     func getItemViewModel(at indexPath: IndexPath) -> LeadCollectionViewCellViewModel {
         return LeadCollectionViewCellViewModel(item: leadItems(rawValue: indexPath.row),
                                                indexPath: indexPath,
-                                               leads: currentMonthLeads)
+                                               leads: leadsHolder)
     }
     
     func getCellViewModel(at indexPath: IndexPath) -> LeadTableViewCellViewModel {
@@ -92,6 +98,7 @@ class LeadViewModel {
     
     func didTapNextMonth(currentPresentedMonth: String) {
         self.currentMonthLeads = []
+        self.leadsHolder = []
         dateFormatter.dateFormat = "MMMM yyyy"
         dateFormatter.locale = Locale(identifier: "He")
         date = Calendar.current.date(byAdding: .month, value: 1, to: date) ?? Date()
@@ -106,12 +113,28 @@ class LeadViewModel {
     
     func didTapLastMonth() {
         self.currentMonthLeads = []
+        self.leadsHolder = []
         date = Calendar.current.date(byAdding: .month, value: -1, to: date) ?? Date()
         checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: date)
         delegate?.reloadData()
         delegate?.updateCurrentMonthLabel()
         delegate?.setNextMonthButtonState(isHidden: false)
         delegate?.changeNewLeadButtonState(isEnabled: false)
+    }
+    
+    func didSearchForLead(text: String) {
+        currentMonthLeads = leadsHolder
+        if text.isEmpty {
+            currentMonthLeads = leadsHolder
+        } else {
+            let filterd = currentMonthLeads.filter({$0.fullName.contains(text)})
+            if filterd.count > 0 {
+                currentMonthLeads = filterd
+            } else {
+                currentMonthLeads = []
+            }
+        }
+        delegate?.reloadData()
     }
     
     func didTapCreateNewLead() {
@@ -121,17 +144,28 @@ class LeadViewModel {
     
     func didTapAddFromContacts() {
         delegate?.moveToContactsVC()
+        delegate?.animateNewLeadButton(toOpen: false)
     }
 
     func didSelectContact(contact: CNContact) {
         let name = contact.givenName + " " + contact.familyName
         let phone = contact.phoneNumbers[0].value.stringValue
-        let phoneNumber = phone.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
-        delegate?.moveToCreateLeadVC(name: name, phone: phoneNumber)
+        let phoneWithNoLines = phone.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
+        if phoneWithNoLines.count > 10 {
+            let phoneWithNoBlanks = phoneWithNoLines.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
+            var phoneNumber = phoneWithNoBlanks.replacingOccurrences(of: "+", with: "", options: NSString.CompareOptions.literal, range: nil)
+            for _ in 0...2 {
+                phoneNumber.remove(at: phoneNumber.startIndex)
+            }
+            phoneNumber.insert("0", at: phoneNumber.startIndex)
+            delegate?.moveToCreateLeadVC(name: name, phone: phoneNumber, leadManager: self.leadManager)
+        }
+        delegate?.moveToCreateLeadVC(name: name, phone: phoneWithNoLines, leadManager: self.leadManager)
     }
 
     func didTapAddManualy() {
-        delegate?.moveToCreateLeadVC(name: nil, phone: nil)
+        delegate?.moveToCreateLeadVC(name: nil, phone: nil, leadManager: self.leadManager)
+        delegate?.animateNewLeadButton(toOpen: false)
     }
     
     func didTapCall(at indexPath: IndexPath) {
@@ -157,11 +191,12 @@ class LeadViewModel {
     func didTapDelete(at indexPath: IndexPath) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
         let leadID = String(currentMonthLeads[indexPath.row].leadID)
-            DataBaseManager.shared.deleteLead(leadId: leadID, userID: currentUserID) { [weak self] result in
+            leadManager.deleteLead(leadId: leadID, userID: currentUserID) { [weak self] result in
                 guard let self = self else {return}
                 DispatchQueue.main.async {
                     switch result {
                     case .success():
+                        self.removeLeadFromAllLeads(lead: self.currentMonthLeads[indexPath.row])
                         self.currentMonthLeads.remove(at: indexPath.row)
                         self.delegate?.removeCell(at: indexPath)
                         self.delegate?.reloadData()
@@ -172,34 +207,73 @@ class LeadViewModel {
             }
     }
     
+    func didTapPresentBy(presentByTitle: String) {
+        switch presentByTitle {
+        case "כל הלידים":
+            delegate?.changePresentByButtonUI(currentSelectedButton: "כל הלידים")
+            self.currentMonthLeads = leadsHolder
+        case "פתוחים":
+            delegate?.changePresentByButtonUI(currentSelectedButton: "פתוחים")
+            let filterd = self.leadsHolder.filter({$0.status == .open})
+            self.currentMonthLeads = filterd
+        case "סגורים":
+            delegate?.changePresentByButtonUI(currentSelectedButton: "סגורים")
+            let filterd = self.leadsHolder.filter({$0.status == .closed})
+            self.currentMonthLeads = filterd
+        case "הומרו לעסקה":
+            delegate?.changePresentByButtonUI(currentSelectedButton: "הומרו לעסקה")
+            let filterd = self.leadsHolder.filter({$0.status == .deal})
+            self.currentMonthLeads = filterd
+        default:
+            self.currentMonthLeads = leadsHolder
+        }
+        delegate?.reloadData()
+    }
+    
     func didTapMakeDeal(at indexPath: IndexPath) {
         currentMonthLeads[indexPath.row].status = .deal
-        allLeads.removeAll(where: {$0.fullName == currentMonthLeads[indexPath.row].fullName})
+        self.removeLeadFromAllLeads(lead: currentMonthLeads[indexPath.row])
         allLeads.append(currentMonthLeads[indexPath.row])
+        leadsHolder.append(currentMonthLeads[indexPath.row])
         changeLeadStatus(lead: currentMonthLeads[indexPath.row])
     }
     
     func didTapLockLead(at indexPath: IndexPath) {
         currentMonthLeads[indexPath.row].status = .closed
-        allLeads.removeAll(where: {$0.fullName == currentMonthLeads[indexPath.row].fullName})
+        self.removeLeadFromAllLeads(lead: currentMonthLeads[indexPath.row])
         allLeads.append(currentMonthLeads[indexPath.row])
+        leadsHolder.append(currentMonthLeads[indexPath.row])
         changeLeadStatus(lead: currentMonthLeads[indexPath.row])
     }
     
     func didTapOpenLead(at indexPath: IndexPath) {
         currentMonthLeads[indexPath.row].status = .open
-        allLeads.removeAll(where: {$0.fullName == currentMonthLeads[indexPath.row].fullName})
+        self.removeLeadFromAllLeads(lead: currentMonthLeads[indexPath.row])
         allLeads.append(currentMonthLeads[indexPath.row])
+        leadsHolder.append(currentMonthLeads[indexPath.row])
         changeLeadStatus(lead: currentMonthLeads[indexPath.row])
     }
     
     func didPickNewLead(lead: Lead) {
         self.currentMonthLeads.append(lead)
+        self.leadsHolder.append(lead)
         self.allLeads.append(lead)
         delegate?.reloadData()
     }
-
     
+    func didPickUpdatedLead(lead: Lead, indexPath: IndexPath) {
+        currentMonthLeads[indexPath.row] = lead
+        removeLeadFromAllLeads(lead: lead)
+        allLeads.append(lead)
+        leadsHolder.append(lead)
+        delegate?.reloadData()
+        delegate?.expandUpdatedCell(lead: currentMonthLeads[indexPath.row])
+    }
+    
+    func didTapEditLeadSummry(at indexPath: IndexPath) {
+        delegate?.moveToEditSummryLeadVC(with: currentMonthLeads[indexPath.row], indexPath: indexPath, leadManager: self.leadManager)
+    }
+
     //Mark:- Private funcs
     private func checkIfLeadsAreEmpty() {
         if currentMonthLeads.isEmpty {
@@ -211,7 +285,7 @@ class LeadViewModel {
     
     private func changeLeadStatus(lead: Lead) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        DataBaseManager.shared.updateLeadStatus(lead: lead, userName: currentUserID, status: lead.status.statusString) { [weak self] result in
+        leadManager.updateLeadStatus(lead: lead, userName: currentUserID, status: lead.status.statusString) { [weak self] result in
             guard let self = self else {return}
             switch result {
             case .success():
@@ -229,9 +303,15 @@ class LeadViewModel {
            let currentMonth = self.dateFormatter.string(from: currentPresentedMonth)
            if self.dateFormatter.string(from: lead.date) == currentMonth {
                self.currentMonthLeads.append(lead)
+               self.leadsHolder.append(lead)
            }
        }
    }
+    
+    private func removeLeadFromAllLeads(lead: Lead) {
+        self.allLeads.removeAll(where: {$0.phoneNumber == lead.phoneNumber})
+        self.leadsHolder.removeAll(where: {$0.phoneNumber == lead.phoneNumber})
+    }
     
     private func bind() {
         DataBaseManager.shared.$isLoading
