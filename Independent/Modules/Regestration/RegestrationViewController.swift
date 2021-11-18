@@ -84,7 +84,7 @@ extension RegestrationViewController: RegestrationViewModelDelegate {
     }
     
     func presentPhoneError(message: String) {
-        phoneNumberTextField.lineColor = .red
+        phoneNumberTextField.lineColor = UIColor(named: "darkred") ?? .red
         phoneErrorLabel.isHidden = false
         phoneErrorLabel.text = message
     }
@@ -100,7 +100,7 @@ extension RegestrationViewController: RegestrationViewModelDelegate {
     }
     
     func presentNameError(message: String) {
-        nameTextField.lineColor = .red
+        nameTextField.lineColor = UIColor(named: "darkred") ?? .red
         nameErrorLabel.isHidden = false
         nameErrorLabel.text = message
     }

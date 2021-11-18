@@ -55,6 +55,4 @@ class CreateLeadViewModel {
         UserDefaults.standard.set(newId, forKey: "leadID")
         return leadId
     }
-    
-    
 }

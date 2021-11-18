@@ -56,7 +56,6 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         viewModel.didTapCreateNewLead()
     }
                        
-    
     @IBAction func didTapAddManualy(_ sender: UIButton) {
         viewModel.didTapAddManualy()
     }
@@ -221,7 +220,7 @@ extension LeadViewController: LeadViewModelDelegate {
         }
     }
     
-    func presentAlert(message: String) {
+    func presentErrorAlert(message: String) {
         self.presentErrorAlert(with: message)
     }
     
@@ -244,8 +243,8 @@ extension LeadViewController: LeadViewModelDelegate {
         self.present(createLeadVC, animated: true, completion: nil)
     }
     
-    func animateNewLeadButton(toOpen: Bool) {
-        if toOpen {
+    func changeCreateLeadButtonsVisability(toPresent: Bool) {
+        if toPresent {
             addleadButtonsWidth.constant = 150
             searchBarWidth.constant = self.view.frame.width - 70 - addleadButtonsWidth.constant - 5
             UIView.animate(withDuration: 0.5) {

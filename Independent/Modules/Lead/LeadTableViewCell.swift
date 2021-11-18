@@ -41,6 +41,36 @@ class LeadTableViewCell: UITableViewCell {
         updateUI()
     }
     
+    @IBAction func didTapCloseDeal(_ sender: UIButton) {
+        handleTap()
+        delegate?.didTapMakeDeal(cell: self)
+    }
+    
+    @IBAction func didTapCall(_ sender: UIButton) {
+        handleTap()
+        delegate?.didTapCall(cell: self)
+    }
+    
+    @IBAction func didTapSendWhatsapp(_ sender: UIButton) {
+        handleTap()
+        delegate?.didTapWhatsapp(cell: self)
+    }
+    
+    @IBAction func didTapLockLead(_ sender: UIButton) {
+        handleTap()
+        delegate?.didTapLockLead(cell: self)
+    }
+    
+    @IBAction func didTapDelete(_ sender: UIButton) {
+        delegate?.didTapDelete(cell: self)
+        handleTap()
+    }
+    
+    @IBAction func didTapInfo(_ sender: UIButton) {
+        isInfoButtonOpen = !isInfoButtonOpen
+        delegate?.didTapInfo(cell: self, isInfoButtonOpen: self.isInfoButtonOpen)
+    }
+    
     func configure(with viewModel: LeadTableViewCellViewModel) {
         self.viewModel = viewModel
         handleCellView()
@@ -101,36 +131,6 @@ class LeadTableViewCell: UITableViewCell {
     @objc func handleLongPress() {
         delegate?.didTapOpenLead(cell: self)
         AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-    }
-    
-    @IBAction func didTapCloseDeal(_ sender: UIButton) {
-        handleTap()
-        delegate?.didTapMakeDeal(cell: self)
-    }
-    
-    @IBAction func didTapCall(_ sender: UIButton) {
-        handleTap()
-        delegate?.didTapCall(cell: self)
-    }
-    
-    @IBAction func didTapSendWhatsapp(_ sender: UIButton) {
-        handleTap()
-        delegate?.didTapWhatsapp(cell: self)
-    }
-    
-    @IBAction func didTapLockLead(_ sender: UIButton) {
-        handleTap()
-        delegate?.didTapLockLead(cell: self)
-    }
-    
-    @IBAction func didTapDelete(_ sender: UIButton) {
-        delegate?.didTapDelete(cell: self)
-        handleTap()
-    }
-    
-    @IBAction func didTapInfo(_ sender: UIButton) {
-        isInfoButtonOpen = !isInfoButtonOpen
-        delegate?.didTapInfo(cell: self, isInfoButtonOpen: self.isInfoButtonOpen)
     }
     
     private func disappearSwipeRightButtons() {

@@ -38,7 +38,7 @@ class TabBarViewController: SOTabBarController {
         mainVC.tabBarItem = UITabBarItem(title: "ראשי", image: UIImage(systemName: "house"), selectedImage: nil)
         
         leadVC.viewModel = LeadViewModel(delegate: leadVC, leadManager: LeadManager())
-        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC)
+        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC, eventsManager: EventsManager())
         viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
     }
 }

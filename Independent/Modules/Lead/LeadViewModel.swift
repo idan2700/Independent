@@ -15,8 +15,8 @@ import Contacts
 protocol LeadViewModelDelegate: AnyObject {
     func updateCurrentMonthLabel()
     func moveToCreateLeadVC(name: String?, phone: String?, leadManager: LeadManager)
-    func animateNewLeadButton(toOpen: Bool)
-    func presentAlert(message: String)
+    func changeCreateLeadButtonsVisability(toPresent: Bool)
+    func presentErrorAlert(message: String)
     func setLeadLoaderState(isHidden: Bool)
     func setNoLeadsLabelState(isHidden: Bool)
     func setNextMonthButtonState(isHidden: Bool)
@@ -80,7 +80,7 @@ class LeadViewModel {
                     self.checkIfLeadsAreEmpty()
                     self.delegate?.reloadData()
                 case .failure(_):
-                    self.delegate?.presentAlert(message: "בעיה בטעינת מתעניינים מהשרת, אנא נסה שנית")
+                    self.delegate?.presentErrorAlert(message: "בעיה בטעינת מתעניינים מהשרת, אנא נסה שנית")
                 }
             }
         }
@@ -139,12 +139,12 @@ class LeadViewModel {
     
     func didTapCreateNewLead() {
         isNewLeadButtonSelected = !isNewLeadButtonSelected
-        delegate?.animateNewLeadButton(toOpen: isNewLeadButtonSelected)
+        delegate?.changeCreateLeadButtonsVisability(toPresent: isNewLeadButtonSelected)
     }
     
     func didTapAddFromContacts() {
         delegate?.moveToContactsVC()
-        delegate?.animateNewLeadButton(toOpen: false)
+        delegate?.changeCreateLeadButtonsVisability(toPresent: false)
     }
 
     func didSelectContact(contact: CNContact) {
@@ -165,7 +165,7 @@ class LeadViewModel {
 
     func didTapAddManualy() {
         delegate?.moveToCreateLeadVC(name: nil, phone: nil, leadManager: self.leadManager)
-        delegate?.animateNewLeadButton(toOpen: false)
+        delegate?.changeCreateLeadButtonsVisability(toPresent: false)
     }
     
     func didTapCall(at indexPath: IndexPath) {
@@ -182,7 +182,7 @@ class LeadViewModel {
                        if success {
                            print("WhatsApp accessed successfully")
                        } else {
-                           self.delegate?.presentAlert(message: "אני לא מוצא את הווטסאפ, בטוח שהוא מותקן על המכשיר?")
+                           self.delegate?.presentErrorAlert(message: "אני לא מוצא את הווטסאפ, בטוח שהוא מותקן על המכשיר?")
                        }
                    }
            }
@@ -201,7 +201,7 @@ class LeadViewModel {
                         self.delegate?.removeCell(at: indexPath)
                         self.delegate?.reloadData()
                     case .failure(_):
-                        self.delegate?.presentAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
+                        self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
                     }
                 }
             }
@@ -291,7 +291,7 @@ class LeadViewModel {
             case .success():
                 self.delegate?.reloadData()
             case .failure(_):
-                self.delegate?.presentAlert(message: "נוצרה בעיה מול השרת בשינוי סטטוס הליד, אנא נסה שנית")
+                self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשינוי סטטוס הליד, אנא נסה שנית")
             }
         }
     }
