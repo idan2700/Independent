@@ -10,6 +10,8 @@ import Lottie
 
 class TabBarViewController: SOTabBarController {
     
+    var viewModel: TabVarViewModel!
+    
     override func loadView() {
            super.loadView()
         SOTabBarSetting.tabBarHeight = 50
@@ -20,9 +22,8 @@ class TabBarViewController: SOTabBarController {
         SOTabBarSetting.tabBarImageColor = UIColor(named: "gold")!
         SOTabBarSetting.tabBarShadowColor = UIColor(named: "10white")!.cgColor
         SOTabBarSetting.tabBarTitleColor = UIColor(named: "gold")!
-//        UIView.appearance().semanticContentAttribute = .forceLeftToRight
        }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let settingsVC: SettingsViewController = storyBoard.instantiateViewController()
@@ -37,10 +38,12 @@ class TabBarViewController: SOTabBarController {
         financeVC.tabBarItem = UITabBarItem(title: "כספים", image: UIImage(systemName: "banknote"), selectedImage: nil)
         mainVC.tabBarItem = UITabBarItem(title: "ראשי", image: UIImage(systemName: "house"), selectedImage: nil)
         
-        leadVC.viewModel = LeadViewModel(delegate: leadVC, leadManager: LeadManager())
-        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC, eventsManager: EventsManager())
+        leadVC.viewModel = LeadViewModel(delegate: leadVC, leadManager: LeadManager(), allLeads: viewModel.allLeads)
+        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC, eventsManager: EventsManager(), allLeads: viewModel.allLeads, deals: viewModel.deals, missions: viewModel.missions)
         viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
     }
+    
 }
+
 
 

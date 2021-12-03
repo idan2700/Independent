@@ -15,12 +15,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let regestrationVC: RegestrationViewController = storyBoard.instantiateViewController()
-        let tabBarVC: TabBarViewController = storyBoard.instantiateViewController()
+        let splashVC: SplashScreenViewController = storyBoard.instantiateViewController()
+        splashVC.viewModel = SplashScreenViewModel(leadsManager: LeadManager(), eventsManager: EventsManager(), delegate: splashVC)
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
         self.window = window
         if Auth.auth().currentUser != nil {
-            self.window?.rootViewController = tabBarVC
+            self.window?.rootViewController = splashVC
           // ...
         } else {
             self.window?.rootViewController = regestrationVC

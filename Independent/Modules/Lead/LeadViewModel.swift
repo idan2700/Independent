@@ -17,7 +17,6 @@ protocol LeadViewModelDelegate: AnyObject {
     func moveToCreateLeadVC(name: String?, phone: String?, leadManager: LeadManager)
     func changeCreateLeadButtonsVisability(toPresent: Bool)
     func presentErrorAlert(message: String)
-    func setLeadLoaderState(isHidden: Bool)
     func setNoLeadsLabelState(isHidden: Bool)
     func setNextMonthButtonState(isHidden: Bool)
     func removeCell(at indexPath: IndexPath)
@@ -25,6 +24,7 @@ protocol LeadViewModelDelegate: AnyObject {
     func changePresentByButtonUI(currentSelectedButton: String)
     func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath, leadManager: LeadManager)
     func expandUpdatedCell(lead: Lead)
+    func moveToCreateDealVC(with lead: Lead, allEvents: [Event], allLeads: [Lead])
     func moveToContactsVC()
     func reloadData()
 }
@@ -36,10 +36,18 @@ class LeadViewModel {
     private let dateFormatter = DateFormatter()
     private let leadManager: LeadManager
     private var date = Date()
-    private var allLeads = [Lead]()
+    private var allEvents = [Event]()
     private var leadsHolder = [Lead]()
     private var isNewLeadButtonSelected: Bool = false
     private var cancellables = Set<AnyCancellable>()
+    private var error: Error?
+    private var newDealIndexPath: IndexPath?
+    
+    private var allLeads: [Lead] {
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "allLeadsChanged"), object: allLeads)
+        }
+    }
     
     var currentMonthLeads = [Lead]() {
         didSet {
@@ -61,28 +69,23 @@ class LeadViewModel {
          return dateFormatter.string(from: date)
     }
 
-    init(delegate: LeadViewModelDelegate?, leadManager: LeadManager) {
+    init(delegate: LeadViewModelDelegate?, leadManager: LeadManager, allLeads: [Lead]) {
         self.delegate = delegate
         self.leadManager = leadManager
+        self.allLeads = allLeads
+        NotificationCenter.default.addObserver(self, selector: #selector(newDealAddedFromLeads), name: Notification.Name(rawValue: "newDealAddedFromLeads"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(allEventsChanged(notification:)), name: Notification.Name(rawValue: "allEventsChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dealOnExistingLead(notification:)), name: Notification.Name(rawValue: "dealOnExistingLead"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dealWasCanceled(notification:)), name: Notification.Name(rawValue: "dealWasCanceled"), object: nil)
     }
     
     func start() {
-        delegate?.setLeadLoaderState(isHidden: false)
-        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        leadManager.loadLeadCollection(userId: currentUserID) { [weak self] result in
-            guard let self = self else {return}
-            DispatchQueue.main.async {
-                self.delegate?.setLeadLoaderState(isHidden: true)
-                switch result {
-                case .success(let leads):
-                    self.allLeads = leads
-                    self.checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: Date())
-                    self.checkIfLeadsAreEmpty()
-                    self.delegate?.reloadData()
-                case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "בעיה בטעינת מתעניינים מהשרת, אנא נסה שנית")
-                }
-            }
+        if self.error != nil {
+            self.delegate?.presentErrorAlert(message: "בעיה בטעינת לידים מהשרת, אנא נסה שנית")
+        } else {
+            self.checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: Date())
+            self.checkIfLeadsAreEmpty()
+            self.delegate?.reloadData()
         }
     }
     
@@ -231,6 +234,12 @@ class LeadViewModel {
     }
     
     func didTapMakeDeal(at indexPath: IndexPath) {
+        self.newDealIndexPath = indexPath
+        delegate?.moveToCreateDealVC(with: currentMonthLeads[indexPath.row], allEvents: allEvents, allLeads: allLeads)
+    }
+    
+    @objc func newDealAddedFromLeads() {
+        guard let indexPath = newDealIndexPath else {return}
         currentMonthLeads[indexPath.row].status = .deal
         self.removeLeadFromAllLeads(lead: currentMonthLeads[indexPath.row])
         allLeads.append(currentMonthLeads[indexPath.row])
@@ -247,6 +256,9 @@ class LeadViewModel {
     }
     
     func didTapOpenLead(at indexPath: IndexPath) {
+        if currentMonthLeads[indexPath.row].status == .deal {
+            return
+        }
         currentMonthLeads[indexPath.row].status = .open
         self.removeLeadFromAllLeads(lead: currentMonthLeads[indexPath.row])
         allLeads.append(currentMonthLeads[indexPath.row])
@@ -275,6 +287,11 @@ class LeadViewModel {
     }
 
     //Mark:- Private funcs
+    @objc private func allEventsChanged(notification: Notification) {
+        guard let allEvents = notification.object as? [Event] else {return}
+        self.allEvents = allEvents
+    }
+    
     private func checkIfLeadsAreEmpty() {
         if currentMonthLeads.isEmpty {
             self.delegate?.setNoLeadsLabelState(isHidden: false)
@@ -313,16 +330,37 @@ class LeadViewModel {
         self.leadsHolder.removeAll(where: {$0.phoneNumber == lead.phoneNumber})
     }
     
-    private func bind() {
-        DataBaseManager.shared.$isLoading
-            .sink { [weak self] isLoading in
-                guard let self = self else {return}
-                if isLoading {
-                    self.delegate?.setLeadLoaderState(isHidden: false)
-                } else {
-                    self.delegate?.setLeadLoaderState(isHidden: true)
-                }
-            }
-            .store(in: &cancellables)
+    @objc private func dealOnExistingLead(notification: Notification) {
+        guard let index = notification.object as? Int else {return}
+        allLeads[index].status = .deal
+        changeLeadStatus(lead: allLeads[index])
+        currentMonthLeads = []
+        leadsHolder = []
+        checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: date)
+        delegate?.reloadData()
     }
+    
+    @objc private func dealWasCanceled(notification: Notification) {
+        guard let index = notification.object as? Int else {return}
+        allLeads[index].status = .closed
+        changeLeadStatus(lead: allLeads[index])
+        currentMonthLeads = []
+        leadsHolder = []
+        checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: date)
+        delegate?.reloadData()
+    }
+    
+    
+//    private func bind() {
+//        DataBaseManager.shared.$isLoading
+//            .sink { [weak self] isLoading in
+//                guard let self = self else {return}
+//                if isLoading {
+//                    
+//                } else {
+//                    
+//                }
+//            }
+//            .store(in: &cancellables)
+//    }
 }

@@ -25,7 +25,7 @@ class LeadTableViewCell: UITableViewCell {
     @IBOutlet weak var cellView: UIView!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var deleteLeadButton: UIButton!
-    @IBOutlet weak var closeDealButton: UIButton!
+    @IBOutlet weak var makeDealButton: UIButton!
     @IBOutlet weak var lockLeadButton: UIButton!
     @IBOutlet weak var callButton: UIButton!
     @IBOutlet weak var whatsappButton: UIButton!
@@ -41,7 +41,7 @@ class LeadTableViewCell: UITableViewCell {
         updateUI()
     }
     
-    @IBAction func didTapCloseDeal(_ sender: UIButton) {
+    @IBAction func didTapMakeDeal(_ sender: UIButton) {
         handleTap()
         delegate?.didTapMakeDeal(cell: self)
     }
@@ -122,7 +122,7 @@ class LeadTableViewCell: UITableViewCell {
     
     @objc func handleTap() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .beginFromCurrentState, animations: {
-            self.cellView.frame.origin.x = self.closeDealButton.frame.origin.x - 10
+            self.cellView.frame.origin.x = self.makeDealButton.frame.origin.x - 10
             self.disappearSwipeRightButtons()
             self.disappearSwipeLeftButton()
         })
@@ -136,14 +136,14 @@ class LeadTableViewCell: UITableViewCell {
     private func disappearSwipeRightButtons() {
         self.callButton.alpha = 0
         self.whatsappButton.alpha = 0
-        self.closeDealButton.alpha = 0
+        self.makeDealButton.alpha = 0
         self.lockLeadButton.alpha = 0
     }
     
     private func presentSwipeRightButtons() {
         self.callButton.alpha = 1
         self.whatsappButton.alpha = 1
-        self.closeDealButton.alpha = 1
+        self.makeDealButton.alpha = 1
         self.lockLeadButton.alpha = 1
     }
     
@@ -159,15 +159,15 @@ class LeadTableViewCell: UITableViewCell {
         switch viewModel.lead.status {
         case .open:
             statusImageView.image = nil
-            infoButton.tintColor = UIColor(named: "50gold")!
+            infoButton.backgroundColor = UIColor(named: "50gold")!
         case .closed:
             statusImageView.image = UIImage(systemName: "lock")
             statusImageView.tintColor = UIColor(named: "50darkred") ?? .red
-            infoButton.tintColor = UIColor(named: "50darkred") ?? .red
+            infoButton.backgroundColor = UIColor(named: "50darkred") ?? .red
         case .deal:
             statusImageView.image = UIImage(systemName: "checkmark")
             statusImageView.tintColor = UIColor(named: "50darkgreen") ?? .green
-            infoButton.tintColor = UIColor(named: "50darkgreen") ?? .green
+            infoButton.backgroundColor = UIColor(named: "50darkgreen") ?? .green
         }
     }
     
@@ -175,13 +175,13 @@ class LeadTableViewCell: UITableViewCell {
         cellView.makeRoundCorners(radius: 10)
         disappearSwipeRightButtons()
         disappearSwipeLeftButton()
-        closeDealButton.makeRoundCorners(radius: 10)
+        makeDealButton.makeRoundCorners(radius: 10)
         callButton.setTitle("", for: .normal)
         deleteLeadButton.setTitle("", for: .normal)
         whatsappButton.setTitle("", for: .normal)
         infoButton.setTitle("", for: .normal)
         lockLeadButton.setTitle("", for: .normal)
-        closeDealButton.setTitle("סגור עסקה", for: .normal)
+        makeDealButton.setTitle("סגור עסקה", for: .normal)
         let swipeRightRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeRight))
         swipeRightRegongnizer.direction = .right
         swipeRightRegongnizer.delegate = self

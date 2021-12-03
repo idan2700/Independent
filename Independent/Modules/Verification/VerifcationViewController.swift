@@ -83,6 +83,9 @@ extension VerifcationViewController: VerifcationViewModelDelegate {
     }
     
     func moveToMainTab() {
-        performSegue(withIdentifier: "VerifyToMainTabBar", sender: self)
+        let splashVC: SplashScreenViewController = storyBoard.instantiateViewController()
+        splashVC.modalPresentationStyle = .overFullScreen
+        splashVC.viewModel = SplashScreenViewModel(leadsManager: LeadManager(), eventsManager: EventsManager(), delegate: splashVC)
+        self.present(splashVC, animated: true, completion: nil)
     }
 }

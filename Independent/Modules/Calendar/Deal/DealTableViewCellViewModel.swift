@@ -13,7 +13,7 @@ protocol DealTableViewCellViewModelDelegate: AnyObject {
 
 class DealTableViewCellViewModel {
     
-    private var deal: Deal
+    var deal: Deal
     private var dateFormatter = DateFormatter()
     private var isNotesButtonIsOpen: Bool = false
     
@@ -32,7 +32,11 @@ class DealTableViewCellViewModel {
     }
     
     var notes: String {
-        return deal.notes ?? "אין הערות"
+        if deal.notes == "" {
+            return "אין הערות"
+        } else {
+            return deal.notes ?? "אין הערות"
+        }
     }
     
     var phone: String {
@@ -58,5 +62,9 @@ class DealTableViewCellViewModel {
             self.delegate?.changeNotesLabelVisability(toPresent: true)
         }
         isNotesButtonIsOpen = !isNotesButtonIsOpen
+    }
+    
+    var reminderTitle: String {
+        return deal.reminder
     }
 }

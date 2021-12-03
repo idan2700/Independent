@@ -11,7 +11,10 @@ import MapKit
 protocol CreateDealTableViewCellDelegate: AnyObject {
     func didTapCancel()
     func updateCellHeight()
+    func didTapReminder(cell: CreateDealTableViewCell)
     func didPickNewDeal(newDeal: Deal)
+    func presentErrorAlert(message: String)
+    func presentAlertThatLeadIsExist()
 }
 
 class CreateDealTableViewCell: UITableViewCell {
@@ -33,6 +36,7 @@ class CreateDealTableViewCell: UITableViewCell {
     @IBOutlet weak var priceErrorLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var phoneErrorLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var phoneErrorLabel: UILabel!
+    @IBOutlet weak var reminderButton: UIButton!
     private let locationManager = CLLocationManager()
     
     weak var delegate: CreateDealTableViewCellDelegate?
@@ -58,6 +62,7 @@ class CreateDealTableViewCell: UITableViewCell {
         startDateButton.makeRoundCorners(radius: 5)
         endDateButton.makeRoundCorners(radius: 5)
         notesTextView.makeRoundCorners(radius: 5)
+        reminderButton.makeRoundCorners(radius: 5)
         nameTextField.attributedPlaceholder = NSAttributedString(string: "שם הלקוח", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
         phoneTextField.attributedPlaceholder = NSAttributedString(string: "טלפון", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
         startDatePicker.addTarget(self, action: #selector(didSelectStartDate), for: .valueChanged)
@@ -74,11 +79,18 @@ class CreateDealTableViewCell: UITableViewCell {
         locationSearchBar.delegate = self
     }
     
-    func configure() {
-        startDatePicker.date = Calendar.current.date(byAdding: .minute , value: 15, to: startDatePicker.date) ?? Date()
+    func configure(name: String?, phone: String?) {
+        viewModel.exsitingLeadIndex = nil
+        if let name = name,
+           let phone = phone {
+            self.nameTextField.text = name
+            self.phoneTextField.text = phone
+        }
+        startDatePicker.date = Calendar.current.date(byAdding: .minute , value: 15, to: viewModel.currentDate) ?? Date()
         viewModel.handleDatePresentation(with: startDatePicker.date, toStartButton: true)
         endDatePicker.date = Calendar.current.date(byAdding: .hour, value: 1, to: startDatePicker.date) ?? Date()
         viewModel.handleDatePresentation(with: endDatePicker.date, toStartButton: false)
+        viewModel.checkForExisitingDeal()
     }
 
     @IBAction func didTapAdd(_ sender: UIButton) {
@@ -104,6 +116,7 @@ class CreateDealTableViewCell: UITableViewCell {
     }
     
     @IBAction func didTapCancel(_ sender: UIButton) {
+        viewModel.exsitingLeadIndex = nil
         delegate?.didTapCancel()
     }
     
@@ -119,8 +132,14 @@ class CreateDealTableViewCell: UITableViewCell {
         viewModel.didEditPhone(phone: sender.text ?? "")
     }
     
+    @IBAction func didTapReminder(_ sender: UIButton) {
+        delegate?.didTapReminder(cell: self)
+    }
+    
     @objc func didSelectStartDate() {
+        endDatePicker.date = Calendar.current.date(byAdding: .hour, value: 1, to: startDatePicker.date) ?? Date()
         viewModel.handleDatePresentation(with: startDatePicker.date, toStartButton: true)
+        viewModel.handleDatePresentation(with: endDatePicker.date, toStartButton: false)
     }
     
     @objc func didSelectEndDate() {
@@ -145,6 +164,32 @@ extension CreateDealTableViewCell: UITextViewDelegate {
 }
 
 extension CreateDealTableViewCell: CreateDealTableViewCellViewModelDelegate {
+    func updateExisitingDeal(event: Event) {
+        switch event {
+        case .deal(viewModel: let viewModel):
+            nameTextField.text = viewModel.eventName
+            phoneTextField.text = viewModel.phone
+            locationSearchBar.text = viewModel.location
+            startDatePicker.date = viewModel.deal.startDate
+            endDatePicker.date = viewModel.deal.endDate
+            priceTextField.text = viewModel.deal.price
+            notesTextView.text = viewModel.notes
+            reminderButton.setTitle(viewModel.reminderTitle, for: .normal)
+            self.viewModel.handleDatePresentation(with: startDatePicker.date, toStartButton: true)
+            self.viewModel.handleDatePresentation(with: endDatePicker.date, toStartButton: false)
+        case .mission(viewModel:):
+            break
+        }
+    }
+    
+    func presentError() {
+        self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשמירת העסקה, אנא נסה שנית ")
+    }
+    
+    func thereIsLeadInLeadsVC() {
+        self.delegate?.presentAlertThatLeadIsExist()
+    }
+    
     func didPickNewDeal(deal: Deal) {
         delegate?.didPickNewDeal(newDeal: deal)
     }
@@ -304,7 +349,6 @@ extension CreateDealTableViewCell: UITableViewDataSource {
 
 extension CreateDealTableViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = placesTableView.cellForRow(at: indexPath) as? PlacesTableViewCell else {return}
         let cellViewModel = viewModel.getCellViewModel(at: indexPath)
         if cellViewModel.place == cellViewModel.city {
             self.locationSearchBar.text = cellViewModel.city
@@ -316,5 +360,12 @@ extension CreateDealTableViewCell: UITableViewDelegate {
 }
 
 extension CreateDealTableViewCell: CLLocationManagerDelegate {
-    
+}
+
+extension CreateDealTableViewCell: ReminderViewControllerDelegate {
+    func didPick(timeOfReminder: Int?, reminderTitle: String) {
+        self.viewModel.reminder = timeOfReminder
+        self.viewModel.reminderTitle = reminderTitle
+        self.reminderButton.setTitle(String(reminderTitle), for: .normal)
+    }
 }

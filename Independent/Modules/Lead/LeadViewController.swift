@@ -22,7 +22,6 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var addFromContactsButton: UIButton!
     @IBOutlet weak var addManualyButton: UIButton!
     @IBOutlet weak var buttonView: UIView!
-    @IBOutlet weak var leadsLoader: UIActivityIndicatorView!
     @IBOutlet weak var noLeadsLabel: UILabel!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var addleadButtonsWidth: NSLayoutConstraint!
@@ -41,6 +40,7 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self
+        self.view.addGesture()
         updateUI()
     }
     
@@ -71,6 +71,8 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func updateUI() {
+        addManualyButton.alpha = 0
+        addFromContactsButton.alpha = 0
         buttonView.makeRoundCorners(radius: 10)
         currentMonthLabel.text = viewModel.stringDate
         lastMonthButton.setTitle("", for: .normal)
@@ -157,6 +159,15 @@ extension LeadViewController: UISearchBarDelegate {
 }
 
 extension LeadViewController: LeadViewModelDelegate {
+    func moveToCreateDealVC(with lead: Lead, allEvents: [Event], allLeads: [Lead]) {
+        let createDealVC: CreateDealViewController = storyBoard.instantiateViewController()
+        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, allEvents: allEvents, isLaunchedFromLead: true,allLeads: allLeads, isNewDeal: true)
+        createDealVC.viewModel.name = lead.fullName
+        createDealVC.viewModel.phone = lead.phoneNumber
+        createDealVC.modalPresentationStyle = .overFullScreen
+        self.present(createDealVC, animated: true, completion: nil)
+    }
+    
     func expandUpdatedCell(lead: Lead) {
         guard let index = viewModel.currentMonthLeads.firstIndex(where: {$0.phoneNumber == lead.phoneNumber}) else {return}
         let indexPath = IndexPath(row: index, section: 0)
@@ -211,15 +222,6 @@ extension LeadViewController: LeadViewModelDelegate {
         noLeadsLabel.isHidden = isHidden
     }
     
-    func setLeadLoaderState(isHidden: Bool) {
-        leadsLoader.isHidden = isHidden
-        if isHidden {
-            tableView.isHidden = false
-        } else {
-            tableView.isHidden = true
-        }
-    }
-    
     func presentErrorAlert(message: String) {
         self.presentErrorAlert(with: message)
     }
@@ -248,12 +250,16 @@ extension LeadViewController: LeadViewModelDelegate {
             addleadButtonsWidth.constant = 150
             searchBarWidth.constant = self.view.frame.width - 70 - addleadButtonsWidth.constant - 5
             UIView.animate(withDuration: 0.5) {
+                self.addManualyButton.alpha = 1
+                self.addFromContactsButton.alpha = 1
                 self.view.layoutIfNeeded()
             }
         } else {
             addleadButtonsWidth.constant = 0
             searchBarWidth.constant = self.view.frame.width - 70
             UIView.animate(withDuration: 0.5) {
+                self.addManualyButton.alpha = 0
+                self.addFromContactsButton.alpha = 0
                 self.view.layoutIfNeeded()
             }
         }

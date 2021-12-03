@@ -1,21 +1,19 @@
 //
-//  Event.swift
+//  Mission.swift
 //  Independent
 //
-//  Created by Idan Levi on 16/11/2021.
+//  Created by Idan Levi on 22/11/2021.
 //
 
 import Foundation
 
-struct Deal {
+struct Mission {
     var name: String
-    var phone: String
     var location: String?
     var startDate: Date
     var endDate: Date
-    var price: String
     var notes: String?
-    var dealID: Int
+    var missionID: Int
     var eventStoreID: String
     var reminder: String
 }

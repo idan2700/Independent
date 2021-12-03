@@ -7,11 +7,16 @@
 
 import UIKit
 
+protocol ErrorAlertViewControllerDelegate: AnyObject {
+    func didTapTryAgain()
+}
+
 class ErrorAlertViewController: UIViewController {
     @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var tryAgainButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     var message: String?
+    var delegate: ErrorAlertViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +26,7 @@ class ErrorAlertViewController: UIViewController {
     }
     
     @IBAction func didTapTryAgain(_ sender: UIButton) {
+        delegate?.didTapTryAgain()
         self.dismiss(animated: true)
     }
 }
