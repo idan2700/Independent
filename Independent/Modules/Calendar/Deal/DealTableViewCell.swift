@@ -38,6 +38,7 @@ class DealTableViewCell: UITableViewCell {
         notesButtonView.makeRoundCorners(radius: 10)
         cellView.makeRoundCorners(radius: 10)
         timeLabel.makeRoundCorners(radius: 10)
+        cancelDealButton.makeBorder(width: 1, color: UIColor(named: "50gold")!.cgColor)
         cancelDealButton.makeRoundCorners(radius: 10)
         notesButton.setTitle("", for: .normal)
         callButton.setTitle("", for: .normal)
@@ -84,6 +85,7 @@ class DealTableViewCell: UITableViewCell {
     }
     
     func configure() {
+        cancelDealButton.makeBorder(width: 1, color: UIColor(named: "50gold")!.cgColor)
         eventNameLabel.text = viewModel.eventName
         locationLabel.text = viewModel.location
         notesLabel.text = viewModel.notes

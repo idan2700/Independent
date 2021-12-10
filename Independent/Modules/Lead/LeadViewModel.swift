@@ -7,7 +7,6 @@
 
 import Foundation
 import Firebase
-import Combine
 import CoreImage
 import UIKit
 import Contacts
@@ -39,8 +38,6 @@ class LeadViewModel {
     private var allEvents = [Event]()
     private var leadsHolder = [Lead]()
     private var isNewLeadButtonSelected: Bool = false
-    private var cancellables = Set<AnyCancellable>()
-    private var error: Error?
     private var newDealIndexPath: IndexPath?
     
     private var allLeads: [Lead] {
@@ -80,13 +77,9 @@ class LeadViewModel {
     }
     
     func start() {
-        if self.error != nil {
-            self.delegate?.presentErrorAlert(message: "בעיה בטעינת לידים מהשרת, אנא נסה שנית")
-        } else {
-            self.checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: Date())
-            self.checkIfLeadsAreEmpty()
-            self.delegate?.reloadData()
-        }
+        self.checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: Date())
+        self.checkIfLeadsAreEmpty()
+        self.delegate?.reloadData()
     }
     
     func getItemViewModel(at indexPath: IndexPath) -> LeadCollectionViewCellViewModel {

@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let regestrationVC: RegestrationViewController = storyBoard.instantiateViewController()
         let splashVC: SplashScreenViewController = storyBoard.instantiateViewController()
-        splashVC.viewModel = SplashScreenViewModel(leadsManager: LeadManager(), eventsManager: EventsManager(), delegate: splashVC)
+        splashVC.viewModel = SplashScreenViewModel(leadsManager: LeadManager(), eventsManager: EventsManager(), financeManager: FinanceManager(), delegate: splashVC)
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
         self.window = window

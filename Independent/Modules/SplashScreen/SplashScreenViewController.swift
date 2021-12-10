@@ -20,10 +20,10 @@ class SplashScreenViewController: UIViewController {
 }
 
 extension SplashScreenViewController: SplashScreenViewModelDelegate {
-    func moveToTabBarVC(leads: [Lead], deals: [Deal], missions: [Mission]) {
+    func moveToTabBarVC(leads: [Lead], deals: [Deal], missions: [Mission], incomes: [Income]) {
         let tabBarVC: TabBarViewController = storyBoard.instantiateViewController()
         tabBarVC.modalPresentationStyle = .overFullScreen
-        tabBarVC.viewModel = TabVarViewModel(allLeads: leads, deals: deals, missions: missions)
+        tabBarVC.viewModel = TabVarViewModel(allLeads: leads, deals: deals, missions: missions, incomes: incomes)
         self.present(tabBarVC, animated: true, completion: nil)
     }
     
