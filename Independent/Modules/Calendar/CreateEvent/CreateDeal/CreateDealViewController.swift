@@ -33,7 +33,7 @@ extension CreateDealViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreateDealCell", for: indexPath) as? CreateDealTableViewCell else {return UITableViewCell()}
         let cellViewModel = viewModel.getCellViewModel(cell: cell)
         cell.viewModel = cellViewModel
-        cell.viewModel.exisitingDeal = viewModel.existingDeal
+        cell.viewModel.existingDeal = viewModel.existingDeal
         cell.configure(name: viewModel.name, phone: viewModel.phone)
         cell.delegate = self
         return cell
@@ -74,10 +74,16 @@ extension CreateDealViewController: CreateDealTableViewCellDelegate {
 }
 
 extension CreateDealViewController: CreateDealViewModelDelegate {
+    func presntErrorAlert(message: String) {
+        presentErrorAlert(with: message)
+    }
+    
+    func returnToPrevious() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func sendDealToCalendar(deal: Deal, isNewDeal: Bool) {
         delegate?.didPick(deal: deal, isNewDeal: isNewDeal)
-        self.dismiss(animated: true) {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "newDealAddedFromLeads"), object: nil)
-        }
+        self.dismiss(animated: true)
     }
 }

@@ -16,7 +16,6 @@ class CreateIncomeViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var titleErrorLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var amountTextField: UITextField!
-
     @IBOutlet weak var amountErrorLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var addButton: UIButton!
@@ -30,6 +29,9 @@ class CreateIncomeViewController: UIViewController {
         addButton.makeRoundCorners(radius: 10)
         datePicker.overrideUserInterfaceStyle = .dark
         datePicker.setValue(0.8, forKey: "alpha")
+        titleTextField.text = viewModel.title
+        amountTextField.text = viewModel.amount
+        datePicker.date = viewModel.date
     }
     
     @IBAction func didTapAdd(_ sender: UIButton) {

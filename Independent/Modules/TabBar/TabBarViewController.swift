@@ -10,8 +10,6 @@ import Lottie
 
 class TabBarViewController: SOTabBarController {
     
-    var viewModel: TabVarViewModel!
-    
     override func loadView() {
            super.loadView()
         SOTabBarSetting.tabBarHeight = 50
@@ -38,9 +36,9 @@ class TabBarViewController: SOTabBarController {
         financeVC.tabBarItem = UITabBarItem(title: "כספים", image: UIImage(systemName: "banknote"), selectedImage: nil)
         mainVC.tabBarItem = UITabBarItem(title: "ראשי", image: UIImage(systemName: "house"), selectedImage: nil)
         
-        leadVC.viewModel = LeadViewModel(delegate: leadVC, leadManager: LeadManager(), allLeads: viewModel.allLeads)
-        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC, eventsManager: EventsManager(), allLeads: viewModel.allLeads, deals: viewModel.deals, missions: viewModel.missions)
-        financeVC.viewModel = FinanceViewModel(delegate: financeVC, allIncomes: viewModel.incomes)
+        leadVC.viewModel = LeadViewModel(delegate: leadVC)
+        calendarVC.viewModel = CalendarViewModel(delegate: calendarVC)
+        financeVC.viewModel = FinanceViewModel(delegate: financeVC)
         viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
     }
     

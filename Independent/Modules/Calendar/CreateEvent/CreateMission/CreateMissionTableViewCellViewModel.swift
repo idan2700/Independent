@@ -22,13 +22,10 @@ protocol CreateMissionTableViewCellViewModelDelegate: AnyObject {
 
 class CreateMissionTableViewCellViewModel {
     
-    private var eventID: Int = 0
-    private var allEvents: [Event]
     private var isStartDateIsOpen: Bool = false
     private var isEndDateIsOpen: Bool = false
     private var isPlacesTableViewIsOpen: Bool = false
     private let dateFormatter = DateFormatter()
-    private var eventsManager: EventsManager
     var matchingItems:[MKMapItem] = []
     var existingMission: Event?
     var currentDate: Date
@@ -37,12 +34,9 @@ class CreateMissionTableViewCellViewModel {
     
     weak var delegate: CreateMissionTableViewCellViewModelDelegate?
     
-    init(delegate: CreateMissionTableViewCellViewModelDelegate?, allEvents: [Event], eventsManager: EventsManager, currentDate: Date) {
+    init(delegate: CreateMissionTableViewCellViewModelDelegate?, currentDate: Date) {
         self.delegate = delegate
-        self.allEvents = allEvents
-        self.eventsManager = eventsManager
         self.currentDate = currentDate
-        updateEventID()
     }
     
     var numberOfRows: Int {
@@ -113,7 +107,7 @@ class CreateMissionTableViewCellViewModel {
                 case .deal(viewModel:):
                     break
                 case .mission(viewModel: let viewModel):
-                    eventsManager.updateMissionToStore(mission: viewModel.mission, name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
+                    EventsManager.shared.updateMissionToStore(mission: viewModel.mission, name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
                         guard let self = self else {return}
                         DispatchQueue.main.async {
                             switch result {
@@ -127,7 +121,7 @@ class CreateMissionTableViewCellViewModel {
                     }
                 }
             } else {
-                eventsManager.saveEventToStore(name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
+                EventsManager.shared.saveEventToStore(name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
                     guard let self = self else {return}
                     DispatchQueue.main.async {
                         switch result {
@@ -137,7 +131,7 @@ class CreateMissionTableViewCellViewModel {
                                                   startDate: startDate,
                                                   endDate: endDate,
                                                   notes: notes,
-                                                  missionID: self.genrateEventID(),
+                                                  missionID: EventsManager.shared.genrateEventID(),
                                                   eventStoreID: eventID,
                                                   reminder: self.reminderTitle)
                             self.delegate?.didPickNewMission(mission: mission)
@@ -168,31 +162,5 @@ class CreateMissionTableViewCellViewModel {
             self.delegate?.changeErrorNameVisability(toPresent: false)
             return
         }
-    }
-
-    private func updateEventID() {
-        if let eventID = UserDefaults.standard.value(forKey: "eventID") as? Int {
-            self.eventID = eventID
-        } else {
-            var allEventIds = [Int]()
-            for event in allEvents {
-                switch event {
-                case .deal(viewModel: let viewModel):
-                    allEventIds.append(viewModel.dealID)
-                case .mission(viewModel: let viewModel):
-                    allEventIds.append(viewModel.missionID)
-                }
-            }
-            if let maxID = allEventIds.max() {
-                eventID = maxID
-            }
-        }
-    }
-    
-    private func genrateEventID()-> Int {
-        let newId = eventID + 1
-        eventID = newId
-        UserDefaults.standard.set(newId, forKey: "eventID")
-        return eventID
     }
 }

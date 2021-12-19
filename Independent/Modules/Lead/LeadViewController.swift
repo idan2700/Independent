@@ -34,7 +34,7 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.start()
+//        viewModel.start()
         collectionView.dataSource = self
         collectionView.delegate = self
         tableView.dataSource = self
@@ -42,6 +42,11 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         searchBar.delegate = self
         self.view.addGesture()
         updateUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.start()
     }
     
     @IBAction func didTapNextMonth(_ sender: UIButton) {
@@ -159,9 +164,10 @@ extension LeadViewController: UISearchBarDelegate {
 }
 
 extension LeadViewController: LeadViewModelDelegate {
-    func moveToCreateDealVC(with lead: Lead, allEvents: [Event], allLeads: [Lead]) {
+   
+    func moveToCreateDealVC(lead: Lead) {
         let createDealVC: CreateDealViewController = storyBoard.instantiateViewController()
-        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, allEvents: allEvents, isLaunchedFromLead: true,allLeads: allLeads, isNewDeal: true)
+        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, isLaunchedFromLead: true, isNewDeal: true)
         createDealVC.viewModel.name = lead.fullName
         createDealVC.viewModel.phone = lead.phoneNumber
         createDealVC.modalPresentationStyle = .overFullScreen
@@ -175,9 +181,9 @@ extension LeadViewController: LeadViewModelDelegate {
         cell.didTapInfo(cell.infoButton)
     }
     
-    func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath, leadManager: LeadManager) {
+    func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath) {
         let editSummryVC: EditLeadSummryViewController = storyBoard.instantiateViewController()
-        editSummryVC.viewModel = EditLeadSummryViewModel(lead: lead, delegate: editSummryVC, indexPath: indexPath, leadManager: leadManager)
+        editSummryVC.viewModel = EditLeadSummryViewModel(lead: lead, delegate: editSummryVC, indexPath: indexPath)
         editSummryVC.delegate = self
         editSummryVC.modalPresentationStyle = .overFullScreen
         self.present(editSummryVC, animated: true, completion: nil)
@@ -235,11 +241,11 @@ extension LeadViewController: LeadViewModelDelegate {
         currentMonthLabel.text = viewModel.stringDate
     }
     
-    func moveToCreateLeadVC(name: String?, phone: String?, leadManager: LeadManager) {
+    func moveToCreateLeadVC(name: String?, phone: String?) {
         let createLeadVC: CreateLeadViewController = storyBoard.instantiateViewController()
         createLeadVC.modalPresentationStyle = .overFullScreen
         createLeadVC.delegate = self
-        createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.currentMonthLeads, leadManager: leadManager)
+        createLeadVC.viewModel = CreateLeadViewModel(delegate: createLeadVC, leads: viewModel.currentMonthLeads)
         createLeadVC.viewModel.nameFromContact = name
         createLeadVC.viewModel.phoneFromContact = phone
         self.present(createLeadVC, animated: true, completion: nil)

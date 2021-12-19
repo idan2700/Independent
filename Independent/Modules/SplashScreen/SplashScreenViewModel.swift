@@ -11,25 +11,14 @@ import Firebase
 protocol SplashScreenViewModelDelegate: AnyObject {
     func changeLoaderState(isHidden: Bool)
     func presentErrorAlert(message: String)
-    func moveToTabBarVC(leads: [Lead], deals: [Deal], missions: [Mission], incomes: [Income])
+    func moveToTabBarVC()
 }
 
 class SplashScreenViewModel {
     
-    private var leadsManager: LeadManager
-    private var eventsManager: EventsManager
-    private var financeManager: FinanceManager
-    private var deals = [Deal]()
-    private var missions = [Mission]()
-    private var incomes = [Income]()
-    private var allLeads = [Lead]()
-    
     weak var delegate: SplashScreenViewModelDelegate?
     
-    init(leadsManager: LeadManager, eventsManager: EventsManager, financeManager: FinanceManager, delegate: SplashScreenViewModelDelegate) {
-        self.leadsManager = leadsManager
-        self.eventsManager = eventsManager
-        self.financeManager = financeManager
+    init(delegate: SplashScreenViewModelDelegate) {
         self.delegate = delegate
     }
     
@@ -39,23 +28,22 @@ class SplashScreenViewModel {
     }
     
     func didFinishToFetchData() {
-        delegate?.moveToTabBarVC(leads: allLeads, deals: deals, missions: missions, incomes: incomes)
+        delegate?.moveToTabBarVC()
     }
     
     private func loadEvents() {
-        eventsManager.loadEventsFromStore {
+        EventsManager.shared.loadEventsFromStore {
             fetchDeals()
         }
     }
     
     private func fetchDeals() {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        eventsManager.loadDeals(userId: userId) { [weak self] result in
+        EventsManager.shared.loadDeals(userId: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
-                case .success(let deals):
-                    self.deals = deals
+                case .success():
                     self.fetchMissions()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
@@ -66,12 +54,12 @@ class SplashScreenViewModel {
     
     private func fetchMissions() {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        eventsManager.loadMissions(userId: userId) { [weak self] result in
+        EventsManager.shared.loadMissions(userId: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
-                case .success(let missions):
-                    self.missions = missions
+                case .success():
+                    EventsManager.shared.appendEventsToAllEvents()
                     self.fetchLeads()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
@@ -82,12 +70,11 @@ class SplashScreenViewModel {
     
     private func fetchLeads() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        leadsManager.loadLeadCollection(userId: currentUserID) { [weak self] result in
+        LeadManager.shared.loadLeadCollection(userId: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
-                case .success(let leads):
-                    self.allLeads = leads
+                case .success():
                     self.fetchIncomes()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
@@ -98,12 +85,11 @@ class SplashScreenViewModel {
     
     private func fetchIncomes() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        financeManager.loadIncomes(userId: currentUserID) { [weak self] result in
+        FinanceManager.shared.loadIncomes(userId: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
-                case .success(let incomes):
-                    self.incomes = incomes
+                case .success():
                     self.delegate?.changeLoaderState(isHidden: true)
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")

@@ -15,8 +15,8 @@ protocol CalendarViewModelDelegate: AnyObject {
     func changeCreateButtonsVisability(toPresent: Bool)
     func reloadData()
     func removeCell(at indexPath: IndexPath)
-    func moveToCreateDealVC(with allEvents: [Event], allLeads: [Lead], currentDate: Date, isNewDeal: Bool, existingDeal: Event?)
-    func moveToCreateMissionVC(with allEvents: [Event], currentDate: Date, isNewMission: Bool, existingMission: Event?)
+    func moveToCreateDealVC(currentDate: Date, isNewDeal: Bool, existingDeal: Event?)
+    func moveToCreateMissionVC(currentDate: Date, isNewMission: Bool, existingMission: Event?)
     func presentErrorAlert(message: String)
     func setNoEventsLabelState(isHidden: Bool)
     func changeLastDayButtonVisability(isHidden: Bool)
@@ -27,19 +27,11 @@ class CalendarViewModel {
     private var dateFormatter = DateFormatter()
     private let store = EKEventStore()
     private var isAddButtonSelected: Bool = false
-    private var eventsManager: EventsManager
-    private var allLeads: [Lead]
-    private var deals: [Deal]
-    private var missions: [Mission]
     private var currentPresentedDate: Date = Date()
     private var error: Error?
     private var existingEvent: Event?
     
-    private var allEvents = [Event]() {
-        didSet {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "allEventsChanged"), object: allEvents)
-        }
-    }
+  
     private var currentPresentedDayEvents = [Event]() {
         didSet {
             checkIfEventsAreEmpty()
@@ -49,14 +41,8 @@ class CalendarViewModel {
     weak var delegate: CalendarViewModelDelegate?
     var isDatePickerOpen: Bool = false
     
-    init(delegate: CalendarViewModelDelegate?, eventsManager: EventsManager, allLeads: [Lead], deals: [Deal], missions: [Mission]) {
+    init(delegate: CalendarViewModelDelegate?) {
         self.delegate = delegate
-        self.eventsManager = eventsManager
-        self.allLeads = allLeads
-        self.deals = deals
-        self.missions = missions
-        NotificationCenter.default.addObserver(self, selector: #selector(allLeadsChanged(notification:)), name: Notification.Name(rawValue: "allLeadsChanged"), object: nil)
-        appendEventsToAllEvents()
     }
     
     var numberOfRows: Int {
@@ -82,12 +68,12 @@ class CalendarViewModel {
     }
     
     func didTapAddDeal() {
-        delegate?.moveToCreateDealVC(with: allEvents, allLeads: allLeads, currentDate: currentPresentedDate, isNewDeal: true, existingDeal: nil)
+        delegate?.moveToCreateDealVC(currentDate: currentPresentedDate, isNewDeal: true, existingDeal: nil)
         delegate?.changeCreateButtonsVisability(toPresent: false)
     }
     
     func didTapAddMission() {
-        delegate?.moveToCreateMissionVC(with: allEvents, currentDate: currentPresentedDate, isNewMission: true, existingMission: nil)
+        delegate?.moveToCreateMissionVC(currentDate: currentPresentedDate, isNewMission: true, existingMission: nil)
         delegate?.changeCreateButtonsVisability(toPresent: false)
     }
     
@@ -147,14 +133,15 @@ class CalendarViewModel {
     
     func didPickNewDeal(newDeal: Deal) {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        eventsManager.saveDeal(deal: newDeal, userName: userId) { [weak self] result in
+        EventsManager.shared.saveDeal(deal: newDeal, userName: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
                 case .success():
+                    self.createNewIncome(deal: newDeal)
                     self.handleDatePresentation(with: self.currentPresentedDate)
-                    self.allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: newDeal)))
-                    self.sortEvents()
+                    EventsManager.shared.allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: newDeal)))
+                    EventsManager.shared.sortEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
                     self.delegate?.reloadData()
                 case .failure(_):
@@ -166,14 +153,14 @@ class CalendarViewModel {
     
     func didPickNewMission(newMission: Mission) {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        eventsManager.saveMission(mission: newMission, userName: userId) { [weak self] result in
+        EventsManager.shared.saveMission(mission: newMission, userName: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
                 case .success():
                     self.handleDatePresentation(with: self.currentPresentedDate)
-                    self.allEvents.append(Event.mission(viewModel: MissionTableViewCellViewModel(mission: newMission)))
-                    self.sortEvents()
+                    EventsManager.shared.allEvents.append(Event.mission(viewModel: MissionTableViewCellViewModel(mission: newMission)))
+                    EventsManager.shared.sortEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
                     self.delegate?.reloadData()
                 case .failure(_):
@@ -185,16 +172,17 @@ class CalendarViewModel {
     
     func didPickEditedDeal(deal: Deal) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        eventsManager.editDeal(deal: deal, userName: currentUserID) { [weak self] result in
+        EventsManager.shared.editDeal(deal: deal, userName: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
                 case .success():
-                    guard let dealIndex = self.deals.firstIndex(where: {$0.eventStoreID == deal.eventStoreID}) else {return}
-                    self.deals.remove(at: dealIndex)
-                    self.deals.append(deal)
-                    self.allEvents = []
-                    self.appendEventsToAllEvents()
+                    self.editIncome(deal: deal)
+                    guard let dealIndex = EventsManager.shared.allDeals.firstIndex(where: {$0.eventStoreID == deal.eventStoreID}) else {return}
+                    EventsManager.shared.allDeals.remove(at: dealIndex)
+                    EventsManager.shared.allDeals.append(deal)
+                    EventsManager.shared.allEvents = []
+                    EventsManager.shared.appendEventsToAllEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
                     self.delegate?.reloadData()
                 case .failure(_):
@@ -206,16 +194,16 @@ class CalendarViewModel {
     
     func didPickEditedMission(mission: Mission) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        eventsManager.editMission(mission: mission, userName: currentUserID) { [weak self] result in
+        EventsManager.shared.editMission(mission: mission, userName: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
                 case .success():
-                    guard let missionIndex = self.missions.firstIndex(where: {$0.eventStoreID == mission.eventStoreID}) else {return}
-                    self.missions.remove(at: missionIndex)
-                    self.missions.append(mission)
-                    self.allEvents = []
-                    self.appendEventsToAllEvents()
+                    guard let missionIndex = EventsManager.shared.allMissions.firstIndex(where: {$0.eventStoreID == mission.eventStoreID}) else {return}
+                    EventsManager.shared.allMissions.remove(at: missionIndex)
+                    EventsManager.shared.allMissions.append(mission)
+                    EventsManager.shared.allEvents = []
+                    EventsManager.shared.appendEventsToAllEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
                     self.delegate?.reloadData()
                 case .failure(_):
@@ -241,11 +229,12 @@ class CalendarViewModel {
             eventStoreID = viewModel.mission.eventStoreID
             collection = "mission"
         }
-        eventsManager.deleteEvent(eventStoreID: eventStoreID, Id: String(eventID), userID: currentUserID, collection: collection) { [weak self] result in
+        EventsManager.shared.deleteEvent(eventStoreID: eventStoreID, Id: String(eventID), userID: currentUserID, collection: collection) { [weak self] result in
                 guard let self = self else {return}
                 DispatchQueue.main.async {
                     switch result {
                     case .success():
+                        self.removeIncome(eventStoreId: eventStoreID)
                         self.removeEventFromAllEvents(currentEvent: self.currentPresentedDayEvents[indexPath.row])
                         self.currentPresentedDayEvents.remove(at: indexPath.row)
                         self.delegate?.removeCell(at: indexPath)
@@ -259,8 +248,18 @@ class CalendarViewModel {
     
     func didTapCancelDeal(at indexPath: IndexPath, phone: String) {
         didTapDelete(at: indexPath)
-        if let index = allLeads.firstIndex(where: {$0.phoneNumber == phone}) {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "dealWasCanceled"), object: index)
+        if let index = LeadManager.shared.allLeads.firstIndex(where: {$0.phoneNumber == phone}) {
+            LeadManager.shared.allLeads[index].status = .closed
+            guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+            LeadManager.shared.updateLeadStatus(lead: LeadManager.shared.allLeads[index], userName: currentUserID, status: LeadManager.shared.allLeads[index].status.statusString) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .success():
+                    print("statusChanged")
+                case .failure(_):
+                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשינוי סטטוס הליד, סטטוס הליד לא השתנה")
+                }
+            }
         }
     }
     
@@ -287,41 +286,26 @@ class CalendarViewModel {
     func didTapEditDeal(at indexPath: IndexPath) {
         let exisitingDeal = currentPresentedDayEvents[indexPath.row]
         self.existingEvent = exisitingDeal
-        self.delegate?.moveToCreateDealVC(with: allEvents, allLeads: allLeads, currentDate: currentPresentedDate, isNewDeal: false, existingDeal: exisitingDeal)
+        self.delegate?.moveToCreateDealVC(currentDate: currentPresentedDate, isNewDeal: false, existingDeal: exisitingDeal)
     }
     
     func didTapEditMission(at indexPath: IndexPath) {
         let exisitingMission = currentPresentedDayEvents[indexPath.row]
         self.existingEvent = exisitingMission
-        self.delegate?.moveToCreateMissionVC(with: allEvents, currentDate: currentPresentedDate, isNewMission: false, existingMission: exisitingMission)
+        self.delegate?.moveToCreateMissionVC(currentDate: currentPresentedDate, isNewMission: false, existingMission: exisitingMission)
     }
     
     private func removeEventFromAllEvents(currentEvent: Event) {
         switch currentEvent {
         case .deal(let viewModel):
-            deals.removeAll(where: {$0.eventStoreID == viewModel.deal.eventStoreID})
+            EventsManager.shared.allDeals.removeAll(where: {$0.eventStoreID == viewModel.deal.eventStoreID})
         case .mission(let viewModel):
-            missions.removeAll(where: {$0.eventStoreID == viewModel.mission.eventStoreID})
+            EventsManager.shared.allMissions.removeAll(where: {$0.eventStoreID == viewModel.mission.eventStoreID})
         }
-        self.appendEventsToAllEvents()
+        EventsManager.shared.appendEventsToAllEvents()
     }
     
-    private func appendEventsToAllEvents() {
-        allEvents = []
-        for deal in deals {
-            allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: deal)))
-        }
-        for mission in missions {
-            allEvents.append(Event.mission(viewModel: MissionTableViewCellViewModel(mission: mission)))
-        }
-        sortEvents()
-    }
-    
-    private func sortEvents() {
-        allEvents.sort(by: {$0 < $1})
-    }
-    
-    
+
     private func checkIfEventsAreEmpty() {
         if currentPresentedDayEvents.isEmpty {
             self.delegate?.setNoEventsLabelState(isHidden: false)
@@ -335,7 +319,7 @@ class CalendarViewModel {
         self.dateFormatter.dateFormat = "d, MMMM, yyyy"
         self.dateFormatter.locale = Locale(identifier: "He")
         let currentDay = self.dateFormatter.string(from: currentPresentedDay)
-        for event in allEvents {
+        for event in EventsManager.shared.allEvents {
             switch event {
             case .deal(viewModel: let viewModel):
                 if self.dateFormatter.string(from: viewModel.deal.startDate) == currentDay {
@@ -350,9 +334,59 @@ class CalendarViewModel {
         }
     }
     
-    @objc private func allLeadsChanged(notification: Notification) {
-        guard let allLeads = notification.object as? [Lead] else {return}
-        self.allLeads = allLeads
+    private func createNewIncome(deal: Deal) {
+        guard let userId = Auth.auth().currentUser?.uid else {return}
+        guard let amount = Int(deal.price) else { return }
+        let id = FinanceManager.shared.genrateIncomeID()
+        let income = Income(amount: amount, date: deal.startDate, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID)
+        FinanceManager.shared.saveIncome(income: income, userName: userId) { [weak self] result in
+            guard let self = self else {return}
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    FinanceManager.shared.allIncomes.append(income)
+                case .failure(_):
+                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשמירת הכנסה, אנא נסה שנית")
+                }
+            }
+        }
+    }
+    
+    private func removeIncome(eventStoreId: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+        if let income = FinanceManager.shared.allIncomes.first(where: {$0.eventStoreId == eventStoreId}) {
+            FinanceManager.shared.deleteIncome(incomeId: String(income.id), userID: currentUserID) { [weak self] result in
+                guard let self = self else {return}
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success():
+                        FinanceManager.shared.allIncomes.removeAll(where: {$0.eventStoreId == eventStoreId})
+                    case .failure(_):
+                        self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func editIncome(deal: Deal) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+        if let income = FinanceManager.shared.allIncomes.first(where: {$0.eventStoreId == deal.eventStoreID}) {
+            guard let amount = Int(deal.price) else {return}
+            let editedIncome = Income(amount: amount, date: deal.startDate, name: deal.name, id: income.id, isDeal: income.isDeal, eventStoreId: income.eventStoreId)
+            FinanceManager.shared.editIncome(income: editedIncome, userName: currentUserID) { [weak self] result in
+                guard let self = self else {return}
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success():
+                        FinanceManager.shared.allIncomes.removeAll(where: {$0.eventStoreId == income.eventStoreId})
+                        FinanceManager.shared.allIncomes.append(editedIncome)
+                    case .failure(_):
+                        self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך העריכה, אנא נסה שנית")
+                    }
+                }
+            }
+        }
     }
 }
 

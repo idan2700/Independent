@@ -21,7 +21,6 @@
 		5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFAF272AA91D007001A5 /* SOTabBarController.swift */; };
 		5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */; };
 		5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */; };
-		5318452D274A43B600DC57CF /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318452C274A43B600DC57CF /* TabBarViewModel.swift */; };
 		5318452F274A4FAB00DC57CF /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318452E274A4FAB00DC57CF /* SplashScreenViewController.swift */; };
 		53184531274A4FBD00DC57CF /* SplashScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184530274A4FBD00DC57CF /* SplashScreenViewModel.swift */; };
 		53184534274BC65D00DC57CF /* Mission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184533274BC65D00DC57CF /* Mission.swift */; };
@@ -123,7 +122,6 @@
 		5312CFAF272AA91D007001A5 /* SOTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarController.swift; sourceTree = "<group>"; };
 		5312CFB1272AA94D007001A5 /* SOTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarItem.swift; sourceTree = "<group>"; };
 		5312CFB3272AA981007001A5 /* SOTabBarSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOTabBarSettings.swift; sourceTree = "<group>"; };
-		5318452C274A43B600DC57CF /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		5318452E274A4FAB00DC57CF /* SplashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
 		53184530274A4FBD00DC57CF /* SplashScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewModel.swift; sourceTree = "<group>"; };
 		53184533274BC65D00DC57CF /* Mission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mission.swift; sourceTree = "<group>"; };
@@ -439,7 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				5312CFA3272A937D007001A5 /* TabBarViewController.swift */,
-				5318452C274A43B600DC57CF /* TabBarViewModel.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -792,7 +789,6 @@
 				53184540274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift in Sources */,
 				535B215D274396EE00ADABAE /* CreateDealViewModel.swift in Sources */,
 				5318454227537AB000DC57CF /* Event.swift in Sources */,
-				5318452D274A43B600DC57CF /* TabBarViewModel.swift in Sources */,
 				5318453E274BD1A800DC57CF /* CreateMissionTableViewCell.swift in Sources */,
 				530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */,
 				5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */,

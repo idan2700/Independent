@@ -11,12 +11,22 @@ import EventKit
 
 class EventsManager {
     
+    var allEvents = [Event]() {
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "allEventsChanged"), object: nil)
+        }
+    }
+    var allMissions = [Mission]()
+    var allDeals = [Deal]()
+    static let shared = EventsManager()
+    private var eventID: Int = 0
     private let db = Firestore.firestore()
     private let store = EKEventStore()
     private var storeEvents = [EKEvent]()
-    private var deals = [Deal]()
-    
-    @Published var isLoading: Bool = false
+
+    private init() {
+        updateEventID()
+    }
     
     func saveDeal(deal: Deal, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
         db.collection("Events").document(userName).collection("deal").document(String(deal.dealID)).setData(["name": deal.name, "phone": deal.phone, "location": deal.location, "startDate": deal.startDate, "endDate": deal.endDate, "price": deal.price, "notes": deal.notes, "eventStoreID": deal.eventStoreID, "reminder": deal.reminder]) { error in
@@ -178,12 +188,9 @@ class EventsManager {
         }
     }
         
-    func loadDeals(userId: String, complition: @escaping (Result<[Deal], Error>)-> Void) {
-        var deals = [Deal]()
-        isLoading = true
+    func loadDeals(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
         db.collection("Events").document(userId).collection("deal").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
-            self.isLoading = false
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -215,23 +222,20 @@ class EventsManager {
                                     }
                                 }
                             } else {
-                            deals.append(newDeal)
+                                self.allDeals.append(newDeal)
                             }
                         }
                     }
                 }
-                self.deals = deals
-                complition(.success(deals))
+                complition(.success(()))
             }
         }
     }
     
-    func loadMissions(userId: String, complition: @escaping (Result<[Mission], Error>)-> Void) {
+    func loadMissions(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
         var missions = [Mission]()
-        isLoading = true
         db.collection("Events").document(userId).collection("mission").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
-            self.isLoading = false
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -266,8 +270,9 @@ class EventsManager {
                         }
                     }
                 }
-                let finalMissions = self.checkIfThereIsUnknownEventInStore(missions: missions, deals: self.deals, userID: userId)
-                complition(.success(finalMissions))
+                let finalMissions = self.checkIfThereIsUnknownEventInStore(missions: missions, deals: self.allDeals, userID: userId)
+                self.allMissions = finalMissions
+                complition(.success(()))
             }
         }
     }
@@ -362,6 +367,21 @@ class EventsManager {
         return updatedMissions
     }
     
+    func appendEventsToAllEvents() {
+        allEvents = []
+        for deal in allDeals {
+            allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: deal)))
+        }
+        for mission in allMissions {
+            allEvents.append(Event.mission(viewModel: MissionTableViewCellViewModel(mission: mission)))
+        }
+        sortEvents()
+    }
+    
+    func sortEvents() {
+        allEvents.sort(by: {$0 < $1})
+    }
+    
     private func getReminderTitleFromEvent(event: EKEvent, startDate: Date)-> String {
         if let eventAlarms = event.alarms {
             let alarmDate = eventAlarms[0].relativeOffset
@@ -389,5 +409,31 @@ class EventsManager {
             }
         }
         return "ללא"
+    }
+    
+    private func updateEventID() {
+        if let eventID = UserDefaults.standard.value(forKey: "eventID") as? Int {
+            self.eventID = eventID
+        } else {
+            var allEventIds = [Int]()
+            for event in allEvents {
+                switch event {
+                case .deal(viewModel: let viewModel):
+                    allEventIds.append(viewModel.dealID)
+                case .mission(viewModel: let viewModel):
+                    allEventIds.append(viewModel.missionID)
+                }
+            }
+            if let maxID = allEventIds.max() {
+                eventID = maxID
+            }
+        }
+    }
+    
+    func genrateEventID()-> Int {
+        let newId = eventID + 1
+        eventID = newId
+        UserDefaults.standard.set(newId, forKey: "eventID")
+        return eventID
     }
 }

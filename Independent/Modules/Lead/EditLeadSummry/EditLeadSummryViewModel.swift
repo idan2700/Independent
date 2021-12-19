@@ -19,14 +19,12 @@ class EditLeadSummryViewModel {
     
     private var lead: Lead
     private var indexPath: IndexPath
-    private let leadManager: LeadManager
     weak var delegate: EditLeadSummryViewModelDelegate?
     
-    init(lead: Lead, delegate: EditLeadSummryViewModelDelegate?, indexPath: IndexPath, leadManager: LeadManager) {
+    init(lead: Lead, delegate: EditLeadSummryViewModelDelegate?, indexPath: IndexPath) {
         self.lead = lead
         self.delegate = delegate
         self.indexPath = indexPath
-        self.leadManager = leadManager
     }
     
     func start() {
@@ -36,7 +34,7 @@ class EditLeadSummryViewModel {
     
     func didTapEdit(with newSummry: String) {
         guard let currentUser = Auth.auth().currentUser?.uid else {return}
-        leadManager.updateLeadSummary(lead: lead, userName: currentUser, summary: newSummry) { [weak self] result in
+        LeadManager.shared.updateLeadSummary(lead: lead, userName: currentUser, summary: newSummry) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {

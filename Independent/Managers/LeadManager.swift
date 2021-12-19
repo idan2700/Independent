@@ -13,7 +13,14 @@ class LeadManager {
     
     private let db = Firestore.firestore()
     
-    @Published var isLoading: Bool = false
+    var allLeads = [Lead]() {
+        didSet {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "AllLeadsChanged"), object: nil)
+        }
+    }
+    static let shared = LeadManager()
+    
+    private init() {}
     
     func saveLead(lead: Lead, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
         db.collection("lead").document(userName).collection("lead").document(String(lead.leadID)).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date, "status": lead.status.statusString]) { error in
@@ -51,12 +58,9 @@ class LeadManager {
         }
     }
     
-    func loadLeadCollection(userId: String, complition: @escaping (Result<[Lead], Error>)-> Void) {
-        var leads = [Lead]()
-        isLoading = true
+    func loadLeadCollection(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
         db.collection("lead").document(userId).collection("lead").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
-            self.isLoading = false
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -80,11 +84,11 @@ class LeadManager {
                                 status = .deal
                             }
                             let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: Int(leadID) ?? 0, status: status)
-                            leads.append(newLead)
+                            self.allLeads.append(newLead)
                         }
                     }
                 }
-                complition(.success(leads))
+                complition(.success(()))
             }
         }
     }

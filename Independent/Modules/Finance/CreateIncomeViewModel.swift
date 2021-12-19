@@ -17,19 +17,37 @@ protocol CreateIncomeViewModelDelegate: AnyObject {
 
 class CreateIncomeViewModel {
     
-    private var incomeId = 0
-    private var incomes: [Income]
-    private var financeManager: FinanceManager
-    weak var delegate: CreateIncomeViewModelDelegate?
     
-    init(incomes: [Income], financeManager: FinanceManager, delegate: CreateIncomeViewModelDelegate?) {
-        self.incomes = incomes
-        self.financeManager = financeManager
+    private var isNewIncome: Bool
+    weak var delegate: CreateIncomeViewModelDelegate?
+    var exsitingIncome: Income?
+    
+    init(delegate: CreateIncomeViewModelDelegate?, isNewIncome: Bool) {
+        self.isNewIncome = isNewIncome
         self.delegate = delegate
-        if let incomeID = UserDefaults.standard.value(forKey: "incomeID") as? Int {
-            self.incomeId = incomeID
-        } else if let maxId = incomes.max(by: {$0.id < $1.id})?.id {
-            self.incomeId = maxId
+    }
+    
+    var title: String {
+        if let exsitingIncome = exsitingIncome {
+            return exsitingIncome.name
+        } else {
+            return ""
+        }
+    }
+    
+    var amount: String {
+        if let exsitingIncome = exsitingIncome {
+            return String(exsitingIncome.amount)
+        } else {
+            return ""
+        }
+    }
+    
+    var date: Date {
+        if let exsitingIncome = exsitingIncome {
+            return exsitingIncome.date
+        } else {
+            return Date()
         }
     }
     
@@ -37,8 +55,8 @@ class CreateIncomeViewModel {
         if validated(title: title, amount: amount) {
             guard let currentUser = Auth.auth().currentUser?.uid else {return}
             guard let amount = Int(amount) else {return}
-            let income = Income(amount: amount, date: date, name: title, id: genrateIncomeID())
-            financeManager.saveIncome(income: income, userName: currentUser) { [weak self] result in
+            let income = Income(amount: amount, date: date, name: title, id: FinanceManager.shared.genrateIncomeID(), isDeal: false, eventStoreId: nil)
+            FinanceManager.shared.saveIncome(income: income, userName: currentUser) { [weak self] result in
                 guard let self = self else {return}
                 DispatchQueue.main.async {
                     switch result {
@@ -52,13 +70,6 @@ class CreateIncomeViewModel {
         } else {
             return
         }
-    }
-    
-    func genrateIncomeID()-> Int {
-        let newId = incomeId + 1
-        incomeId = newId
-        UserDefaults.standard.set(newId, forKey: "incomeID")
-        return incomeId
     }
     
     private func validated(title: String, amount: String)-> Bool {

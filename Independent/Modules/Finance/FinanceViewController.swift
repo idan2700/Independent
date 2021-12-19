@@ -43,6 +43,11 @@ class FinanceViewController: UIViewController {
         collectionView.delegate = self
         incomeTableView.dataSource = self
         imcomeSumLabel.text = viewModel.totalIncomes
+//        viewModel.start()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.start()
     }
     
@@ -93,16 +98,28 @@ extension FinanceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = incomeTableView.dequeueReusableCell(withIdentifier: "IncomeCell", for: indexPath) as? IncomeTableViewCell else {return UITableViewCell()}
         let cellViewModel = viewModel.getIncomeCellViewModel(at: indexPath)
+        cell.delegate = self
         cell.configure(with: cellViewModel)
         return cell
     }
 }
 
 extension FinanceViewController: FinanceViewModelDelegate {
-    func moveToCreateIncomeVC(with incomes: [Income]) {
+    func presentIsDealError(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentErrorAlert(message: String) {
+        presentErrorAlert(with: message)
+    }
+    
+    func moveToCreateIncomeVC(isNewIncome: Bool, exsitingIncome: Income?) {
         let incomeVC: CreateIncomeViewController = storyBoard.instantiateViewController()
         incomeVC.delegate = self
-        incomeVC.viewModel = CreateIncomeViewModel(incomes: incomes, financeManager: FinanceManager(), delegate: incomeVC)
+        incomeVC.viewModel = CreateIncomeViewModel(delegate: incomeVC, isNewIncome: isNewIncome)
+        incomeVC.viewModel.exsitingIncome = exsitingIncome
         self.present(incomeVC, animated: true, completion: nil)
     }
     
@@ -124,6 +141,18 @@ extension FinanceViewController: FinanceViewModelDelegate {
 extension FinanceViewController: CreateIncomeViewControllerDelegate {
     func didPick(newIncome: Income) {
         viewModel.didPickNewIncome(income: newIncome)
+    }
+}
+
+extension FinanceViewController: IncomeTableViewCellDelegate {
+    func didTapDelete(cell: IncomeTableViewCell) {
+        guard let indexPath = incomeTableView.indexPath(for: cell) else {return}
+        viewModel.didTapDeleteIncome(at: indexPath)
+    }
+    
+    func didTapEdit(cell: IncomeTableViewCell) {
+        guard let indexPath = incomeTableView.indexPath(for: cell) else {return}
+        viewModel.didTapEditIncome(at: indexPath)
     }
 }
 

@@ -28,7 +28,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.start()
+//        viewModel.start()
         lastDayButton.isHidden = true
         createButtonsWidth.constant = 0
         presentedDayWidth.constant = self.view.frame.width - 44
@@ -62,6 +62,11 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
         swipeRightRegongnizer.delegate = self
         tableView.addGestureRecognizer(swipeRightRegongnizer)
         viewModel.handleDatePresentation(with: datePicker.date)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.start()
     }
     
     @IBAction func didTapExpandDatePicker(_ sender: UIButton) {
@@ -138,20 +143,20 @@ extension CalendarViewController: CalendarViewModelDelegate {
         lastDayButton.isHidden = isHidden
     }
     
-    func moveToCreateMissionVC(with allEvents: [Event], currentDate: Date, isNewMission: Bool, existingMission: Event?) {
+    func moveToCreateMissionVC(currentDate: Date, isNewMission: Bool, existingMission: Event?) {
         let createMissionVC: CreateMissionViewController = storyBoard.instantiateViewController()
         createMissionVC.delegate = self
-        createMissionVC.viewModel = CreateMissionViewModel(delegate: createMissionVC, allEvents: allEvents, isNewMission: isNewMission)
+        createMissionVC.viewModel = CreateMissionViewModel(delegate: createMissionVC, isNewMission: isNewMission)
         createMissionVC.viewModel.exisitingMission = existingMission
         createMissionVC.viewModel.currentDate = currentDate
         createMissionVC.modalPresentationStyle = .overFullScreen
         self.present(createMissionVC, animated: true, completion: nil)
     }
     
-    func moveToCreateDealVC(with allEvents: [Event], allLeads: [Lead], currentDate: Date, isNewDeal: Bool, existingDeal: Event?) {
+    func moveToCreateDealVC(currentDate: Date, isNewDeal: Bool, existingDeal: Event?) {
         let createDealVC: CreateDealViewController = storyBoard.instantiateViewController()
         createDealVC.delegate = self
-        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, allEvents: allEvents, isLaunchedFromLead: false, allLeads: allLeads, isNewDeal: isNewDeal)
+        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, isLaunchedFromLead: false, isNewDeal: isNewDeal)
         createDealVC.viewModel.existingDeal = existingDeal
         createDealVC.viewModel.currentDate = currentDate
         createDealVC.viewModel.isLaunchedFromLead = false

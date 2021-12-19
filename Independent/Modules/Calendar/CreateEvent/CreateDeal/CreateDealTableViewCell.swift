@@ -80,7 +80,7 @@ class CreateDealTableViewCell: UITableViewCell {
     }
     
     func configure(name: String?, phone: String?) {
-        viewModel.exsitingLeadIndex = nil
+        viewModel.existingLead = nil
         if let name = name,
            let phone = phone {
             self.nameTextField.text = name
@@ -116,7 +116,7 @@ class CreateDealTableViewCell: UITableViewCell {
     }
     
     @IBAction func didTapCancel(_ sender: UIButton) {
-        viewModel.exsitingLeadIndex = nil
+        viewModel.existingLead = nil
         delegate?.didTapCancel()
     }
     

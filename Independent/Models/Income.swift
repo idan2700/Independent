@@ -12,4 +12,6 @@ struct Income {
     let date: Date
     let name: String
     let id: Int
+    let isDeal: Bool
+    let eventStoreId: String?
 }

@@ -26,30 +26,22 @@ protocol CreateDealTableViewCellViewModelDelegate: AnyObject {
 
 class CreateDealTableViewCellViewModel {
     
-    private var eventID: Int = 0
-    private var allEvents: [Event]
-    private var allLeads: [Lead]
     private var isStartDateIsOpen: Bool = false
     private var isEndDateIsOpen: Bool = false
     private var isPlacesTableViewIsOpen: Bool = false
     private let dateFormatter = DateFormatter()
-    private var eventsManager: EventsManager
     var matchingItems:[MKMapItem] = []
     var currentDate: Date
-    var exisitingDeal: Event?
-    var exsitingLeadIndex: Int?
+    var existingDeal: Event?
+    var existingLead: Lead?
     var reminder: Int?
     var reminderTitle = String()
     
     weak var delegate: CreateDealTableViewCellViewModelDelegate?
     
-    init(delegate: CreateDealTableViewCellViewModelDelegate?, allEvents: [Event], allLeads: [Lead], eventsManager: EventsManager, currentDate: Date) {
+    init(delegate: CreateDealTableViewCellViewModelDelegate?, currentDate: Date) {
         self.delegate = delegate
-        self.allEvents = allEvents
-        self.allLeads = allLeads
-        self.eventsManager = eventsManager
         self.currentDate = currentDate
-        updateEventID()
     }
     
     var numberOfRows: Int {
@@ -61,7 +53,7 @@ class CreateDealTableViewCellViewModel {
     }
     
     func checkForExisitingDeal() {
-        if let exisitingDeal = exisitingDeal {
+        if let exisitingDeal = existingDeal {
             delegate?.updateExisitingDeal(event: exisitingDeal)
         }
     }
@@ -115,10 +107,10 @@ class CreateDealTableViewCellViewModel {
     
     func didTapAdd(name: String, phone: String, location: String, startDate: Date, endDate: Date, price: String, notes: String) {
         if validated(name: name, price: price, phone: phone) {
-            if let exisitingDeal = exisitingDeal {
+            if let exisitingDeal = existingDeal {
                 switch exisitingDeal {
                 case .deal(viewModel: let viewModel):
-                    eventsManager.updateDealToStore(deal: viewModel.deal, name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
+                    EventsManager.shared.updateDealToStore(deal: viewModel.deal, name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
                         guard let self = self else {return}
                         DispatchQueue.main.async {
                             switch result {
@@ -134,7 +126,7 @@ class CreateDealTableViewCellViewModel {
                     break
                 }
             } else {
-                eventsManager.saveEventToStore(name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
+                EventsManager.shared.saveEventToStore(name: name, location: location, start: startDate, end: endDate, notes: notes, reminder: self.reminder) { [weak self] result in
                     guard let self = self else {return}
                     DispatchQueue.main.async {
                         switch result {
@@ -146,12 +138,12 @@ class CreateDealTableViewCellViewModel {
                                             endDate: endDate,
                                             price: price,
                                             notes: notes,
-                                            dealID: self.genrateEventID(),
+                                            dealID: EventsManager.shared.genrateEventID(),
                                             eventStoreID: eventID,
                                             reminder: self.reminderTitle)
-                            if self.exsitingLeadIndex != nil {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "dealOnExistingLead"), object: self.exsitingLeadIndex)
-                                self.exsitingLeadIndex = nil
+                            if let lead = self.existingLead  {
+                                self.updateExistingLeadStatus(lead: lead)
+                                self.existingLead = nil
                             }
                             self.delegate?.didPickNewDeal(deal: deal)
                         case .failure(_):
@@ -162,6 +154,19 @@ class CreateDealTableViewCellViewModel {
             }
         } else {
             return
+        }
+    }
+    
+    private func updateExistingLeadStatus(lead: Lead) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+        LeadManager.shared.updateLeadStatus(lead: lead, userName: currentUserID, status: lead.status.statusString) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success():
+                print("success")
+            case .failure(_):
+                print("failed to change status")
+            }
         }
     }
     
@@ -206,11 +211,11 @@ class CreateDealTableViewCellViewModel {
     }
     
     func didEditPhone(phone: String) {
-        if let index = allLeads.firstIndex(where: {$0.phoneNumber == phone}) {
+        if let lead = LeadManager.shared.allLeads.first(where: {$0.phoneNumber == phone}) {
             self.delegate?.thereIsLeadInLeadsVC()
-            self.exsitingLeadIndex = index
+            self.existingLead = lead
         } else {
-            self.exsitingLeadIndex = nil
+            self.existingLead = nil
         }
         if phone.isEmpty {
             self.delegate?.changePhoneErrorVisability(toPresent: true, message: "לא הכנסת טלפון")
@@ -219,29 +224,5 @@ class CreateDealTableViewCellViewModel {
         }
     }
     
-    private func updateEventID() {
-        if let eventID = UserDefaults.standard.value(forKey: "eventID") as? Int {
-            self.eventID = eventID
-        } else {
-            var allEventIds = [Int]()
-            for event in allEvents {
-                switch event {
-                case .deal(viewModel: let viewModel):
-                    allEventIds.append(viewModel.dealID)
-                case .mission(viewModel: let viewModel):
-                    allEventIds.append(viewModel.missionID)
-                }
-            }
-            if let maxID = allEventIds.max() {
-                eventID = maxID
-            }
-        }
-    }
     
-    private func genrateEventID()-> Int {
-        let newId = eventID + 1
-        eventID = newId
-        UserDefaults.standard.set(newId, forKey: "eventID")
-        return eventID
-    }
 }
