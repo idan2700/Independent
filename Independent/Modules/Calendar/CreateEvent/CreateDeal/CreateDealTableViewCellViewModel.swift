@@ -159,13 +159,15 @@ class CreateDealTableViewCellViewModel {
     
     private func updateExistingLeadStatus(lead: Lead) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
-        LeadManager.shared.updateLeadStatus(lead: lead, userName: currentUserID, status: lead.status.statusString) { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success():
-                print("success")
-            case .failure(_):
-                print("failed to change status")
+        if let index = LeadManager.shared.allLeads.firstIndex(where: {$0.phoneNumber == lead.phoneNumber}) {
+            LeadManager.shared.allLeads[index].status = .deal
+            LeadManager.shared.updateLeadStatus(lead: LeadManager.shared.allLeads[index], userName: currentUserID, status: LeadManager.shared.allLeads[index].status.statusString) {  result in
+                switch result {
+                case .success():
+                    print("success")
+                case .failure(_):
+                    print("failed to change status")
+                }
             }
         }
     }
