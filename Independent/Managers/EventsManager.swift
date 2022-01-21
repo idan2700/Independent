@@ -294,18 +294,6 @@ class EventsManager {
         }
     }
     
-    
-    private func generateID(missions: [Mission]) -> Int {
-        var id = [Int]()
-        for mission in missions {
-            id.append(mission.missionID)
-        }
-        if let maxId = id.max() {
-            return maxId + 1
-        }
-        return 0
-    }
-    
     private func checkIfThereIsUnknownEventInStore(missions: [Mission], deals: [Deal], userID: String)-> [Mission] {
         var updatedMissions = missions
         var newMissionsToDb = [Mission]()
@@ -338,7 +326,7 @@ class EventsManager {
                                          startDate: event.startDate,
                                          endDate: event.endDate,
                                          notes: event.notes,
-                                         missionID: self.generateID(missions: updatedMissions),
+                                         missionID: self.genrateEventID(),
                                          eventStoreID: event.eventIdentifier,
                                          reminder: reminder)
                 updatedMissions.append(newMission)

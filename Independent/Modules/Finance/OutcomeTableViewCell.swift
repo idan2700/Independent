@@ -1,18 +1,18 @@
 //
-//  IncomeTableViewCell.swift
+//  OutcomeTableViewCell.swift
 //  Independent
 //
-//  Created by Idan Levi on 10/12/2021.
+//  Created by Idan Levi on 31/12/2021.
 //
 
 import UIKit
 
-protocol IncomeTableViewCellDelegate: AnyObject {
-    func didTapDelete(cell: IncomeTableViewCell)
-    func didTapEdit(cell: IncomeTableViewCell)
+protocol OutcomeTableViewCellDelegate: AnyObject {
+    func didTapDelete(cell: OutcomeTableViewCell)
+    func didTapEdit(cell: OutcomeTableViewCell)
 }
 
-class IncomeTableViewCell: UITableViewCell {
+class OutcomeTableViewCell: UITableViewCell {
     
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -21,12 +21,10 @@ class IncomeTableViewCell: UITableViewCell {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var paymentsLabel: UILabel!
-    weak var delegate: IncomeTableViewCellDelegate?
-    
+    weak var delegate: OutcomeTableViewCellDelegate?
+
     override func awakeFromNib() {
         super.awakeFromNib()
-//        amountLabel.makeBorder(width: 1, color: UIColor(named: "darkgreen")!.cgColor)
-//        amountLabel.makeRound()
         deleteButton.setTitle("", for: .normal)
         editButton.setTitle("", for: .normal)
         deleteButton.alpha = 0
@@ -43,8 +41,8 @@ class IncomeTableViewCell: UITableViewCell {
         tapRegongnizer.delegate = self
         cellView.addGestureRecognizer(tapRegongnizer)
     }
-
-    func configure(with viewModel: IncomeTableViewCellViewModel) {
+    
+    func configure(with viewModel: OutcomeTableViewCellViewModel) {
         amountLabel.text = viewModel.amount
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
@@ -55,14 +53,14 @@ class IncomeTableViewCell: UITableViewCell {
             paymentsLabel.isHidden = true
         }
     }
-    
-    @IBAction func didTapDelete(_ sender: UIButton) {
-        delegate?.didTapDelete(cell: self)
+
+    @IBAction func didTapEdit(_ sender: UIButton) {
+        delegate?.didTapEdit(cell: self)
         handleTap()
     }
     
-    @IBAction func didTapEdit(_ sender: UIButton) {
-        delegate?.didTapEdit(cell: self)
+    @IBAction func didTapDelete(_ sender: UIButton) {
+        delegate?.didTapDelete(cell: self)
         handleTap()
     }
     
@@ -89,4 +87,5 @@ class IncomeTableViewCell: UITableViewCell {
             self.editButton.alpha = 0
         })
     }
+    
 }

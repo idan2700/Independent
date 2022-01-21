@@ -63,9 +63,11 @@ class CreateDealViewModel {
     
     private func createNewIncome(deal: Deal) {
         guard let userId = Auth.auth().currentUser?.uid else {return}
+        var dates = [Date]()
+        dates.append(deal.startDate)
         guard let amount = Int(deal.price) else { return }
         let id = FinanceManager.shared.genrateIncomeID()
-        let income = Income(amount: amount, date: deal.startDate, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID)
+        let income = Income(amount: amount, dates: dates, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID, type: .oneTime, numberOfPayments: nil)
         FinanceManager.shared.saveIncome(income: income, userName: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {

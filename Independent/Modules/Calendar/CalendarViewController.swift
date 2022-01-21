@@ -6,62 +6,62 @@
 //
 
 import UIKit
-import CalendarKit
+import UIKit.UIGestureRecognizerSubclass
+import FSCalendar
+
 
 class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var expandDatePickerButton: UIButton!
-    @IBOutlet weak var datePickerViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var presentedDayLabel: UILabel!
+    
+    @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var addEventButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var missionButton: UIButton!
-    @IBOutlet weak var createButtonsWidth: NSLayoutConstraint!
     @IBOutlet weak var noEventsLabel: UILabel!
-    @IBOutlet weak var presentedDayWidth: NSLayoutConstraint!
-    @IBOutlet weak var lastDayButton: UIButton!
-    @IBOutlet weak var nextDayButton: UIButton!
-    @IBOutlet weak var presentedDayView: UIView!
+    @IBOutlet weak var calendarHeight: NSLayoutConstraint!
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var tableViewView: UIView!
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var addEventButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var addEventButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var closeEventsButtons: UIButton!
+    @IBOutlet weak var missionButtonX: NSLayoutConstraint!
+    @IBOutlet weak var dealButtonX: NSLayoutConstraint!
+    @IBOutlet weak var presentedDayLabel: UILabel!
+    var animator: UIViewPropertyAnimator?
     var viewModel: CalendarViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel.start()
-        lastDayButton.isHidden = true
-        createButtonsWidth.constant = 0
-        presentedDayWidth.constant = self.view.frame.width - 44
-        dealButton.alpha = 0
-        missionButton.alpha = 0
-        missionButton.layer.borderWidth = 2
-        missionButton.layer.borderColor = UIColor(named: "gold")!.cgColor
-        dealButton.makeRoundCorners(radius: 10)
-        missionButton.makeRoundCorners(radius: 10)
-        datePicker.overrideUserInterfaceStyle = .dark
-        datePicker.setValue(0.8, forKey: "alpha")
-        datePicker.minimumDate = Date()
-        datePickerViewHeight.constant = 25
-        datePicker.alpha = 0
-        expandDatePickerButton.setTitle("", for: .normal)
-        expandDatePickerButton.makeRoundCorners(radius: 5)
-        presentedDayView.makeRoundCorners(radius: 7)
+        viewModel.start()
+        calendar.calendarHeaderView.fs_height = 60
+        tableViewView.makeTopRoundCorners()
+        tableViewView.addShadow(color: UIColor(named: "50white")!, opacity: 0.2, radius: 5.0, size: CGSize(width: 0.0, height: 0.0))
+        headerView.makeTopRoundCorners()
+        calendar.delegate = self
+        calendar.dataSource = self
+        dealButton.makeRound()
+        missionButton.makeRound()
+        tableViewHeight.constant = self.view.frame.height - calendarHeight.constant - 50
         addEventButton.setTitle("", for: .normal)
-        lastDayButton.setTitle("", for: .normal)
-        nextDayButton.setTitle("", for: .normal)
-        addEventButton.makeRoundCorners(radius: 7)
-        datePicker.addTarget(self, action: #selector(didSelectDate), for: .valueChanged)
+        closeEventsButtons.setTitle("", for: .normal)
+        addEventButton.makeRoundCorners(radius: addEventButton.frame.width / 2)
         tableView.dataSource = self
         tableView.delegate = self
-        let swipeLeftRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeLeft))
-        swipeLeftRegongnizer.direction = .left
-        swipeLeftRegongnizer.delegate = self
-        tableView.addGestureRecognizer(swipeLeftRegongnizer)
-        let swipeRightRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeRight))
-        swipeRightRegongnizer.direction = .right
-        swipeRightRegongnizer.delegate = self
-        tableView.addGestureRecognizer(swipeRightRegongnizer)
-        viewModel.handleDatePresentation(with: datePicker.date)
+        closeEventsButtons.alpha = 0
+        let swipeDownRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeDown))
+        swipeDownRegongnizer.direction = .down
+        swipeDownRegongnizer.delegate = self
+        headerView.addGestureRecognizer(swipeDownRegongnizer)
+        tableViewView.addGestureRecognizer(swipeDownRegongnizer)
+        let swipeUpRegongnizer = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipeUp))
+        swipeUpRegongnizer.direction = .up
+        swipeUpRegongnizer.delegate = self
+        headerView.addGestureRecognizer(swipeUpRegongnizer)
+        tableViewView.addGestureRecognizer(swipeUpRegongnizer)
+        viewModel.didSelectDate(date: calendar.selectedDate ?? Date())
+        calendar.select(Date())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,16 +69,12 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
         viewModel.start()
     }
     
-    @IBAction func didTapExpandDatePicker(_ sender: UIButton) {
-        viewModel.didTapExpandDatePicker()
-    }
-    
-    @objc func didSelectDate() {
-        viewModel.didSelectDate(date: datePicker.date)
-    }
-    
     @IBAction func didTapAdd(_ sender: UIButton) {
         viewModel.didTapAdd()
+    }
+    
+    @IBAction func didTapCloseEventsButtons(_ sender: UIButton) {
+        viewModel.didTapCloseEventsButtons()
     }
     
     @IBAction func didTapAddMission(_ sender: UIButton) {
@@ -89,20 +85,43 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
         viewModel.didTapAddDeal()
     }
     
-    @objc func handleSwipeLeft() {
-        viewModel.didSwipeLeft()
+    
+    @objc func handleSwipeDown() {
+        calendar.setScope(.month, animated: true)
     }
     
-    @objc func handleSwipeRight() {
-        viewModel.didSwipeRight()
+    @objc func handleSwipeUp() {
+        calendar.setScope(.week, animated: true)
+    }
+
+}
+
+extension CalendarViewController: FSCalendarDelegate {
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+            calendar.fs_height = bounds.height + 10
+        self.calendarHeight.constant = bounds.height
+        tableViewHeight.constant = self.view.frame.height - calendarHeight.constant - 50
+            self.view.layoutIfNeeded()
+        }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        viewModel.didSelectDate(date: date)
+    }
+}
+    
+extension CalendarViewController: FSCalendarDataSource {
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        return viewModel.calendarNumberOfEvents(date: date)
+    }
+}
+extension CalendarViewController: FSCalendarDelegateAppearance {
+    
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance,eventDefaultColorsFor date: Date) -> [UIColor]? {
+        return viewModel.calendarEventsColor(date: date)
     }
     
-    @IBAction func didTapLastDay(_ sender: UIButton) {
-        viewModel.didSwipeLeft()
-    }
-    
-    @IBAction func didTapNextDay(_ sender: UIButton) {
-        viewModel.didSwipeRight()
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventSelectionColorsFor date: Date) -> [UIColor]? {
+        return viewModel.calendarEventsColor(date: date)
     }
 }
 
@@ -139,10 +158,11 @@ extension CalendarViewController: UITableViewDelegate {
 }
 
 extension CalendarViewController: CalendarViewModelDelegate {
-    func changeLastDayButtonVisability(isHidden: Bool) {
-        lastDayButton.isHidden = isHidden
+    func selectDateInCalendar(date: Date) {
+        self.calendar.select(date)
     }
     
+
     func moveToCreateMissionVC(currentDate: Date, isNewMission: Bool, existingMission: Event?) {
         let createMissionVC: CreateMissionViewController = storyBoard.instantiateViewController()
         createMissionVC.delegate = self
@@ -150,7 +170,9 @@ extension CalendarViewController: CalendarViewModelDelegate {
         createMissionVC.viewModel.exisitingMission = existingMission
         createMissionVC.viewModel.currentDate = currentDate
         createMissionVC.modalPresentationStyle = .overFullScreen
-        self.present(createMissionVC, animated: true, completion: nil)
+        self.present(createMissionVC, animated: true) {
+            self.viewModel.didTapCloseEventsButtons()
+        }
     }
     
     func moveToCreateDealVC(currentDate: Date, isNewDeal: Bool, existingDeal: Event?) {
@@ -161,7 +183,9 @@ extension CalendarViewController: CalendarViewModelDelegate {
         createDealVC.viewModel.currentDate = currentDate
         createDealVC.viewModel.isLaunchedFromLead = false
         createDealVC.modalPresentationStyle = .overFullScreen
-        self.present(createDealVC, animated: true, completion: nil)
+        self.present(createDealVC, animated: true) {
+            self.viewModel.didTapCloseEventsButtons()
+        }
     }
     
     func removeCell(at indexPath: IndexPath) {
@@ -179,50 +203,78 @@ extension CalendarViewController: CalendarViewModelDelegate {
     }
     
     func reloadData() {
+        calendar.reloadData()
         tableView.reloadData()
-    }
-    
-    func changeCreateButtonsVisability(toPresent: Bool) {
-        if toPresent {
-            createButtonsWidth.constant = 150
-            presentedDayWidth.constant = self.view.frame.width - 44 - 150 - 5
-            UIView.animate(withDuration: 0.5) {
-                self.view.layoutIfNeeded()
-                self.dealButton.alpha = 1
-                self.missionButton.alpha = 1
-                self.dealButton.makeBorder(width: 1, color: UIColor(named: "gold")!.cgColor)
-                self.missionButton.makeBorder(width: 1, color: UIColor(named: "gold")!.cgColor)
-            }
-        } else {
-            createButtonsWidth.constant = 0
-            presentedDayWidth.constant = self.view.frame.width - 44
-            UIView.animate(withDuration: 0.5) {
-                self.view.layoutIfNeeded()
-                self.dealButton.alpha = 0
-                self.missionButton.alpha = 0
-            }
-        }
     }
     
     func updatePresentedDayLabel(with date: String) {
         self.presentedDayLabel.text = date
     }
     
-    func changeDatePickerVisability(toPresent: Bool) {
-        guard let buttonImage = self.expandDatePickerButton.imageView else {return}
+    func changeCalendarVisability(toPresent: Bool) {
         if toPresent {
-            datePickerViewHeight.constant = 360
+            self.calendar.setScope(.month, animated: true)
+        } else {
+            self.calendar.setScope(.week, animated: true)
+        }
+    }
+    
+    func changeEventsButtonVisability(toPresent: Bool) {
+        if toPresent {
+            missionButtonX.constant = missionButtonX.constant + 80.0
+            dealButtonX.constant = -dealButtonX.constant - 80.0
             UIView.animate(withDuration: 0.5) {
+                self.missionButton.transform = CGAffineTransform(rotationAngle: ( Double.pi) * 3)
+                self.dealButton.transform = CGAffineTransform(rotationAngle: ( -Double.pi) * 3)
                 self.view.layoutIfNeeded()
-                self.datePicker.alpha = 1
-                buttonImage.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            } completion: { _ in
+                self.addEventButtonWidth.constant = 0
+                self.addEventButtonHeight.constant = 0
+                UIView.animate(withDuration: 0.5) {
+                    self.addEventButton.alpha = 0
+                    self.view.layoutIfNeeded()
+                } completion: { _ in
+                    self.missionButtonX.constant = self.missionButtonX.constant - 40.0
+                    self.dealButtonX.constant = self.dealButtonX.constant + 40.0
+                    UIView.animate(withDuration: 0.5) {
+                        self.missionButton.transform = CGAffineTransform(rotationAngle:  180 * -Double.pi)
+                        self.dealButton.transform = CGAffineTransform(rotationAngle: 180 * Double.pi)
+                        self.closeEventsButtons.alpha = 1
+                        self.view.layoutIfNeeded()
+                    }
+                }
             }
         } else {
-            datePickerViewHeight.constant = 25
+            self.missionButtonX.constant = self.missionButtonX.constant + 40.0
+            self.dealButtonX.constant = self.dealButtonX.constant - 40.0
             UIView.animate(withDuration: 0.5) {
+                self.missionButton.transform = CGAffineTransform(rotationAngle:  3 * Double.pi)
+                self.dealButton.transform = CGAffineTransform(rotationAngle: 3 * -Double.pi)
+                self.closeEventsButtons.alpha = 0
                 self.view.layoutIfNeeded()
-                self.datePicker.alpha = 0
-                buttonImage.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 180)
+            }  completion: { _ in
+                self.addEventButtonWidth.constant = 50
+                self.addEventButtonHeight.constant = 50
+                UIView.animate(withDuration: 0.5) {
+                    self.addEventButton.alpha = 1
+                    self.view.layoutIfNeeded()
+                } completion: { _ in
+                    self.missionButtonX.constant = 0.0
+                    self.dealButtonX.constant = 0.0
+                    UIView.animate(withDuration: 0.5) {
+                        self.missionButton.transform = CGAffineTransform(rotationAngle:  180 * -Double.pi)
+                        self.dealButton.transform = CGAffineTransform(rotationAngle: 180 * Double.pi)
+                        self.view.layoutIfNeeded()
+                    } completion: { _ in
+                        UIView.animate(withDuration: 0.1) {
+                            self.addEventButton.transform = CGAffineTransform.identity.scaledBy(x: 1.2, y: 1.2)
+                        } completion: { _ in
+                            UIView.animate(withDuration: 0.1) {
+                                self.addEventButton.transform = CGAffineTransform.identity
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -291,4 +343,5 @@ extension CalendarViewController: MissionTableViewCellDelegate {
         tableView.endUpdates()
     }
 }
+
 

@@ -39,6 +39,7 @@ class TabBarViewController: SOTabBarController {
         leadVC.viewModel = LeadViewModel(delegate: leadVC)
         calendarVC.viewModel = CalendarViewModel(delegate: calendarVC)
         financeVC.viewModel = FinanceViewModel(delegate: financeVC)
+        mainVC.viewModel = MainViewModel(delegate: mainVC)
         viewControllers = [settingsVC, leadVC, calendarVC, financeVC, mainVC]
     }
     

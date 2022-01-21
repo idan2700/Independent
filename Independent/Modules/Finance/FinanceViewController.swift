@@ -42,6 +42,7 @@ class FinanceViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         incomeTableView.dataSource = self
+        outcomeTableView.dataSource = self
         imcomeSumLabel.text = viewModel.totalIncomes
 //        viewModel.start()
     }
@@ -63,6 +64,7 @@ class FinanceViewController: UIViewController {
     }
     
     @IBAction func didTapAddOutcome(_ sender: UIButton) {
+        viewModel.didTapAddOutcome()
     }
 }
 
@@ -92,19 +94,45 @@ extension FinanceViewController: UICollectionViewDelegateFlowLayout {
 
 extension FinanceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfIncomeRaws
+        switch tableView {
+        case incomeTableView:
+            return viewModel.numberOfIncomeRaws
+        case outcomeTableView:
+            return viewModel.numberOfOutcomeRaws
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = incomeTableView.dequeueReusableCell(withIdentifier: "IncomeCell", for: indexPath) as? IncomeTableViewCell else {return UITableViewCell()}
-        let cellViewModel = viewModel.getIncomeCellViewModel(at: indexPath)
-        cell.delegate = self
-        cell.configure(with: cellViewModel)
-        return cell
+        switch tableView {
+        case incomeTableView:
+            guard let cell = incomeTableView.dequeueReusableCell(withIdentifier: "IncomeCell", for: indexPath) as? IncomeTableViewCell else {return UITableViewCell()}
+            let cellViewModel = viewModel.getIncomeCellViewModel(at: indexPath)
+            cell.delegate = self
+            cell.configure(with: cellViewModel)
+            return cell
+        case outcomeTableView:
+            guard let cell = outcomeTableView.dequeueReusableCell(withIdentifier: "OutcomeCell", for: indexPath) as? OutcomeTableViewCell else {return UITableViewCell()}
+            let cellViewModel = viewModel.getOutcomeCellViewModel(at: indexPath)
+            cell.delegate = self
+            cell.configure(with: cellViewModel)
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
 }
 
 extension FinanceViewController: FinanceViewModelDelegate {
+    func moveToCreateOutcomeVC(isNewOutcome: Bool, exsitingOutcome: Outcome?) {
+        let outcomeVC: CreateOutcomeViewController = storyBoard.instantiateViewController()
+        outcomeVC.delegate = self
+        outcomeVC.viewModel = CreateOutcomeViewModel(delegate: outcomeVC, isNewOutcome: isNewOutcome)
+        outcomeVC.viewModel.exsitingOutcome = exsitingOutcome
+        self.present(outcomeVC, animated: true, completion: nil)
+    }
+    
     func presentIsDealError(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -125,6 +153,10 @@ extension FinanceViewController: FinanceViewModelDelegate {
     
     func updateTotalIncomesLabel() {
         imcomeSumLabel.text = viewModel.totalIncomes
+    }
+    
+    func updateTotalOutcomesLabel() {
+        outcomeSumLabel.text = viewModel.totalOutcomes
     }
     
     func updateCurrentMonthLabel() {
@@ -153,6 +185,24 @@ extension FinanceViewController: IncomeTableViewCellDelegate {
     func didTapEdit(cell: IncomeTableViewCell) {
         guard let indexPath = incomeTableView.indexPath(for: cell) else {return}
         viewModel.didTapEditIncome(at: indexPath)
+    }
+}
+
+extension FinanceViewController: CreateOutcomeViewControllerDelegate {
+    func didPick(newOutcome: Outcome) {
+        viewModel.didPickNewOutcome(outcome: newOutcome)
+    }
+}
+
+extension FinanceViewController: OutcomeTableViewCellDelegate {
+    func didTapDelete(cell: OutcomeTableViewCell) {
+        guard let indexPath = outcomeTableView.indexPath(for: cell) else {return}
+        viewModel.didTapDeleteOutcome(at: indexPath)
+    }
+    
+    func didTapEdit(cell: OutcomeTableViewCell) {
+        guard let indexPath = outcomeTableView.indexPath(for: cell) else {return}
+        viewModel.didTapEditOutcome(at: indexPath)
     }
 }
 

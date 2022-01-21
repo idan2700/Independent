@@ -10,16 +10,16 @@ import EventKit
 import Firebase
 
 protocol CalendarViewModelDelegate: AnyObject {
-    func changeDatePickerVisability(toPresent: Bool)
     func updatePresentedDayLabel(with date: String)
-    func changeCreateButtonsVisability(toPresent: Bool)
     func reloadData()
     func removeCell(at indexPath: IndexPath)
     func moveToCreateDealVC(currentDate: Date, isNewDeal: Bool, existingDeal: Event?)
     func moveToCreateMissionVC(currentDate: Date, isNewMission: Bool, existingMission: Event?)
     func presentErrorAlert(message: String)
     func setNoEventsLabelState(isHidden: Bool)
-    func changeLastDayButtonVisability(isHidden: Bool)
+    func changeEventsButtonVisability(toPresent: Bool)
+    func changeCalendarVisability(toPresent: Bool)
+    func selectDateInCalendar(date: Date)
 }
 
 class CalendarViewModel {
@@ -58,47 +58,95 @@ class CalendarViewModel {
         return currentPresentedDayEvents[indexPath.row]
     }
     
-    func didTapAdd() {
-        isAddButtonSelected = !isAddButtonSelected
-        if isAddButtonSelected {
-            delegate?.changeCreateButtonsVisability(toPresent: true)
-        } else {
-            delegate?.changeCreateButtonsVisability(toPresent: false)
+    func calendarEventsColor(date: Date)-> [UIColor] {
+        dateFormatter.dateFormat = "DD/MM/YY"
+        var colors = [UIColor]()
+        var dealDates = [String]()
+        var missionDates = [String]()
+        for event in EventsManager.shared.allEvents {
+            switch event {
+            case .deal(let viewModel):
+                if dateFormatter.string(from: viewModel.deal.startDate) == dateFormatter.string(from: date) {
+                    dealDates.append(dateFormatter.string(from: viewModel.deal.startDate))
+                }
+            case .mission(let viewModel):
+                if dateFormatter.string(from: viewModel.mission.startDate) == dateFormatter.string(from: date) {
+                    missionDates.append(dateFormatter.string(from: viewModel.mission.startDate))
+                }
+            }
         }
+        if missionDates.count > 0 {
+            colors.append(UIColor(named: "mission")!)
+        }
+        if dealDates.count > 0 {
+            colors.append(UIColor(named: "deal")!)
+        }
+        if missionDates.count >= 2 && missionDates.count > dealDates.count {
+            colors = []
+            colors.append(UIColor(named: "mission")!)
+            colors.append(UIColor(named: "deal")!)
+        }
+        return colors
+    }
+    
+    func calendarNumberOfEvents(date: Date)-> Int {
+        dateFormatter.dateFormat = "DD/MM/YY"
+        var counter = 0
+        for event in EventsManager.shared.allEvents {
+            switch event {
+            case .deal(let viewModel):
+                if dateFormatter.string(from: viewModel.deal.startDate) == dateFormatter.string(from: date) {
+                    counter += 1
+                }
+            case .mission(let viewModel):
+                if dateFormatter.string(from: viewModel.mission.startDate) == dateFormatter.string(from: date) {
+                    counter += 1
+                }
+            }
+        }
+      return counter
+    }
+    
+    func didTapAdd() {
+        delegate?.changeEventsButtonVisability(toPresent: true)
+    }
+    
+    func didTapCloseEventsButtons() {
+        delegate?.changeEventsButtonVisability(toPresent: false)
     }
     
     func didTapAddDeal() {
         delegate?.moveToCreateDealVC(currentDate: currentPresentedDate, isNewDeal: true, existingDeal: nil)
-        delegate?.changeCreateButtonsVisability(toPresent: false)
     }
     
     func didTapAddMission() {
         delegate?.moveToCreateMissionVC(currentDate: currentPresentedDate, isNewMission: true, existingMission: nil)
-        delegate?.changeCreateButtonsVisability(toPresent: false)
     }
     
-    func didTapExpandDatePicker() {
-        if isDatePickerOpen {
-            delegate?.changeDatePickerVisability(toPresent: false)
-        } else {
-            delegate?.changeDatePickerVisability(toPresent: true)
-        }
+    func didSwipeDown() {
+        delegate?.changeCalendarVisability(toPresent: true)
         isDatePickerOpen = !isDatePickerOpen
     }
     
+    func didSwipeUp() {
+        delegate?.changeCalendarVisability(toPresent: false)
+        isDatePickerOpen = !isDatePickerOpen
+    }
+
     func didSelectDate(date: Date) {
         self.currentPresentedDate = date
         checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: date)
         handleDatePresentation(with: date)
+        delegate?.selectDateInCalendar(date: date)
         delegate?.reloadData()
     }
     
     func handleDatePresentation(with date: Date) {
         dateFormatter.locale = Locale(identifier: "He")
-        dateFormatter.dateFormat = "EEEE, d MMMM, yyyy"
+        dateFormatter.dateFormat = "EEEE, d MMMM"
         let stringDate = dateFormatter.string(from: date)
         if stringDate == dateFormatter.string(from: Date()) {
-            dateFormatter.dateFormat = "היום, d MMMM, yyyy"
+            dateFormatter.dateFormat = "היום, d MMMM"
             let todayStringDate = dateFormatter.string(from: date)
             delegate?.updatePresentedDayLabel(with: todayStringDate)
         }else {
@@ -106,30 +154,6 @@ class CalendarViewModel {
         }
     }
     
-    func didSwipeLeft() {
-        self.dateFormatter.dateFormat = "d, MMMM, yyyy"
-        self.dateFormatter.locale = Locale(identifier: "He")
-        let currentDay = self.dateFormatter.string(from: currentPresentedDate)
-        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
-        if currentDay == self.dateFormatter.string(from: nextDay) {
-            self.delegate?.changeLastDayButtonVisability(isHidden: true)
-        }
-        if currentDay == self.dateFormatter.string(from: Date()) {
-            return
-        }
-        self.currentPresentedDate = Calendar.current.date(byAdding: .day, value: -1, to: currentPresentedDate) ?? Date()
-        checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: currentPresentedDate)
-        handleDatePresentation(with: currentPresentedDate)
-        delegate?.reloadData()
-    }
-    
-    func didSwipeRight() {
-        self.currentPresentedDate = Calendar.current.date(byAdding: .day, value: 1, to: currentPresentedDate) ?? Date()
-        checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: currentPresentedDate)
-        handleDatePresentation(with: currentPresentedDate)
-        delegate?.changeLastDayButtonVisability(isHidden: false)
-        delegate?.reloadData()
-    }
     
     func didPickNewDeal(newDeal: Deal) {
         guard let userId = Auth.auth().currentUser?.uid else {return}
@@ -143,6 +167,7 @@ class CalendarViewModel {
                     EventsManager.shared.allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: newDeal)))
                     EventsManager.shared.sortEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
+                    self.didSelectDate(date: newDeal.startDate)
                     self.delegate?.reloadData()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשמירת העסקה, אנא נסה שנית ")
@@ -162,6 +187,7 @@ class CalendarViewModel {
                     EventsManager.shared.allEvents.append(Event.mission(viewModel: MissionTableViewCellViewModel(mission: newMission)))
                     EventsManager.shared.sortEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
+                    self.didSelectDate(date: newMission.startDate)
                     self.delegate?.reloadData()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשמירת העסקה, אנא נסה שנית ")
@@ -184,6 +210,7 @@ class CalendarViewModel {
                     EventsManager.shared.allEvents = []
                     EventsManager.shared.appendEventsToAllEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
+                    self.didSelectDate(date: deal.startDate)
                     self.delegate?.reloadData()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך העריכה, אנא נסה שנית")
@@ -205,6 +232,7 @@ class CalendarViewModel {
                     EventsManager.shared.allEvents = []
                     EventsManager.shared.appendEventsToAllEvents()
                     self.checkIfEventsAreEqualToCurrentPresentedDay(currentPresentedDay: self.currentPresentedDate)
+                    self.didSelectDate(date: mission.startDate)
                     self.delegate?.reloadData()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך העריכה, אנא נסה שנית")
@@ -337,8 +365,10 @@ class CalendarViewModel {
     private func createNewIncome(deal: Deal) {
         guard let userId = Auth.auth().currentUser?.uid else {return}
         guard let amount = Int(deal.price) else { return }
+        var dates = [Date]()
+        dates.append(deal.startDate)
         let id = FinanceManager.shared.genrateIncomeID()
-        let income = Income(amount: amount, date: deal.startDate, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID)
+        let income = Income(amount: amount, dates: dates, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID, type: .oneTime, numberOfPayments: nil)
         FinanceManager.shared.saveIncome(income: income, userName: userId) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
@@ -373,7 +403,9 @@ class CalendarViewModel {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
         if let income = FinanceManager.shared.allIncomes.first(where: {$0.eventStoreId == deal.eventStoreID}) {
             guard let amount = Int(deal.price) else {return}
-            let editedIncome = Income(amount: amount, date: deal.startDate, name: deal.name, id: income.id, isDeal: income.isDeal, eventStoreId: income.eventStoreId)
+            var dates = [Date]()
+            dates.append(deal.startDate)
+            let editedIncome = Income(amount: amount, dates: dates, name: deal.name, id: income.id, isDeal: income.isDeal, eventStoreId: income.eventStoreId, type: .oneTime, numberOfPayments: nil)
             FinanceManager.shared.editIncome(income: editedIncome, userName: currentUserID) { [weak self] result in
                 guard let self = self else {return}
                 DispatchQueue.main.async {

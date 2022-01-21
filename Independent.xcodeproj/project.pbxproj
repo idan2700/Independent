@@ -43,6 +43,16 @@
 		532566492763848200DF302E /* IncomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532566482763848200DF302E /* IncomeTableViewCell.swift */; };
 		5325664B2763849A00DF302E /* IncomeTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */; };
 		5325664D2763917800DF302E /* FinanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664C2763917800DF302E /* FinanceManager.swift */; };
+		532A362E2775122700CD42E8 /* CreateOutcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */; };
+		532E6581277EE63B00CC96D6 /* CreateOutcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */; };
+		532E6583277EEA7800CC96D6 /* Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6582277EEA7800CC96D6 /* Outcome.swift */; };
+		532E6585277EF54600CC96D6 /* OutcomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6584277EF54600CC96D6 /* OutcomeTableViewCell.swift */; };
+		532E6587277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6586277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift */; };
+		532E658B27889C8D00CC96D6 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E658A27889C8D00CC96D6 /* MainViewModel.swift */; };
+		532E658D2788A5E000CC96D6 /* FinanceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E658C2788A5E000CC96D6 /* FinanceTableViewCell.swift */; };
+		532E658F2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E658E2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift */; };
+		532E65912791A8CE00CC96D6 /* GoalsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */; };
+		532E65932791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */; };
 		5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */; };
 		533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B95272A7DDC00B2A48D /* AnimationManager.swift */; };
 		5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B10E2726BD14002E5672 /* DataBaseManager.swift */; };
@@ -144,6 +154,16 @@
 		532566482763848200DF302E /* IncomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCell.swift; sourceTree = "<group>"; };
 		5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5325664C2763917800DF302E /* FinanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceManager.swift; sourceTree = "<group>"; };
+		532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewController.swift; sourceTree = "<group>"; };
+		532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewModel.swift; sourceTree = "<group>"; };
+		532E6582277EEA7800CC96D6 /* Outcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Outcome.swift; sourceTree = "<group>"; };
+		532E6584277EF54600CC96D6 /* OutcomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutcomeTableViewCell.swift; sourceTree = "<group>"; };
+		532E6586277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutcomeTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		532E658A27889C8D00CC96D6 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		532E658C2788A5E000CC96D6 /* FinanceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceTableViewCell.swift; sourceTree = "<group>"; };
+		532E658E2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsTableViewCell.swift; sourceTree = "<group>"; };
+		532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLeadViewController.swift; sourceTree = "<group>"; };
 		533D5B95272A7DDC00B2A48D /* AnimationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
 		5340B10E2726BD14002E5672 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
@@ -326,6 +346,24 @@
 			path = Mission;
 			sourceTree = "<group>";
 		};
+		532E6588277F252300CC96D6 /* CreateOutcome */ = {
+			isa = PBXGroup;
+			children = (
+				532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */,
+				532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */,
+			);
+			path = CreateOutcome;
+			sourceTree = "<group>";
+		};
+		532E6589277F253400CC96D6 /* CreateIncome */ = {
+			isa = PBXGroup;
+			children = (
+				538769EB2763948C007AA7E1 /* CreateIncomeViewController.swift */,
+				538769ED276394A1007AA7E1 /* CreateIncomeViewModel.swift */,
+			);
+			path = CreateIncome;
+			sourceTree = "<group>";
+		};
 		5340B1172726D6E3002E5672 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,6 +459,7 @@
 				5318454127537AB000DC57CF /* Event.swift */,
 				53184549275A072E00DC57CF /* ReminderTime.swift */,
 				53256646276377B600DF302E /* Income.swift */,
+				532E6582277EEA7800CC96D6 /* Outcome.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -429,6 +468,11 @@
 			isa = PBXGroup;
 			children = (
 				5340B11B2726D7BD002E5672 /* MainViewController.swift */,
+				532E658A27889C8D00CC96D6 /* MainViewModel.swift */,
+				532E658C2788A5E000CC96D6 /* FinanceTableViewCell.swift */,
+				532E658E2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift */,
+				532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */,
+				532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -470,8 +514,10 @@
 				532566422763516700DF302E /* FinanceCollectionViewCellViewModel.swift */,
 				532566482763848200DF302E /* IncomeTableViewCell.swift */,
 				5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */,
-				538769EB2763948C007AA7E1 /* CreateIncomeViewController.swift */,
-				538769ED276394A1007AA7E1 /* CreateIncomeViewModel.swift */,
+				532E6584277EF54600CC96D6 /* OutcomeTableViewCell.swift */,
+				532E6586277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift */,
+				532E6589277F253400CC96D6 /* CreateIncome */,
+				532E6588277F252300CC96D6 /* CreateOutcome */,
 			);
 			path = Finance;
 			sourceTree = "<group>";
@@ -732,6 +778,7 @@
 			files = (
 				53256647276377B600DF302E /* Income.swift in Sources */,
 				532566432763516700DF302E /* FinanceCollectionViewCellViewModel.swift in Sources */,
+				532E65932791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift in Sources */,
 				53184544275A05A700DC57CF /* ReminderTableViewCell.swift in Sources */,
 				535B21642745302500ADABAE /* PlacesTableViewCellViewModel.swift in Sources */,
 				5318453A274BCFA600DC57CF /* CreateMissionViewController.swift in Sources */,
@@ -742,12 +789,16 @@
 				5340B1112726BD93002E5672 /* AuthManager.swift in Sources */,
 				535B21452741481800ADABAE /* EditLeadSummryViewModel.swift in Sources */,
 				535B21622745243F00ADABAE /* PlacesTableViewCell.swift in Sources */,
+				532E6583277EEA7800CC96D6 /* Outcome.swift in Sources */,
+				532E6581277EE63B00CC96D6 /* CreateOutcomeViewModel.swift in Sources */,
 				535B5F78272C209F00992283 /* Lead.swift in Sources */,
 				5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */,
 				532566492763848200DF302E /* IncomeTableViewCell.swift in Sources */,
 				53184531274A4FBD00DC57CF /* SplashScreenViewModel.swift in Sources */,
 				5312CFB4272AA981007001A5 /* SOTabBarSettings.swift in Sources */,
+				532A362E2775122700CD42E8 /* CreateOutcomeViewController.swift in Sources */,
 				5325664B2763849A00DF302E /* IncomeTableViewCellViewModel.swift in Sources */,
+				532E658B27889C8D00CC96D6 /* MainViewModel.swift in Sources */,
 				5312CFA6272A9546007001A5 /* SettingsViewController.swift in Sources */,
 				53AF2A5927268216001A359B /* RegestrationViewController.swift in Sources */,
 				5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */,
@@ -765,17 +816,22 @@
 				535B215027427F8300ADABAE /* LeadManager.swift in Sources */,
 				53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */,
 				535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */,
+				532E658F2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift in Sources */,
 				5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */,
 				53184546275A05C700DC57CF /* ReminderViewController.swift in Sources */,
 				5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */,
 				535B2157274394AA00ADABAE /* Deal.swift in Sources */,
+				532E65912791A8CE00CC96D6 /* GoalsTableViewCell.swift in Sources */,
+				532E6585277EF54600CC96D6 /* OutcomeTableViewCell.swift in Sources */,
 				5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */,
 				5325664D2763917800DF302E /* FinanceManager.swift in Sources */,
+				532E6587277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift in Sources */,
 				538769EC2763948C007AA7E1 /* CreateIncomeViewController.swift in Sources */,
 				53184534274BC65D00DC57CF /* Mission.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				5318454A275A072E00DC57CF /* ReminderTime.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
+				532E658D2788A5E000CC96D6 /* FinanceTableViewCell.swift in Sources */,
 				535B215527428F8700ADABAE /* DealTableViewCellViewModel.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,
 				53E029182746566D00405D64 /* EventsManager.swift in Sources */,

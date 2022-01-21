@@ -1,24 +1,22 @@
 //
-//  Income.swift
+//  Outcome.swift
 //  Independent
 //
-//  Created by Idan Levi on 10/12/2021.
+//  Created by Idan Levi on 31/12/2021.
 //
 
 import Foundation
 
-struct Income {
+struct Outcome {
     let amount: Int
     let dates: [Date]
     let name: String
     let id: Int
-    let isDeal: Bool
-    let eventStoreId: String?
-    let type: IncomeType
+    let type: OutcomeType
     let numberOfPayments: Int?
 }
 
-enum IncomeType: String {
+enum OutcomeType: String {
     case oneTime = "חד פעמית"
     case payments = "תשלומים"
     case permanent = "קבועה"

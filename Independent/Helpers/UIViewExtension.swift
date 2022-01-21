@@ -11,7 +11,7 @@ import UIKit
 extension UIView {
 
     func makeTopRoundCorners() {
-        layer.cornerRadius = 10
+        layer.cornerRadius = 50
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
     
@@ -44,6 +44,14 @@ extension UIView {
     
     func makeRound() {
         layer.cornerRadius = bounds.size.width * 0.5
+    }
+    
+    func addShadow(color: UIColor, opacity: Float, radius: CGFloat, size: CGSize) {
+        layer.shadowColor = color.cgColor
+        layer.shadowOpacity = opacity
+        layer.shadowRadius = radius
+        layer.shadowOffset = size
+        layer.masksToBounds = false
     }
     
     func addGesture() {

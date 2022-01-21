@@ -44,7 +44,7 @@ class SplashScreenViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success():
-                    self.fetchMissions()
+                        self.fetchMissions()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
@@ -86,6 +86,21 @@ class SplashScreenViewModel {
     private func fetchIncomes() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
         FinanceManager.shared.loadIncomes(userId: currentUserID) { [weak self] result in
+            guard let self = self else {return}
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    self.fetchOutcomes()
+                case .failure(_):
+                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                }
+            }
+        }
+    }
+    
+    private func fetchOutcomes() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {return}
+        FinanceManager.shared.loadOutcomes(userId: currentUserID) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 switch result {
