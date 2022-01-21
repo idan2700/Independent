@@ -11,8 +11,6 @@ import Firebase
 protocol FinanceViewModelDelegate: AnyObject {
     func reloadData()
     func updateCurrentMonthLabel()
-    func updateTotalIncomesLabel()
-    func updateTotalOutcomesLabel()
     func moveToCreateIncomeVC(isNewIncome: Bool, exsitingIncome: Income?)
     func presentErrorAlert(message: String)
     func presentIsDealError(title: String, message: String)
@@ -35,8 +33,6 @@ class FinanceViewModel {
     func start() {
         checkIfIncomesAreEqualToCurrentPresentedMonth()
         checkIfOutcomesAreEqualToCurrentPresentedMonth()
-        delegate?.updateTotalIncomesLabel()
-        delegate?.updateTotalOutcomesLabel()
         delegate?.reloadData()
     }
     
@@ -104,8 +100,6 @@ class FinanceViewModel {
         checkIfIncomesAreEqualToCurrentPresentedMonth()
         checkIfOutcomesAreEqualToCurrentPresentedMonth()
         delegate?.updateCurrentMonthLabel()
-        delegate?.updateTotalOutcomesLabel()
-        delegate?.updateTotalIncomesLabel()
         delegate?.reloadData()
     }
     
@@ -117,8 +111,6 @@ class FinanceViewModel {
         checkIfIncomesAreEqualToCurrentPresentedMonth()
         checkIfOutcomesAreEqualToCurrentPresentedMonth()
         delegate?.updateCurrentMonthLabel()
-        delegate?.updateTotalIncomesLabel()
-        delegate?.updateTotalOutcomesLabel()
         delegate?.reloadData()
     }
     
@@ -134,7 +126,6 @@ class FinanceViewModel {
         FinanceManager.shared.allIncomes.removeAll(where: {$0.id == income.id})
         FinanceManager.shared.allIncomes.append(income)
         checkIfIncomesAreEqualToCurrentPresentedMonth()
-        delegate?.updateTotalIncomesLabel()
         delegate?.reloadData()
     }
     
@@ -142,7 +133,6 @@ class FinanceViewModel {
         FinanceManager.shared.allOutcomes.removeAll(where: {$0.id == outcome.id})
         FinanceManager.shared.allOutcomes.append(outcome)
         checkIfOutcomesAreEqualToCurrentPresentedMonth()
-        delegate?.updateTotalOutcomesLabel()
         delegate?.reloadData()
     }
     
@@ -159,7 +149,6 @@ class FinanceViewModel {
                     case .success():
                         FinanceManager.shared.allIncomes.removeAll(where: {$0.id == income.id})
                         self.checkIfIncomesAreEqualToCurrentPresentedMonth()
-                        self.delegate?.updateTotalIncomesLabel()
                         self.delegate?.reloadData()
                     case .failure(_):
                         self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
@@ -179,7 +168,6 @@ class FinanceViewModel {
                 case .success():
                     FinanceManager.shared.allOutcomes.removeAll(where: {$0.id == outcome.id})
                     self.checkIfOutcomesAreEqualToCurrentPresentedMonth()
-                    self.delegate?.updateTotalOutcomesLabel()
                     self.delegate?.reloadData()
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")

@@ -29,6 +29,11 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var presentByButtonsView: UIStackView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var presentByButtons: [UIButton]!
+    @IBOutlet weak var monthViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var PresentMonthlyOrAllButtonsView: UIStackView!
+    @IBOutlet var presentMonthlyOrAllButtons: [UIButton]!
+    @IBOutlet weak var monthViewTopSpace: NSLayoutConstraint!
+    
     
     var viewModel: LeadViewModel!
  
@@ -48,6 +53,13 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewWillAppear(animated)
         viewModel.start()
     }
+    
+    @IBAction func didTapPresentMonthlyOrAll(_ sender: UIButton) {
+        if let titleLabel = sender.titleLabel?.text {
+        viewModel.didTapPresentMonthlyOrAll(title: titleLabel)
+        }
+    }
+    
     
     @IBAction func didTapNextMonth(_ sender: UIButton) {
         viewModel.didTapNextMonth(currentPresentedMonth: currentMonthLabel.text ?? "")
@@ -88,13 +100,14 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         newLeadButton.makeRoundCorners(radius: 10)
         monthPickerView.makeRoundCorners(radius: 10)
         monthView.makeRoundCorners(radius: 10)
-        tableView.makeTopRoundCorners()
+//        tableView.makeTopRoundCorners()
         addManualyButton.layer.cornerRadius = 10
         addFromContactsButton.layer.cornerRadius = 10
         collectionViewHeight.constant = (view.frame.width - 51) / 3
         addleadButtonsWidth.constant = 0
         searchBarWidth.constant = self.view.frame.width - 70
         presentByButtonsView.makeRoundCorners(radius: 10)
+        PresentMonthlyOrAllButtonsView.makeRoundCorners(radius: 10)
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
             let atrbString = NSAttributedString(string: "חפש ליד", attributes: [.foregroundColor : UIColor(named: "30white")!, .font : UIFont.systemFont(ofSize: 10)])
             textfield.attributedPlaceholder = atrbString
@@ -266,6 +279,34 @@ extension LeadViewController: LeadViewModelDelegate {
             UIView.animate(withDuration: 0.5) {
                 self.addManualyButton.alpha = 0
                 self.addFromContactsButton.alpha = 0
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    func changePresentByMonthOrAllButtonUI(currentSelectedButton: String) {
+        for button in presentMonthlyOrAllButtons {
+            if button.titleLabel?.text == currentSelectedButton {
+                button.backgroundColor = UIColor(named: "10white") ?? .white
+                button.tintColor = UIColor(named: "gold") ?? .white
+            } else {
+                button.backgroundColor = UIColor(named: "5white") ?? .white
+                button.tintColor = UIColor(named: "30white") ?? .white
+            }
+        }
+    }
+    
+    func changeMonthlyViewVisability(toPresent: Bool) {
+        if toPresent {
+            monthViewHeight.constant = 40
+            monthViewTopSpace.constant = 10
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            monthViewHeight.constant = 0
+            monthViewTopSpace.constant = 0
+            UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
             }
         }

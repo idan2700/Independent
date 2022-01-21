@@ -21,8 +21,9 @@ class FinanceViewController: UIViewController {
     @IBOutlet weak var addOutcomeButton: UIButton!
     @IBOutlet weak var incomeView: UIView!
     @IBOutlet weak var outcomeView: UIView!
-    @IBOutlet weak var imcomeSumLabel: UILabel!
-    @IBOutlet weak var outcomeSumLabel: UILabel!
+    @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var incomeViewBorder: UIView!
+    @IBOutlet weak var outcomeViewBorder: UIView!
     
     var viewModel: FinanceViewModel!
     
@@ -35,15 +36,20 @@ class FinanceViewController: UIViewController {
         monthView.makeRoundCorners(radius: 10)
         addIncomeButton.setTitle("", for: .normal)
         addOutcomeButton.setTitle("", for: .normal)
-        incomeView.makeRoundCorners(radius: 5)
-        outcomeView.makeRoundCorners(radius: 5)
-        addIncomeButton.makeRoundCorners(radius: 5)
-        addOutcomeButton.makeRoundCorners(radius: 5)
+        incomeView.makeRoundCorners(radius: 20)
+        incomeViewBorder.makeRoundCorners(radius: 20)
+        incomeViewBorder.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
+        incomeView.clipsToBounds = true
+        outcomeView.makeRoundCorners(radius: 20)
+        outcomeViewBorder.makeRoundCorners(radius: 20)
+        outcomeViewBorder.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
+        outcomeView.clipsToBounds = true
+        addIncomeButton.makeRound()
+        addOutcomeButton.makeRound()
         collectionView.dataSource = self
         collectionView.delegate = self
         incomeTableView.dataSource = self
         outcomeTableView.dataSource = self
-        imcomeSumLabel.text = viewModel.totalIncomes
 //        viewModel.start()
     }
     
@@ -84,6 +90,7 @@ extension FinanceViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (view.frame.width - 51) / 3
         let height = width
+        collectionViewHeight.constant = height
         return CGSize(width: width, height: height)
     }
     
@@ -149,14 +156,6 @@ extension FinanceViewController: FinanceViewModelDelegate {
         incomeVC.viewModel = CreateIncomeViewModel(delegate: incomeVC, isNewIncome: isNewIncome)
         incomeVC.viewModel.exsitingIncome = exsitingIncome
         self.present(incomeVC, animated: true, completion: nil)
-    }
-    
-    func updateTotalIncomesLabel() {
-        imcomeSumLabel.text = viewModel.totalIncomes
-    }
-    
-    func updateTotalOutcomesLabel() {
-        outcomeSumLabel.text = viewModel.totalOutcomes
     }
     
     func updateCurrentMonthLabel() {

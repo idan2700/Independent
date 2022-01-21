@@ -42,6 +42,7 @@ class IncomeTableViewCell: UITableViewCell {
         let tapRegongnizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
         tapRegongnizer.delegate = self
         cellView.addGestureRecognizer(tapRegongnizer)
+        
     }
 
     func configure(with viewModel: IncomeTableViewCellViewModel) {

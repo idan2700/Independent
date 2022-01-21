@@ -25,6 +25,8 @@ protocol LeadViewModelDelegate: AnyObject {
     func expandUpdatedCell(lead: Lead)
     func moveToCreateDealVC(lead: Lead)
     func moveToContactsVC()
+    func changePresentByMonthOrAllButtonUI(currentSelectedButton: String)
+    func changeMonthlyViewVisability(toPresent: Bool)
     func reloadData()
 }
 
@@ -77,6 +79,27 @@ class LeadViewModel {
     
     func getCellViewModel(at indexPath: IndexPath) -> LeadTableViewCellViewModel {
         return LeadTableViewCellViewModel(lead: currentMonthLeads[indexPath.row])
+    }
+    
+    func didTapPresentMonthlyOrAll(title: String) {
+        delegate?.changePresentByMonthOrAllButtonUI(currentSelectedButton: title)
+        switch title {
+        case "הצג לפי חודש":
+            delegate?.changeMonthlyViewVisability(toPresent: true)
+            checkIfLeadsAreEqualToCurrentPresentedMonth(currentPresentedMonth: date)
+            checkIfLeadsAreEmpty()
+            delegate?.reloadData()
+        case "הצג הכל":
+            delegate?.changeMonthlyViewVisability(toPresent: false)
+            currentMonthLeads = []
+            leadsHolder = []
+            currentMonthLeads = LeadManager.shared.allLeads
+            leadsHolder = LeadManager.shared.allLeads
+            checkIfLeadsAreEmpty()
+            delegate?.reloadData()
+        default:
+            break
+        }
     }
     
     func didTapNextMonth(currentPresentedMonth: String) {
