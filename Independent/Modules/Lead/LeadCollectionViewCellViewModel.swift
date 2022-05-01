@@ -55,9 +55,9 @@ class LeadCollectionViewCellViewModel {
         case .precentOfSales:
             guard let precentOfSales = precentOfSales else { return UIColor(named: "gold")!}
             if precentOfSales < 6 {
-                return UIColor(named: "darkred")!
+                return UIColor(named: "ired")!
             } else if precentOfSales > 19 {
-                return UIColor(named: "darkgreen")!
+                return UIColor(named: "igreen")!
             } else {
                 return UIColor(named: "gold")!
             }

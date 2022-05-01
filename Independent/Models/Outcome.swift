@@ -11,7 +11,7 @@ struct Outcome {
     let amount: Int
     let dates: [Date]
     let name: String
-    let id: Int
+    let id: String
     let type: OutcomeType
     let numberOfPayments: Int?
 }

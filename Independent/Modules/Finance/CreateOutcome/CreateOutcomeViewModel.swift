@@ -85,7 +85,7 @@ class CreateOutcomeViewModel {
                 }
             }
             if self.isNewOutcome {
-                let outcome = Outcome(amount: amount, dates: dates, name: title, id: FinanceManager.shared.genrateIncomeID(), type: selectedType, numberOfPayments: numberOfPayments)
+                let outcome = Outcome(amount: amount, dates: dates, name: title, id: UUID().uuidString, type: selectedType, numberOfPayments: numberOfPayments)
                 FinanceManager.shared.saveOutcome(outcome: outcome, userName: currentUser) { [weak self] result in
                     guard let self = self else {return}
                     DispatchQueue.main.async {

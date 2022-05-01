@@ -30,16 +30,14 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var presentByButtons: [UIButton]!
     @IBOutlet weak var monthViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var PresentMonthlyOrAllButtonsView: UIStackView!
-    @IBOutlet var presentMonthlyOrAllButtons: [UIButton]!
     @IBOutlet weak var monthViewTopSpace: NSLayoutConstraint!
-    
+    @IBOutlet weak var tableViewView: UIView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var viewModel: LeadViewModel!
  
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel.start()
         collectionView.dataSource = self
         collectionView.delegate = self
         tableView.dataSource = self
@@ -53,13 +51,10 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewWillAppear(animated)
         viewModel.start()
     }
-    
-    @IBAction func didTapPresentMonthlyOrAll(_ sender: UIButton) {
-        if let titleLabel = sender.titleLabel?.text {
-        viewModel.didTapPresentMonthlyOrAll(title: titleLabel)
-        }
+        
+    @IBAction func didChangeSegmant(_ sender: UISegmentedControl) {
+        viewModel.didChangeSegmant(selectedIndex: sender.selectedSegmentIndex)
     }
-    
     
     @IBAction func didTapNextMonth(_ sender: UIButton) {
         viewModel.didTapNextMonth(currentPresentedMonth: currentMonthLabel.text ?? "")
@@ -97,22 +92,25 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         newLeadButton.setTitle("", for: .normal)
         addFromContactsButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
         addManualyButton.makeBorder(width: 2, color: UIColor(named: "gold")!.cgColor)
-        newLeadButton.makeRoundCorners(radius: 10)
+        newLeadButton.makeRound()
         monthPickerView.makeRoundCorners(radius: 10)
         monthView.makeRoundCorners(radius: 10)
-//        tableView.makeTopRoundCorners()
         addManualyButton.layer.cornerRadius = 10
         addFromContactsButton.layer.cornerRadius = 10
-        collectionViewHeight.constant = (view.frame.width - 51) / 3
+        collectionViewHeight.constant = (view.frame.width - 31) / 3
         addleadButtonsWidth.constant = 0
-        searchBarWidth.constant = self.view.frame.width - 70
+        searchBarWidth.constant = self.view.frame.width - 60
         presentByButtonsView.makeRoundCorners(radius: 10)
-        PresentMonthlyOrAllButtonsView.makeRoundCorners(radius: 10)
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
             let atrbString = NSAttributedString(string: "חפש ליד", attributes: [.foregroundColor : UIColor(named: "30white")!, .font : UIFont.systemFont(ofSize: 10)])
             textfield.attributedPlaceholder = atrbString
             textfield.textColor = UIColor(named: "50white") ?? .white
         }
+        tableViewView.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
+        tableViewView.makeTopRoundCorners(radius: 20)
+        tableView.makeTopRoundCorners(radius: 20)
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!], for: .normal)
+        segmentControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
     }
 }
 
@@ -130,7 +128,7 @@ extension LeadViewController: UICollectionViewDataSource {
 
 extension LeadViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 51) / 3
+        let width = (view.frame.width - 31) / 3
         let height = width
         return CGSize(width: width, height: height)
     }
@@ -157,6 +155,40 @@ extension LeadViewController: UITableViewDataSource {
 extension LeadViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let closeDeal = createTableViewAction(title: "סגור עסקה", image: nil) {
+            self.viewModel.didTapMakeDeal(at: indexPath)
+        }
+        let call = createTableViewAction(title: "התקשר", image: UIImage(systemName: "phone")!) {
+            self.viewModel.didTapCall(at: indexPath)
+        }
+        let whatsapp = createTableViewAction(title: "שלח הודעה", image: UIImage(systemName: "envelope")!) {
+            self.viewModel.didTapSendWhatsapp(at: indexPath)
+        }
+        let lock = createTableViewAction(title: "סגור ליד", image: UIImage(systemName: "lock")!) {
+            self.viewModel.didTapLockLead(at: indexPath)
+        }
+        UIButton.appearance().setTitleColor(.black, for: .normal)
+        closeDeal.backgroundColor = UIColor(named: "gold")!
+        
+        if viewModel.currentMonthLeads[indexPath.row].status == .closed {
+            return UISwipeActionsConfiguration()
+        } else if viewModel.currentMonthLeads[indexPath.row].status == .deal {
+            return UISwipeActionsConfiguration(actions: [call, whatsapp])
+        } else {
+        return UISwipeActionsConfiguration(actions: [closeDeal, call, whatsapp, lock])
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = createTableViewAction(title: "מחק", image: UIImage(systemName: "trash")!) {
+            self.viewModel.didTapDelete(at: indexPath)
+        }
+        delete.backgroundColor = .systemRed
+        delete.image = UIImage(systemName: "trash")!.colored(in: .white)
+        return UISwipeActionsConfiguration(actions: [delete])
     }
 }
 
@@ -269,6 +301,7 @@ extension LeadViewController: LeadViewModelDelegate {
             addleadButtonsWidth.constant = 150
             searchBarWidth.constant = self.view.frame.width - 70 - addleadButtonsWidth.constant - 5
             UIView.animate(withDuration: 0.5) {
+                self.newLeadButton.transform = CGAffineTransform(rotationAngle: -150)
                 self.addManualyButton.alpha = 1
                 self.addFromContactsButton.alpha = 1
                 self.view.layoutIfNeeded()
@@ -277,25 +310,14 @@ extension LeadViewController: LeadViewModelDelegate {
             addleadButtonsWidth.constant = 0
             searchBarWidth.constant = self.view.frame.width - 70
             UIView.animate(withDuration: 0.5) {
+                self.newLeadButton.transform = CGAffineTransform(rotationAngle: ( -Double.pi) * 3)
                 self.addManualyButton.alpha = 0
                 self.addFromContactsButton.alpha = 0
                 self.view.layoutIfNeeded()
             }
         }
     }
-    
-    func changePresentByMonthOrAllButtonUI(currentSelectedButton: String) {
-        for button in presentMonthlyOrAllButtons {
-            if button.titleLabel?.text == currentSelectedButton {
-                button.backgroundColor = UIColor(named: "10white") ?? .white
-                button.tintColor = UIColor(named: "gold") ?? .white
-            } else {
-                button.backgroundColor = UIColor(named: "5white") ?? .white
-                button.tintColor = UIColor(named: "30white") ?? .white
-            }
-        }
-    }
-    
+
     func changeMonthlyViewVisability(toPresent: Bool) {
         if toPresent {
             monthViewHeight.constant = 40
@@ -327,26 +349,6 @@ extension LeadViewController: LeadTableViewCellDelegate {
     func didTapMakeDeal(cell: LeadTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {return}
         viewModel.didTapMakeDeal(at: indexPath)
-    }
-    
-    func didTapLockLead(cell: LeadTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else {return}
-        viewModel.didTapLockLead(at: indexPath)
-    }
-    
-    func didTapCall(cell: LeadTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else {return}
-        viewModel.didTapCall(at: indexPath)
-    }
-    
-    func didTapWhatsapp(cell: LeadTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else {return}
-        viewModel.didTapSendWhatsapp(at: indexPath)
-    }
-    
-    func didTapDelete(cell: LeadTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else {return}
-        viewModel.didTapDelete(at: indexPath)
     }
     
     func didTapInfo(cell: LeadTableViewCell, isInfoButtonOpen: Bool) {

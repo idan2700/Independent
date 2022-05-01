@@ -43,6 +43,7 @@
 		532566492763848200DF302E /* IncomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532566482763848200DF302E /* IncomeTableViewCell.swift */; };
 		5325664B2763849A00DF302E /* IncomeTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */; };
 		5325664D2763917800DF302E /* FinanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664C2763917800DF302E /* FinanceManager.swift */; };
+		53286BB5279AE92B0009F079 /* ContextualActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53286BB4279AE92B0009F079 /* ContextualActions.swift */; };
 		532A362E2775122700CD42E8 /* CreateOutcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */; };
 		532E6581277EE63B00CC96D6 /* CreateOutcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */; };
 		532E6583277EEA7800CC96D6 /* Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6582277EEA7800CC96D6 /* Outcome.swift */; };
@@ -154,6 +155,7 @@
 		532566482763848200DF302E /* IncomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCell.swift; sourceTree = "<group>"; };
 		5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5325664C2763917800DF302E /* FinanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceManager.swift; sourceTree = "<group>"; };
+		53286BB4279AE92B0009F079 /* ContextualActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualActions.swift; sourceTree = "<group>"; };
 		532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewController.swift; sourceTree = "<group>"; };
 		532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewModel.swift; sourceTree = "<group>"; };
 		532E6582277EEA7800CC96D6 /* Outcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Outcome.swift; sourceTree = "<group>"; };
@@ -518,6 +520,7 @@
 				532E6586277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift */,
 				532E6589277F253400CC96D6 /* CreateIncome */,
 				532E6588277F252300CC96D6 /* CreateOutcome */,
+				53286BB4279AE92B0009F079 /* ContextualActions.swift */,
 			);
 			path = Finance;
 			sourceTree = "<group>";
@@ -802,6 +805,7 @@
 				5312CFA6272A9546007001A5 /* SettingsViewController.swift in Sources */,
 				53AF2A5927268216001A359B /* RegestrationViewController.swift in Sources */,
 				5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */,
+				53286BB5279AE92B0009F079 /* ContextualActions.swift in Sources */,
 				533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */,
 				530FC96C272AC3B40098407F /* LeadCollectionViewCellViewModel.swift in Sources */,
 				5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */,

@@ -167,7 +167,7 @@ extension CreateMissionTableViewCell: CreateMissionTableViewCellViewModelDelegat
     func changeErrorNameVisability(toPresent: Bool) {
         if toPresent {
             self.nameErrorLabelHeight.constant = 15
-            self.nameTextField.makeBorder(width: 1, color: UIColor(named: "darkred")!.cgColor)
+            self.nameTextField.makeBorder(width: 1, color: UIColor(named: "ired")!.cgColor)
             UIView.animate(withDuration: 0.5) {
                 self.contentView.layoutIfNeeded()
                 self.delegate?.updateCellHeight()

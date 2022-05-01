@@ -15,6 +15,9 @@ protocol FinanceViewModelDelegate: AnyObject {
     func presentErrorAlert(message: String)
     func presentIsDealError(title: String, message: String)
     func moveToCreateOutcomeVC(isNewOutcome: Bool, exsitingOutcome: Outcome?)
+    func deleteOutcomeRow(at indexPath: IndexPath)
+    func deleteIncomeRow(at indexPath: IndexPath)
+    func manageSegmantApperance()
 }
 
 class FinanceViewModel {
@@ -114,6 +117,17 @@ class FinanceViewModel {
         delegate?.reloadData()
     }
     
+    func didTapAdd(index: Int) {
+        switch index {
+        case 0:
+            didTapAddIncome()
+        case 1:
+            didTapAddOutcome()
+        default:
+            break
+        }
+    }
+    
     func didTapAddIncome() {
         delegate?.moveToCreateIncomeVC(isNewIncome: true, exsitingIncome: nil)
     }
@@ -136,6 +150,10 @@ class FinanceViewModel {
         delegate?.reloadData()
     }
     
+    func didChangeSegmant() {
+        delegate?.manageSegmantApperance()
+    }
+    
     func didTapDeleteIncome(at indexPath: IndexPath) {
         let income = currentMonthIncomes[indexPath.row]
         if income.isDeal {
@@ -149,12 +167,28 @@ class FinanceViewModel {
                     case .success():
                         FinanceManager.shared.allIncomes.removeAll(where: {$0.id == income.id})
                         self.checkIfIncomesAreEqualToCurrentPresentedMonth()
-                        self.delegate?.reloadData()
+                        self.delegate?.deleteIncomeRow(at: indexPath)
                     case .failure(_):
                         self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
                     }
                 }
             }
+        }
+    }
+    
+    func presentIncomeNoLabel() -> Bool {
+        if currentMonthIncomes.isEmpty {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func presentOutcomeNoLabel() -> Bool {
+        if currentMonthOutcomes.isEmpty {
+            return true
+        } else {
+            return false
         }
     }
     
@@ -168,7 +202,7 @@ class FinanceViewModel {
                 case .success():
                     FinanceManager.shared.allOutcomes.removeAll(where: {$0.id == outcome.id})
                     self.checkIfOutcomesAreEqualToCurrentPresentedMonth()
-                    self.delegate?.reloadData()
+                    self.delegate?.deleteOutcomeRow(at: indexPath)
                 case .failure(_):
                     self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך המחיקה, אנא נסה שנית")
                 }
@@ -178,11 +212,7 @@ class FinanceViewModel {
     
     func didTapEditIncome(at indexPath: IndexPath) {
         let income = currentMonthIncomes[indexPath.row]
-//        if income.isDeal {
-//            delegate?.presentIsDealError(title: "לא ניתן לערוך הכנסה מעסקה", message: "יש לבצע עריכה לעסקה ביומן")
-//        } else {
             delegate?.moveToCreateIncomeVC(isNewIncome: false, exsitingIncome: income)
-//        }
     }
     
     func didTapEditOutcome(at indexPath: IndexPath) {

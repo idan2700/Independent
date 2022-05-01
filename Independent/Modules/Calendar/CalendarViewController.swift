@@ -36,9 +36,9 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         viewModel.start()
         calendar.calendarHeaderView.fs_height = 60
-        tableViewView.makeTopRoundCorners()
-        tableViewView.addShadow(color: UIColor(named: "50white")!, opacity: 0.2, radius: 5.0, size: CGSize(width: 0.0, height: 0.0))
-        headerView.makeTopRoundCorners()
+        tableViewView.makeTopRoundCorners(radius: 20)
+        tableViewView.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
+        headerView.makeTopRoundCorners(radius: 20)
         calendar.delegate = self
         calendar.dataSource = self
         dealButton.makeRound()

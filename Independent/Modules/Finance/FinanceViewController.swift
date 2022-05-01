@@ -17,40 +17,42 @@ class FinanceViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var incomeTableView: UITableView!
     @IBOutlet weak var outcomeTableView: UITableView!
+    @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var addIncomeButton: UIButton!
     @IBOutlet weak var addOutcomeButton: UIButton!
-    @IBOutlet weak var incomeView: UIView!
-    @IBOutlet weak var outcomeView: UIView!
+    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
-    @IBOutlet weak var incomeViewBorder: UIView!
-    @IBOutlet weak var outcomeViewBorder: UIView!
+    @IBOutlet weak var noLabel: UILabel!
+    
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     var viewModel: FinanceViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        outcomeTableView.isHidden = true
         currentMonthLabel.text = viewModel.stringDate
         lastMonthButton.setTitle("", for: .normal)
         nextMonthButton.setTitle("", for: .normal)
         monthPickerView.makeRoundCorners(radius: 10)
         monthView.makeRoundCorners(radius: 10)
-        addIncomeButton.setTitle("", for: .normal)
-        addOutcomeButton.setTitle("", for: .normal)
-        incomeView.makeRoundCorners(radius: 20)
-        incomeViewBorder.makeRoundCorners(radius: 20)
-        incomeViewBorder.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
-        incomeView.clipsToBounds = true
-        outcomeView.makeRoundCorners(radius: 20)
-        outcomeViewBorder.makeRoundCorners(radius: 20)
-        outcomeViewBorder.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
-        outcomeView.clipsToBounds = true
-        addIncomeButton.makeRound()
-        addOutcomeButton.makeRound()
+        incomeTableView.makeTopRoundCorners(radius: 20)
+        incomeTableView.clipsToBounds = true
+        outcomeTableView.makeTopRoundCorners(radius: 20)
+        borderView.makeRoundCorners(radius: 20)
+        borderView.addShadow(color: UIColor(named: "50gold")!, opacity: 1, radius: 1, size: CGSize(width: -1.1, height: -1.1))
+        outcomeTableView.clipsToBounds = true
         collectionView.dataSource = self
         collectionView.delegate = self
         incomeTableView.dataSource = self
         outcomeTableView.dataSource = self
-//        viewModel.start()
+        incomeTableView.delegate = self
+        outcomeTableView.delegate = self
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
+        addButton.makeRound()
+        addButton.setTitle("", for: .normal)
+        addButton.addShadow(color: UIColor(named: "50gold")!, opacity: 0.2, radius: 5, size: CGSize(width: 0, height: 0))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +74,14 @@ class FinanceViewController: UIViewController {
     @IBAction func didTapAddOutcome(_ sender: UIButton) {
         viewModel.didTapAddOutcome()
     }
+    
+    @IBAction func didTapAdd(_ sender: UIButton) {
+        viewModel.didTapAdd(index: segmentedControl.selectedSegmentIndex)
+    }
+    
+    @IBAction func didChangeSegmant(_ sender: UISegmentedControl) {
+        viewModel.didChangeSegmant()
+    }
 }
 
 extension FinanceViewController: UICollectionViewDataSource {
@@ -88,7 +98,7 @@ extension FinanceViewController: UICollectionViewDataSource {
 
 extension FinanceViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 51) / 3
+        let width = (view.frame.width - 31) / 3
         let height = width
         collectionViewHeight.constant = height
         return CGSize(width: width, height: height)
@@ -116,13 +126,11 @@ extension FinanceViewController: UITableViewDataSource {
         case incomeTableView:
             guard let cell = incomeTableView.dequeueReusableCell(withIdentifier: "IncomeCell", for: indexPath) as? IncomeTableViewCell else {return UITableViewCell()}
             let cellViewModel = viewModel.getIncomeCellViewModel(at: indexPath)
-            cell.delegate = self
             cell.configure(with: cellViewModel)
             return cell
         case outcomeTableView:
             guard let cell = outcomeTableView.dequeueReusableCell(withIdentifier: "OutcomeCell", for: indexPath) as? OutcomeTableViewCell else {return UITableViewCell()}
             let cellViewModel = viewModel.getOutcomeCellViewModel(at: indexPath)
-            cell.delegate = self
             cell.configure(with: cellViewModel)
             return cell
         default:
@@ -131,9 +139,64 @@ extension FinanceViewController: UITableViewDataSource {
     }
 }
 
+extension FinanceViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        switch tableView {
+        case incomeTableView:
+            let delete = createTableViewAction(title: "", image: UIImage(systemName: "trash")!) {
+                self.viewModel.didTapDeleteIncome(at: indexPath)
+            }
+            return UISwipeActionsConfiguration(actions: [delete])
+        case outcomeTableView:
+            let delete = createTableViewAction(title: "", image: UIImage(systemName: "trash")!) {
+                self.viewModel.didTapDeleteOutcome(at: indexPath)
+            }
+            return UISwipeActionsConfiguration(actions: [delete])
+        default:
+            return UISwipeActionsConfiguration()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        switch tableView {
+        case incomeTableView:
+            let edit = createTableViewAction(title: "", image: UIImage(systemName: "pencil")!) {
+                self.viewModel.didTapEditIncome(at: indexPath)
+            }
+            return UISwipeActionsConfiguration(actions: [edit])
+        case outcomeTableView:
+            let edit = createTableViewAction(title: "", image: UIImage(systemName: "pencil")!) {
+                self.viewModel.didTapEditOutcome(at: indexPath)
+            }
+            return UISwipeActionsConfiguration(actions: [edit])
+        default:
+            return UISwipeActionsConfiguration()
+        }
+    }
+}
+
+
 extension FinanceViewController: FinanceViewModelDelegate {
+    func manageSegmantApperance() {
+        if outcomeTableView.isHidden {
+            outcomeTableView.isHidden = false
+            incomeTableView.isHidden = true
+            noLabel.text = "אין הוצאות"
+            noLabel.isHidden = !viewModel.presentOutcomeNoLabel()
+            addButton.backgroundColor = UIColor(named: "ired")!
+        } else {
+            outcomeTableView.isHidden = true
+            incomeTableView.isHidden = false
+            noLabel.text = "אין הכנסות"
+            noLabel.isHidden = !viewModel.presentIncomeNoLabel()
+            addButton.backgroundColor = UIColor(named: "igreen")!
+        }
+    }
+    
     func moveToCreateOutcomeVC(isNewOutcome: Bool, exsitingOutcome: Outcome?) {
         let outcomeVC: CreateOutcomeViewController = storyBoard.instantiateViewController()
+        outcomeVC.modalPresentationStyle = .overFullScreen
         outcomeVC.delegate = self
         outcomeVC.viewModel = CreateOutcomeViewModel(delegate: outcomeVC, isNewOutcome: isNewOutcome)
         outcomeVC.viewModel.exsitingOutcome = exsitingOutcome
@@ -152,6 +215,7 @@ extension FinanceViewController: FinanceViewModelDelegate {
     
     func moveToCreateIncomeVC(isNewIncome: Bool, exsitingIncome: Income?) {
         let incomeVC: CreateIncomeViewController = storyBoard.instantiateViewController()
+        incomeVC.modalPresentationStyle = .overFullScreen
         incomeVC.delegate = self
         incomeVC.viewModel = CreateIncomeViewModel(delegate: incomeVC, isNewIncome: isNewIncome)
         incomeVC.viewModel.exsitingIncome = exsitingIncome
@@ -167,6 +231,18 @@ extension FinanceViewController: FinanceViewModelDelegate {
         outcomeTableView.reloadData()
         collectionView.reloadData()
     }
+    
+    func deleteOutcomeRow(at indexPath: IndexPath) {
+        outcomeTableView.beginUpdates()
+        outcomeTableView.deleteRows(at: [indexPath], with: .right)
+        outcomeTableView.endUpdates()
+    }
+    
+    func deleteIncomeRow(at indexPath: IndexPath) {
+        incomeTableView.beginUpdates()
+        incomeTableView.deleteRows(at: [indexPath], with: .right)
+        incomeTableView.endUpdates()
+    }
 }
 
 extension FinanceViewController: CreateIncomeViewControllerDelegate {
@@ -175,17 +251,6 @@ extension FinanceViewController: CreateIncomeViewControllerDelegate {
     }
 }
 
-extension FinanceViewController: IncomeTableViewCellDelegate {
-    func didTapDelete(cell: IncomeTableViewCell) {
-        guard let indexPath = incomeTableView.indexPath(for: cell) else {return}
-        viewModel.didTapDeleteIncome(at: indexPath)
-    }
-    
-    func didTapEdit(cell: IncomeTableViewCell) {
-        guard let indexPath = incomeTableView.indexPath(for: cell) else {return}
-        viewModel.didTapEditIncome(at: indexPath)
-    }
-}
 
 extension FinanceViewController: CreateOutcomeViewControllerDelegate {
     func didPick(newOutcome: Outcome) {
@@ -193,15 +258,4 @@ extension FinanceViewController: CreateOutcomeViewControllerDelegate {
     }
 }
 
-extension FinanceViewController: OutcomeTableViewCellDelegate {
-    func didTapDelete(cell: OutcomeTableViewCell) {
-        guard let indexPath = outcomeTableView.indexPath(for: cell) else {return}
-        viewModel.didTapDeleteOutcome(at: indexPath)
-    }
-    
-    func didTapEdit(cell: OutcomeTableViewCell) {
-        guard let indexPath = outcomeTableView.indexPath(for: cell) else {return}
-        viewModel.didTapEditOutcome(at: indexPath)
-    }
-}
 

@@ -86,7 +86,7 @@ class CreateIncomeViewModel {
                 }
             }
             if self.isNewIncome {
-                let income = Income(amount: amount, dates: dates, name: title, id: FinanceManager.shared.genrateIncomeID(), isDeal: false, eventStoreId: nil, type: selectedType, numberOfPayments: numberOfPayments)
+                let income = Income(amount: amount, dates: dates, name: title, id: UUID().uuidString, isDeal: false, eventStoreId: nil, type: selectedType, numberOfPayments: numberOfPayments)
                 FinanceManager.shared.saveIncome(income: income, userName: currentUser) { [weak self] result in
                     guard let self = self else {return}
                     DispatchQueue.main.async {

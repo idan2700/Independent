@@ -75,17 +75,7 @@ class CalendarViewModel {
                 }
             }
         }
-        if missionDates.count > 0 {
-            colors.append(UIColor(named: "mission")!)
-        }
-        if dealDates.count > 0 {
-            colors.append(UIColor(named: "deal")!)
-        }
-        if missionDates.count >= 2 && missionDates.count > dealDates.count {
-            colors = []
-            colors.append(UIColor(named: "mission")!)
-            colors.append(UIColor(named: "deal")!)
-        }
+        colors = Array(repeating: UIColor(named: "deal")!, count: dealDates.count) + Array(repeating: UIColor(named: "mission")!, count: missionDates.count)
         return colors
     }
     
@@ -367,7 +357,7 @@ class CalendarViewModel {
         guard let amount = Int(deal.price) else { return }
         var dates = [Date]()
         dates.append(deal.startDate)
-        let id = FinanceManager.shared.genrateIncomeID()
+        let id = UUID().uuidString
         let income = Income(amount: amount, dates: dates, name: deal.name, id: id, isDeal: true, eventStoreId: deal.eventStoreID, type: .oneTime, numberOfPayments: nil)
         FinanceManager.shared.saveIncome(income: income, userName: userId) { [weak self] result in
             guard let self = self else {return}

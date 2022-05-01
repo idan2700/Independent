@@ -25,6 +25,15 @@ class ErrorAlertViewController: UIViewController {
         messageLabel.text = message
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let original = errorView.transform
+        errorView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.errorView.transform = original
+        }
+    }
+    
     @IBAction func didTapTryAgain(_ sender: UIButton) {
         delegate?.didTapTryAgain()
         self.dismiss(animated: true)

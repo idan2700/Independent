@@ -20,12 +20,10 @@ class FinanceManager {
     private let db = Firestore.firestore()
     static let shared = FinanceManager()
     
-    private init() {
-//        updateId()
-    }
+    private init() {}
     
     func saveIncome(income: Income, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Income").document(userName).collection("Income").document(String(income.id)).setData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
+        db.collection(userName).document("Incomes").collection("Income").document(String(income.id)).setData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -37,7 +35,7 @@ class FinanceManager {
     }
     
     func loadIncomes(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Income").document(userId).collection("Income").getDocuments { (querySnapshot, error) in
+        db.collection(userId).document("Incomes").collection("Income").getDocuments { (querySnapshot, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -65,7 +63,7 @@ class FinanceManager {
                             } else if type == IncomeType.permanent.rawValue {
                                 incomeType = IncomeType.permanent
                             }
-                            let newIncome = Income(amount: amount, dates: dates, name: name, id: Int(id) ?? 0, isDeal: deal, eventStoreId: eventStoreId, type: incomeType, numberOfPayments: numberOfPayments)
+                            let newIncome = Income(amount: amount, dates: dates, name: name, id: id, isDeal: deal, eventStoreId: eventStoreId, type: incomeType, numberOfPayments: numberOfPayments)
                             self.allIncomes.append(newIncome)
                         }
                     }
@@ -76,7 +74,7 @@ class FinanceManager {
     }
     
     func deleteIncome(incomeId: String, userID: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Income").document(userID).collection("Income").document(incomeId).delete() { error in
+        db.collection(userID).document("Incomes").collection("Income").document(incomeId).delete() { error in
             if let error = error {
                 complition(.failure(error))
             } else {
@@ -86,7 +84,7 @@ class FinanceManager {
     }
     
     func editIncome(income: Income, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Income").document(userName).collection("Income").document(String(income.id)).updateData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
+        db.collection(userName).document("Incomes").collection("Income").document(String(income.id)).updateData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -98,7 +96,7 @@ class FinanceManager {
     }
     
     func saveOutcome(outcome: Outcome, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Outcome").document(userName).collection("Outcome").document(String(outcome.id)).setData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
+        db.collection(userName).document("Outcomes").collection("Outcome").document(String(outcome.id)).setData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -110,7 +108,7 @@ class FinanceManager {
     }
     
     func loadOutcomes(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Outcome").document(userId).collection("Outcome").getDocuments { (querySnapshot, error) in
+        db.collection(userId).document("Outcomes").collection("Outcome").getDocuments { (querySnapshot, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -136,7 +134,7 @@ class FinanceManager {
                             } else if type == OutcomeType.permanent.rawValue {
                                 outcomeType = OutcomeType.permanent
                             }
-                            let newOutcome = Outcome(amount: amount, dates: dates, name: name, id: Int(id) ?? 0, type: outcomeType, numberOfPayments: numberOfPayments)
+                            let newOutcome = Outcome(amount: amount, dates: dates, name: name, id: id, type: outcomeType, numberOfPayments: numberOfPayments)
                             self.allOutcomes.append(newOutcome)
                         }
                     }
@@ -147,7 +145,7 @@ class FinanceManager {
     }
     
     func deleteOutcome(outcomeId: String, userID: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Outcome").document(userID).collection("Outcome").document(outcomeId).delete() { error in
+        db.collection(userID).document("Outcomes").collection("Outcome").document(outcomeId).delete() { error in
             if let error = error {
                 complition(.failure(error))
             } else {
@@ -157,7 +155,7 @@ class FinanceManager {
     }
     
     func editOutcome(outcome: Outcome, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Outcome").document(userName).collection("Outcome").document(String(outcome.id)).updateData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
+        db.collection(userName).document("Outcomes").collection("Outcome").document(String(outcome.id)).updateData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -165,33 +163,6 @@ class FinanceManager {
                     complition(.success(()))
                 }
             }
-        }
-    }
-    
-    func genrateIncomeID()-> Int {
-        let newId = incomeId + 1
-        incomeId = newId
-        UserDefaults.standard.set(newId, forKey: "incomeID")
-        return incomeId
-    }
-    
-    func genrateOutcomeID()-> Int {
-        let newId = incomeId + 1
-        incomeId = newId
-        UserDefaults.standard.set(newId, forKey: "outcomeID")
-        return incomeId
-    }
-    
-    private func updateId() {
-        if let incomeID = UserDefaults.standard.value(forKey: "incomeID") as? Int {
-            self.incomeId = incomeID
-        } else if let maxId = FinanceManager.shared.allIncomes.max(by: {$0.id < $1.id})?.id {
-            self.incomeId = maxId
-        }
-        if let outcomeId = UserDefaults.standard.value(forKey: "outcomeID") as? Int {
-            self.outcomeId = outcomeId
-        } else if let maxId = FinanceManager.shared.allOutcomes.max(by: {$0.id < $1.id})?.id {
-            self.outcomeId = maxId
         }
     }
 }

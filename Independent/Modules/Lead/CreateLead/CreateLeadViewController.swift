@@ -31,6 +31,15 @@ class CreateLeadViewController: UIViewController {
         phoneTextField.text = viewModel.phoneFromContact ?? ""
         updateUI()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let original = addLeadView.transform
+        addLeadView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.addLeadView.transform = original
+        }
+    }
 
     @IBAction func didTapCancel(_ sender: UIButton) {
         dismiss(animated: true)
@@ -40,12 +49,16 @@ class CreateLeadViewController: UIViewController {
         viewModel.didTapAdd(name: nameTextField.text ?? "", date: Date(), summary: summryTextView.text, phoneNumber: phoneTextField.text ?? "")
     }
     
+    @IBAction func didEditPhone(_ sender: UITextField) {
+       viewModel.didEditPhone(phone: sender.text ?? "")
+    }
+    
     private func updateUI() {
         summryTextView.layer.cornerRadius = 10
         nameTextField.layer.cornerRadius = 10
         phoneTextField.layer.cornerRadius = 10
         addLeadButton.makeRoundCorners(radius: 10)
-        addLeadView.makeTopRoundCorners()
+        addLeadView.makeRoundCorners(radius: 10)
         nameTextField.attributedPlaceholder = NSAttributedString(string: "שם מלא", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
         phoneTextField.attributedPlaceholder = NSAttributedString(string: "טלפון", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
     }
@@ -59,5 +72,9 @@ extension CreateLeadViewController: CreateLeadViewModelDelegate {
     
     func presentAlert(message: String) {
         self.presentErrorAlert(with: message)
+    }
+    
+    func restartPhoneTextField() {
+        self.phoneTextField.text = ""
     }
 }

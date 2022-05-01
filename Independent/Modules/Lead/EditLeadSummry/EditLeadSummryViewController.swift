@@ -26,6 +26,15 @@ class EditLeadSummryViewController: UIViewController {
         updateUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let original = editView.transform
+        editView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.editView.transform = original
+        }
+    }
+    
     @IBAction func didTapCancel(_ sender: UIButton) {
         viewModel.didTapCancel()
     }
@@ -35,7 +44,7 @@ class EditLeadSummryViewController: UIViewController {
     }
     
     private func updateUI() {
-        editView.makeTopRoundCorners()
+        editView.makeRoundCorners(radius: 10)
         editButton.makeRoundCorners(radius: 10)
     }
 }

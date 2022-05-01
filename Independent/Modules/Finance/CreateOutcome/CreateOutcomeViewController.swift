@@ -25,6 +25,7 @@ class CreateOutcomeViewController: UIViewController {
     @IBOutlet var outcomeTypeButtons: [UIButton]!
     @IBOutlet weak var paymentsPickerWidth: NSLayoutConstraint!
     @IBOutlet weak var paymentsPickerHeight: NSLayoutConstraint!
+    @IBOutlet weak var outcomeView: UIView!
     
     weak var delegate: CreateOutcomeViewControllerDelegate?
     var viewModel: CreateOutcomeViewModel!
@@ -46,6 +47,16 @@ class CreateOutcomeViewController: UIViewController {
         paymentsPicker.dataSource = self
         paymentsPicker.delegate = self
         paymentsPicker.selectRow(2, inComponent: 0, animated: false)
+        outcomeView.makeRoundCorners(radius: 10)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let origin = self.view.transform
+        self.view.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.view.transform = origin
+        }
     }
     
     @IBAction func didTapAdd(_ sender: UIButton) {
@@ -125,7 +136,7 @@ extension CreateOutcomeViewController: CreateOutcomeViewModelDelegate {
     func changeErrorNameVisability(toPresent: Bool) {
             if toPresent {
                 self.titleErrorLabelHeight.constant = 15
-                self.titleTextField.makeBorder(width: 1, color: UIColor(named: "darkred")!.cgColor)
+                self.titleTextField.makeBorder(width: 1, color: UIColor(named: "ired")!.cgColor)
                 UIView.animate(withDuration: 0.5) {
                     self.view.layoutIfNeeded()
                 }
@@ -141,7 +152,7 @@ extension CreateOutcomeViewController: CreateOutcomeViewModelDelegate {
     func changePriceErrorVisability(toPresent: Bool) {
         if toPresent {
             self.amountErrorLabelHeight.constant = 15
-            self.amountTextField.makeBorder(width: 1, color: UIColor(named: "darkred")!.cgColor)
+            self.amountTextField.makeBorder(width: 1, color: UIColor(named: "ired")!.cgColor)
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
             }

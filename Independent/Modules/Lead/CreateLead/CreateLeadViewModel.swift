@@ -11,6 +11,7 @@ import Firebase
 protocol CreateLeadViewModelDelegate: AnyObject {
     func returnToLeadVC(with newLead: Lead)
     func presentAlert(message: String)
+    func restartPhoneTextField()
 }
 
 class CreateLeadViewModel {
@@ -41,6 +42,17 @@ class CreateLeadViewModel {
                 case .failure(_):
                     self.delegate?.presentAlert(message: "שגיאה בשמירת המתעניין לשרת, אנא נסה שוב")
                 }
+            }
+        }
+    }
+    
+    func didEditPhone(phone: String) {
+        if phone.count < 9 || phone.count > 10 {
+            return
+        } else {
+            if LeadManager.shared.allLeads.contains(where: {$0.phoneNumber == phone}) {
+                self.delegate?.presentAlert(message: "הליד קיים במערכת")
+                self.delegate?.restartPhoneTextField()
             }
         }
     }

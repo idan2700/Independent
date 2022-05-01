@@ -74,7 +74,7 @@ extension VerifcationViewController: VerifcationViewModelDelegate {
     func presentCodeError(message: String) {
         codeErrorLabel.isHidden = false
         codeErrorLabel.text = message
-        verifyTextField.lineColor = UIColor(named: "darkred") ?? .red
+        verifyTextField.lineColor = UIColor(named: "ired") ?? .red
     }
     
     func hideCodeError() {

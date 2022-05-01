@@ -98,9 +98,9 @@ class FinanceCollectionViewCellViewModel {
                 }
             }
             if totalIncomes - totalOutcomes > 0 {
-                return UIColor(named: "darkgreen")!
+                return UIColor(named: "igreen")!
             } else if totalIncomes - totalOutcomes < 0 {
-                return UIColor(named: "darkred")!
+                return UIColor(named: "ired")!
             } else {
             return UIColor(named: "gold")!
             }
