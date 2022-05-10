@@ -203,10 +203,8 @@ extension FinanceViewController: FinanceViewModelDelegate {
         self.present(outcomeVC, animated: true, completion: nil)
     }
     
-    func presentIsDealError(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+    func presentIsDealError(message: String) {
+        presentErrorAlert(with: message, buttonTitle: "אישור")
     }
     
     func presentErrorAlert(message: String) {

@@ -188,6 +188,9 @@ extension LeadViewController: UITableViewDelegate {
         }
         delete.backgroundColor = .systemRed
         delete.image = UIImage(systemName: "trash")!.colored(in: .white)
+        if viewModel.currentMonthLeads[indexPath.row].status == .closed || viewModel.currentMonthLeads[indexPath.row].status == .deal {
+            return UISwipeActionsConfiguration()
+        }
         return UISwipeActionsConfiguration(actions: [delete])
     }
 }
@@ -211,8 +214,8 @@ extension LeadViewController: UISearchBarDelegate {
 extension LeadViewController: LeadViewModelDelegate {
    
     func moveToCreateDealVC(lead: Lead) {
-        let createDealVC: CreateDealViewController = storyBoard.instantiateViewController()
-        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, isLaunchedFromLead: true, isNewDeal: true)
+        let createDealVC: CreateEventViewController = storyBoard.instantiateViewController()
+        createDealVC.viewModel = CreateEventViewModel(delegate: createDealVC, isLaunchedFromLead: true, isNewEvent: true, currentDate: Date(), eventType: .deal)
         createDealVC.viewModel.name = lead.fullName
         createDealVC.viewModel.phone = lead.phoneNumber
         createDealVC.modalPresentationStyle = .overFullScreen

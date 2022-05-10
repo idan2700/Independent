@@ -19,14 +19,13 @@ class CreateLeadViewController: UIViewController {
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var summryTextView: UITextView!
     @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var phoneLabel: UILabel!
     weak var delegate: CreateLeadViewControllerDelegate?
     var viewModel: CreateLeadViewModel!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        phoneTextField.delegate = self
         nameTextField.text = viewModel.nameFromContact ?? ""
         phoneTextField.text = viewModel.phoneFromContact ?? ""
         updateUI()
@@ -76,5 +75,19 @@ extension CreateLeadViewController: CreateLeadViewModelDelegate {
     
     func restartPhoneTextField() {
         self.phoneTextField.text = ""
+    }
+}
+
+extension CreateLeadViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        switch textField {
+        case phoneTextField:
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            return updatedText.count <= 10
+        default:
+            return false
+        }
     }
 }

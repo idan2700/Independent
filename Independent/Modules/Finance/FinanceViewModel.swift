@@ -13,7 +13,7 @@ protocol FinanceViewModelDelegate: AnyObject {
     func updateCurrentMonthLabel()
     func moveToCreateIncomeVC(isNewIncome: Bool, exsitingIncome: Income?)
     func presentErrorAlert(message: String)
-    func presentIsDealError(title: String, message: String)
+    func presentIsDealError(message: String)
     func moveToCreateOutcomeVC(isNewOutcome: Bool, exsitingOutcome: Outcome?)
     func deleteOutcomeRow(at indexPath: IndexPath)
     func deleteIncomeRow(at indexPath: IndexPath)
@@ -157,7 +157,7 @@ class FinanceViewModel {
     func didTapDeleteIncome(at indexPath: IndexPath) {
         let income = currentMonthIncomes[indexPath.row]
         if income.isDeal {
-            delegate?.presentIsDealError(title: "לא ניתן למחוק הכנסה מעסקה", message: "יש לבצע ביטול עסקה ביומן")
+            delegate?.presentIsDealError(message: "לא ניתן למחוק הכנסה מעסקה, יש לבצע ביטול עסקה ביומן")
         } else {
             guard let currentUserID = Auth.auth().currentUser?.uid else {return}
             FinanceManager.shared.deleteIncome(incomeId: String(income.id), userID: currentUserID) { [weak self] result in

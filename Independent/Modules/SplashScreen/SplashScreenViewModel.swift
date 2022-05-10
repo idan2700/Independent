@@ -10,7 +10,7 @@ import Firebase
 
 protocol SplashScreenViewModelDelegate: AnyObject {
     func changeLoaderState(isHidden: Bool)
-    func presentErrorAlert(message: String)
+    func presentAlert(message: String)
     func moveToTabBarVC()
 }
 
@@ -46,7 +46,7 @@ class SplashScreenViewModel {
                 case .success():
                         self.fetchMissions()
                 case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                    self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }
@@ -62,7 +62,7 @@ class SplashScreenViewModel {
                     EventsManager.shared.appendEventsToAllEvents()
                     self.fetchLeads()
                 case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                    self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }
@@ -77,7 +77,7 @@ class SplashScreenViewModel {
                 case .success():
                     self.fetchIncomes()
                 case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                    self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }
@@ -92,7 +92,7 @@ class SplashScreenViewModel {
                 case .success():
                     self.fetchOutcomes()
                 case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                    self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }
@@ -107,7 +107,7 @@ class SplashScreenViewModel {
                 case .success():
                     self.delegate?.changeLoaderState(isHidden: true)
                 case .failure(_):
-                    self.delegate?.presentErrorAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
+                    self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }

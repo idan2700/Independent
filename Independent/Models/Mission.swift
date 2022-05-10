@@ -13,7 +13,7 @@ struct Mission {
     var startDate: Date
     var endDate: Date
     var notes: String?
-    var missionID: Int
+    var missionID: String
     var eventStoreID: String
     var reminder: String
 }

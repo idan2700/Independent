@@ -16,23 +16,17 @@ protocol CreateLeadViewModelDelegate: AnyObject {
 
 class CreateLeadViewModel {
     
-    private var leadId = 0
     weak var delegate: CreateLeadViewModelDelegate?
     var nameFromContact: String?
     var phoneFromContact: String?
     
     init(delegate: CreateLeadViewModelDelegate?, leads: [Lead]) {
         self.delegate = delegate
-        if let leadID = UserDefaults.standard.value(forKey: "leadID") as? Int {
-            self.leadId = leadID
-        } else if let maxId = LeadManager.shared.allLeads.max(by: {$0.leadID < $1.leadID})?.leadID {
-            self.leadId = maxId
-        }
     }
     
     func didTapAdd(name: String, date: Date, summary: String?, phoneNumber: String) {
         guard let currentUser = Auth.auth().currentUser?.uid else {return}
-        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: genrateLeadID(), status: .open)
+        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: UUID().uuidString, status: .open)
         LeadManager.shared.saveLead(lead: lead, userName: currentUser) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
@@ -55,12 +49,5 @@ class CreateLeadViewModel {
                 self.delegate?.restartPhoneTextField()
             }
         }
-    }
-    
-    func genrateLeadID()-> Int {
-        let newId = leadId + 1
-        leadId = newId
-        UserDefaults.standard.set(newId, forKey: "leadID")
-        return leadId
     }
 }

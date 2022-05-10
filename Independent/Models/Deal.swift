@@ -15,7 +15,8 @@ struct Deal {
     var endDate: Date
     var price: String
     var notes: String?
-    var dealID: Int
+    var dealID: String
     var eventStoreID: String
     var reminder: String
+    var isAllDay: Bool
 }

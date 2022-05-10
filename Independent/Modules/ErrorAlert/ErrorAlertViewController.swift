@@ -7,22 +7,20 @@
 
 import UIKit
 
-protocol ErrorAlertViewControllerDelegate: AnyObject {
-    func didTapTryAgain()
-}
-
 class ErrorAlertViewController: UIViewController {
     @IBOutlet weak var errorView: UIView!
-    @IBOutlet weak var tryAgainButton: UIButton!
+    @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     var message: String?
-    var delegate: ErrorAlertViewControllerDelegate?
+    var buttonAction: (()->())?
+    var buttonTitle: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         errorView.makeRoundCorners(radius: 10)
-        tryAgainButton.makeRoundCorners(radius: 10)
+        actionButton.makeRoundCorners(radius: 10)
         messageLabel.text = message
+        self.actionButton.setTitle(buttonTitle ?? "נסה שנית", for: .normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,8 +32,8 @@ class ErrorAlertViewController: UIViewController {
         }
     }
     
-    @IBAction func didTapTryAgain(_ sender: UIButton) {
-        delegate?.didTapTryAgain()
+    @IBAction func didTapAction(_ sender: UIButton) {
+        buttonAction?()
         self.dismiss(animated: true)
     }
 }

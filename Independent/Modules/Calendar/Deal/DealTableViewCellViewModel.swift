@@ -27,7 +27,7 @@ class DealTableViewCellViewModel {
         return deal.name
     }
     
-    var dealID: Int {
+    var dealID: String {
         return deal.dealID
     }
     
@@ -48,11 +48,15 @@ class DealTableViewCellViewModel {
     }
     
     var time: String {
-        dateFormatter.locale = Locale(identifier: "He")
-        dateFormatter.dateFormat = "HH:mm"
-        let startTime = dateFormatter.string(from: deal.startDate)
-        let endTime = dateFormatter.string(from: deal.endDate)
-        return "\(startTime) : \(endTime)"
+        if deal.isAllDay {
+            return "יום שלם"
+        } else {
+            dateFormatter.locale = Locale(identifier: "He")
+            dateFormatter.dateFormat = "HH:mm"
+            let startTime = dateFormatter.string(from: deal.startDate)
+            let endTime = dateFormatter.string(from: deal.endDate)
+            return "\(startTime) : \(endTime)"
+        }
     }
     
     func didTapNotesButton() {

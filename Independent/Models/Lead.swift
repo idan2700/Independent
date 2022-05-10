@@ -12,7 +12,7 @@ struct Lead {
     var date: Date
     var summary: String?
     var phoneNumber: String
-    var leadID: Int
+    var leadID: String
     var status: Status
 }
 

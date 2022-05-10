@@ -26,12 +26,10 @@ extension SplashScreenViewController: SplashScreenViewModelDelegate {
         self.present(tabBarVC, animated: true, completion: nil)
     }
     
-    func presentErrorAlert(message: String) {
-        let errorAlertVC: ErrorAlertViewController = storyBoard.instantiateViewController()
-        errorAlertVC.delegate = self
-        errorAlertVC.message = message
-        errorAlertVC.modalPresentationStyle = .overFullScreen
-        self.present(errorAlertVC, animated: true, completion: nil)
+    func presentAlert(message: String) {
+        presentErrorAlert(with: message) { [weak self] in
+            self?.viewModel.start()
+        }
     }
     
     func changeLoaderState(isHidden: Bool) {
@@ -43,8 +41,3 @@ extension SplashScreenViewController: SplashScreenViewModelDelegate {
     }
 }
 
-extension SplashScreenViewController: ErrorAlertViewControllerDelegate {
-    func didTapTryAgain() {
-        viewModel.start()
-    }
-}

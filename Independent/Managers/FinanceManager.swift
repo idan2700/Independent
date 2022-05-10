@@ -23,7 +23,7 @@ class FinanceManager {
     private init() {}
     
     func saveIncome(income: Income, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection(userName).document("Incomes").collection("Income").document(String(income.id)).setData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
+        db.collection(userName).document("Incomes").collection("Income").document(income.id).setData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -84,7 +84,7 @@ class FinanceManager {
     }
     
     func editIncome(income: Income, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection(userName).document("Incomes").collection("Income").document(String(income.id)).updateData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
+        db.collection(userName).document("Incomes").collection("Income").document(income.id).updateData(["name": income.name,  "amount": income.amount, "dates": income.dates, "isDeal": income.isDeal, "eventStoreId": income.eventStoreId, "type": income.type.rawValue, "numberOfPayments": income.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -96,7 +96,7 @@ class FinanceManager {
     }
     
     func saveOutcome(outcome: Outcome, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection(userName).document("Outcomes").collection("Outcome").document(String(outcome.id)).setData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
+        db.collection(userName).document("Outcomes").collection("Outcome").document(outcome.id).setData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -155,7 +155,7 @@ class FinanceManager {
     }
     
     func editOutcome(outcome: Outcome, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection(userName).document("Outcomes").collection("Outcome").document(String(outcome.id)).updateData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
+        db.collection(userName).document("Outcomes").collection("Outcome").document(outcome.id).updateData(["name": outcome.name,  "amount": outcome.amount, "dates": outcome.dates, "type": outcome.type.rawValue, "numberOfPayments": outcome.numberOfPayments]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))

@@ -24,9 +24,11 @@ extension UIViewController: StoryboardIdentifiable {
             return UIStoryboard(name: "Main", bundle: nil)
         }
     
-    public func presentErrorAlert(with message: String) {
+    public func presentErrorAlert(with message: String, buttonTitle: String? = nil, buttonAction: (()->())? = nil) {
         let errorAlertVC: ErrorAlertViewController = storyBoard.instantiateViewController()
         errorAlertVC.message = message
+        errorAlertVC.buttonAction = buttonAction
+        errorAlertVC.buttonTitle = buttonTitle
         errorAlertVC.modalPresentationStyle = .overFullScreen
         self.present(errorAlertVC, animated: true, completion: nil)
     }

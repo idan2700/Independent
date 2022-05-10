@@ -23,7 +23,7 @@ class LeadManager {
     private init() {}
     
     func saveLead(lead: Lead, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("lead").document(userName).collection("lead").document(String(lead.leadID)).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date, "status": lead.status.statusString]) { error in
+        db.collection(userName).document("leads").collection("lead").document(lead.leadID).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date, "status": lead.status.statusString]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -35,7 +35,7 @@ class LeadManager {
     }
     
     func updateLeadStatus(lead: Lead, userName: String, status: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("lead").document(userName).collection("lead").document(String(lead.leadID)).updateData(["status": status]) { error in
+        db.collection(userName).document("leads").collection("lead").document(lead.leadID).updateData(["status": status]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -47,7 +47,7 @@ class LeadManager {
     }
     
     func updateLeadSummary(lead: Lead, userName: String, summary: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("lead").document(userName).collection("lead").document(String(lead.leadID)).updateData(["summry": summary]) { error in
+        db.collection(userName).document("leads").collection("lead").document(lead.leadID).updateData(["summry": summary]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -59,7 +59,7 @@ class LeadManager {
     }
     
     func loadLeadCollection(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("lead").document(userId).collection("lead").getDocuments { [weak self] (querySnapshot, error) in
+        db.collection(userId).document("leads").collection("lead").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 if let error = error {
@@ -83,7 +83,7 @@ class LeadManager {
                             } else if statusString == "עסקה" {
                                 status = .deal
                             }
-                            let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: Int(leadID) ?? 0, status: status)
+                            let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: leadID, status: status)
                             self.allLeads.append(newLead)
                         }
                     }
@@ -94,7 +94,7 @@ class LeadManager {
     }
     
     func deleteLead(leadId: String, userID: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("lead").document(userID).collection("lead").document(leadId).delete() { error in
+        db.collection(userID).document("leads").collection("lead").document(leadId).delete() { error in
             if let error = error {
                 complition(.failure(error))
             } else {

@@ -61,6 +61,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
         headerView.addGestureRecognizer(swipeUpRegongnizer)
         tableViewView.addGestureRecognizer(swipeUpRegongnizer)
         viewModel.didSelectDate(date: calendar.selectedDate ?? Date())
+        calendar.scope = .week
         calendar.select(Date())
     }
     
@@ -164,11 +165,11 @@ extension CalendarViewController: CalendarViewModelDelegate {
     
 
     func moveToCreateMissionVC(currentDate: Date, isNewMission: Bool, existingMission: Event?) {
-        let createMissionVC: CreateMissionViewController = storyBoard.instantiateViewController()
+        let createMissionVC: CreateEventViewController = storyBoard.instantiateViewController()
         createMissionVC.delegate = self
-        createMissionVC.viewModel = CreateMissionViewModel(delegate: createMissionVC, isNewMission: isNewMission)
-        createMissionVC.viewModel.exisitingMission = existingMission
-        createMissionVC.viewModel.currentDate = currentDate
+        createMissionVC.viewModel = CreateEventViewModel(delegate: createMissionVC, isLaunchedFromLead: false, isNewEvent: isNewMission, currentDate: currentDate, eventType: .mission)
+//        createMissionVC.viewModel = CreateMissionViewModel(delegate: createMissionVC, isNewMission: isNewMission)
+        createMissionVC.viewModel.existingEvent = existingMission
         createMissionVC.modalPresentationStyle = .overFullScreen
         self.present(createMissionVC, animated: true) {
             self.viewModel.didTapCloseEventsButtons()
@@ -176,12 +177,10 @@ extension CalendarViewController: CalendarViewModelDelegate {
     }
     
     func moveToCreateDealVC(currentDate: Date, isNewDeal: Bool, existingDeal: Event?) {
-        let createDealVC: CreateDealViewController = storyBoard.instantiateViewController()
+        let createDealVC: CreateEventViewController = storyBoard.instantiateViewController()
         createDealVC.delegate = self
-        createDealVC.viewModel = CreateDealViewModel(delegate: createDealVC, isLaunchedFromLead: false, isNewDeal: isNewDeal)
-        createDealVC.viewModel.existingDeal = existingDeal
-        createDealVC.viewModel.currentDate = currentDate
-        createDealVC.viewModel.isLaunchedFromLead = false
+        createDealVC.viewModel = CreateEventViewModel(delegate: createDealVC, isLaunchedFromLead: false, isNewEvent: isNewDeal, currentDate: currentDate, eventType: .deal)
+        createDealVC.viewModel.existingEvent = existingDeal
         createDealVC.modalPresentationStyle = .overFullScreen
         self.present(createDealVC, animated: true) {
             self.viewModel.didTapCloseEventsButtons()
@@ -199,7 +198,7 @@ extension CalendarViewController: CalendarViewModelDelegate {
     }
     
     func presentErrorAlert(message: String) {
-        self.presentErrorAlert(with: message)
+        self.presentErrorAlert(with: message, buttonAction: nil)
     }
     
     func reloadData() {
@@ -223,20 +222,20 @@ extension CalendarViewController: CalendarViewModelDelegate {
         if toPresent {
             missionButtonX.constant = missionButtonX.constant + 80.0
             dealButtonX.constant = -dealButtonX.constant - 80.0
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.2) {
                 self.missionButton.transform = CGAffineTransform(rotationAngle: ( Double.pi) * 3)
                 self.dealButton.transform = CGAffineTransform(rotationAngle: ( -Double.pi) * 3)
                 self.view.layoutIfNeeded()
             } completion: { _ in
                 self.addEventButtonWidth.constant = 0
                 self.addEventButtonHeight.constant = 0
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.1) {
                     self.addEventButton.alpha = 0
                     self.view.layoutIfNeeded()
                 } completion: { _ in
                     self.missionButtonX.constant = self.missionButtonX.constant - 40.0
                     self.dealButtonX.constant = self.dealButtonX.constant + 40.0
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.3) {
                         self.missionButton.transform = CGAffineTransform(rotationAngle:  180 * -Double.pi)
                         self.dealButton.transform = CGAffineTransform(rotationAngle: 180 * Double.pi)
                         self.closeEventsButtons.alpha = 1
@@ -247,7 +246,7 @@ extension CalendarViewController: CalendarViewModelDelegate {
         } else {
             self.missionButtonX.constant = self.missionButtonX.constant + 40.0
             self.dealButtonX.constant = self.dealButtonX.constant - 40.0
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.2) {
                 self.missionButton.transform = CGAffineTransform(rotationAngle:  3 * Double.pi)
                 self.dealButton.transform = CGAffineTransform(rotationAngle: 3 * -Double.pi)
                 self.closeEventsButtons.alpha = 0
@@ -255,19 +254,19 @@ extension CalendarViewController: CalendarViewModelDelegate {
             }  completion: { _ in
                 self.addEventButtonWidth.constant = 50
                 self.addEventButtonHeight.constant = 50
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.2) {
                     self.addEventButton.alpha = 1
                     self.view.layoutIfNeeded()
                 } completion: { _ in
                     self.missionButtonX.constant = 0.0
                     self.dealButtonX.constant = 0.0
-                    UIView.animate(withDuration: 0.5) {
+                    UIView.animate(withDuration: 0.3) {
                         self.missionButton.transform = CGAffineTransform(rotationAngle:  180 * -Double.pi)
                         self.dealButton.transform = CGAffineTransform(rotationAngle: 180 * Double.pi)
                         self.view.layoutIfNeeded()
                     } completion: { _ in
                         UIView.animate(withDuration: 0.1) {
-                            self.addEventButton.transform = CGAffineTransform.identity.scaledBy(x: 1.2, y: 1.2)
+                            self.addEventButton.transform = CGAffineTransform.identity.scaledBy(x: 1.5, y: 1.5)
                         } completion: { _ in
                             UIView.animate(withDuration: 0.1) {
                                 self.addEventButton.transform = CGAffineTransform.identity
@@ -280,12 +279,20 @@ extension CalendarViewController: CalendarViewModelDelegate {
     }
 }
 
-extension CalendarViewController: CreateDealViewControllerDelegate {
+extension CalendarViewController: CreateEventViewControllerDelegate {
     func didPick(deal: Deal, isNewDeal: Bool) {
         if isNewDeal {
             viewModel.didPickNewDeal(newDeal: deal)
         } else {
             viewModel.didPickEditedDeal(deal: deal)
+        }
+    }
+    
+    func didPick(mission: Mission, isNewMission: Bool) {
+        if isNewMission {
+            viewModel.didPickNewMission(newMission: mission)
+        } else {
+            viewModel.didPickEditedMission(mission: mission)
         }
     }
 }
@@ -314,16 +321,6 @@ extension CalendarViewController: DealTableViewCellDelegate {
     func updateCellHeight() {
         tableView.beginUpdates()
         tableView.endUpdates()
-    }
-}
-
-extension CalendarViewController: CreateMissionViewControllerDelegate {
-    func didPick(mission: Mission, isNewMission: Bool) {
-        if isNewMission {
-            viewModel.didPickNewMission(newMission: mission)
-        } else {
-            viewModel.didPickEditedMission(mission: mission)
-        }
     }
 }
 

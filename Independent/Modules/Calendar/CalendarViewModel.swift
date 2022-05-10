@@ -153,6 +153,7 @@ class CalendarViewModel {
                 switch result {
                 case .success():
                     self.createNewIncome(deal: newDeal)
+                    self.createNewLead(deal: newDeal)
                     self.handleDatePresentation(with: self.currentPresentedDate)
                     EventsManager.shared.allEvents.append(Event.deal(viewModel: DealTableViewCellViewModel(deal: newDeal)))
                     EventsManager.shared.sortEvents()
@@ -234,7 +235,7 @@ class CalendarViewModel {
     func didTapDelete(at indexPath: IndexPath) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {return}
         let currentEvent = currentPresentedDayEvents[indexPath.row]
-        var eventID = 0
+        var eventID = ""
         var eventStoreID = ""
         var collection = ""
         switch currentEvent {
@@ -247,7 +248,7 @@ class CalendarViewModel {
             eventStoreID = viewModel.mission.eventStoreID
             collection = "mission"
         }
-        EventsManager.shared.deleteEvent(eventStoreID: eventStoreID, Id: String(eventID), userID: currentUserID, collection: collection) { [weak self] result in
+        EventsManager.shared.deleteEvent(eventStoreID: eventStoreID, Id: eventID, userID: currentUserID, collection: collection) { [weak self] result in
                 guard let self = self else {return}
                 DispatchQueue.main.async {
                     switch result {
@@ -405,6 +406,24 @@ class CalendarViewModel {
                         FinanceManager.shared.allIncomes.append(editedIncome)
                     case .failure(_):
                         self.delegate?.presentErrorAlert(message: "נוצרה בעיה בפניה לשרת לצורך העריכה, אנא נסה שנית")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func createNewLead(deal: Deal) {
+        guard let userId = Auth.auth().currentUser?.uid else {return}
+        if !LeadManager.shared.allLeads.contains(where: {$0.phoneNumber == deal.phone}) {
+            let newLead = Lead(fullName: deal.name, date: Date(), summary: deal.notes, phoneNumber: deal.phone, leadID: UUID().uuidString, status: .deal)
+            LeadManager.shared.saveLead(lead: newLead, userName: userId) { [weak self] result in
+                guard let self = self else {return}
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success():
+                        LeadManager.shared.allLeads.append(newLead)
+                    case .failure(_):
+                        self.delegate?.presentErrorAlert(message: "נוצרה בעיה מול השרת בשמירת העסקה, אנא נסה שנית ")
                     }
                 }
             }

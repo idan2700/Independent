@@ -26,10 +26,6 @@
 		53184534274BC65D00DC57CF /* Mission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184533274BC65D00DC57CF /* Mission.swift */; };
 		53184536274BC72D00DC57CF /* MissionTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184535274BC72D00DC57CF /* MissionTableViewCellViewModel.swift */; };
 		53184538274BCBAD00DC57CF /* MissionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184537274BCBAD00DC57CF /* MissionTableViewCell.swift */; };
-		5318453A274BCFA600DC57CF /* CreateMissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184539274BCFA600DC57CF /* CreateMissionViewController.swift */; };
-		5318453C274BD11700DC57CF /* CreateMissionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318453B274BD11700DC57CF /* CreateMissionViewModel.swift */; };
-		5318453E274BD1A800DC57CF /* CreateMissionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318453D274BD1A800DC57CF /* CreateMissionTableViewCell.swift */; };
-		53184540274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318453F274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift */; };
 		5318454227537AB000DC57CF /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318454127537AB000DC57CF /* Event.swift */; };
 		53184544275A05A700DC57CF /* ReminderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184543275A05A700DC57CF /* ReminderTableViewCell.swift */; };
 		53184546275A05C700DC57CF /* ReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53184545275A05C700DC57CF /* ReminderViewController.swift */; };
@@ -55,6 +51,10 @@
 		532E65912791A8CE00CC96D6 /* GoalsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */; };
 		532E65932791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */; };
 		5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */; };
+		533B5BD0281ED5F200C1427D /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B5BCF281ED5F200C1427D /* CreateEventViewController.swift */; };
+		533B5BD228215C9000C1427D /* CreateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B5BD128215C9000C1427D /* CreateEventViewModel.swift */; };
+		533B5BD42827CF4D00C1427D /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B5BD32827CF4D00C1427D /* LocationViewController.swift */; };
+		533B5BD62827DA6B00C1427D /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533B5BD52827DA6B00C1427D /* LocationViewModel.swift */; };
 		533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533D5B95272A7DDC00B2A48D /* AnimationManager.swift */; };
 		5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B10E2726BD14002E5672 /* DataBaseManager.swift */; };
 		5340B1112726BD93002E5672 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5340B1102726BD93002E5672 /* AuthManager.swift */; };
@@ -72,10 +72,6 @@
 		535B215327428F0B00ADABAE /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B215227428F0B00ADABAE /* DealTableViewCell.swift */; };
 		535B215527428F8700ADABAE /* DealTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B215427428F8700ADABAE /* DealTableViewCellViewModel.swift */; };
 		535B2157274394AA00ADABAE /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B2156274394AA00ADABAE /* Deal.swift */; };
-		535B2159274396B300ADABAE /* CreateDealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B2158274396B300ADABAE /* CreateDealTableViewCell.swift */; };
-		535B215B274396CC00ADABAE /* CreateDealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B215A274396CC00ADABAE /* CreateDealViewController.swift */; };
-		535B215D274396EE00ADABAE /* CreateDealViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B215C274396EE00ADABAE /* CreateDealViewModel.swift */; };
-		535B215F2743971700ADABAE /* CreateDealTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B215E2743971700ADABAE /* CreateDealTableViewCellViewModel.swift */; };
 		535B21622745243F00ADABAE /* PlacesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B21612745243F00ADABAE /* PlacesTableViewCell.swift */; };
 		535B21642745302500ADABAE /* PlacesTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */; };
 		535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */; };
@@ -138,10 +134,6 @@
 		53184533274BC65D00DC57CF /* Mission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mission.swift; sourceTree = "<group>"; };
 		53184535274BC72D00DC57CF /* MissionTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		53184537274BCBAD00DC57CF /* MissionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionTableViewCell.swift; sourceTree = "<group>"; };
-		53184539274BCFA600DC57CF /* CreateMissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMissionViewController.swift; sourceTree = "<group>"; };
-		5318453B274BD11700DC57CF /* CreateMissionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMissionViewModel.swift; sourceTree = "<group>"; };
-		5318453D274BD1A800DC57CF /* CreateMissionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMissionTableViewCell.swift; sourceTree = "<group>"; };
-		5318453F274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMissionTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5318454127537AB000DC57CF /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		53184543275A05A700DC57CF /* ReminderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTableViewCell.swift; sourceTree = "<group>"; };
 		53184545275A05C700DC57CF /* ReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +159,10 @@
 		532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsTableViewCell.swift; sourceTree = "<group>"; };
 		532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5333ACC7272E979700CC89B1 /* CreateLeadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLeadViewController.swift; sourceTree = "<group>"; };
+		533B5BCF281ED5F200C1427D /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		533B5BD128215C9000C1427D /* CreateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewModel.swift; sourceTree = "<group>"; };
+		533B5BD32827CF4D00C1427D /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		533B5BD52827DA6B00C1427D /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		533D5B95272A7DDC00B2A48D /* AnimationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
 		5340B10E2726BD14002E5672 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		5340B1102726BD93002E5672 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -185,10 +181,6 @@
 		535B215227428F0B00ADABAE /* DealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		535B215427428F8700ADABAE /* DealTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B2156274394AA00ADABAE /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
-		535B2158274396B300ADABAE /* CreateDealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealTableViewCell.swift; sourceTree = "<group>"; };
-		535B215A274396CC00ADABAE /* CreateDealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealViewController.swift; sourceTree = "<group>"; };
-		535B215C274396EE00ADABAE /* CreateDealViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealViewModel.swift; sourceTree = "<group>"; };
-		535B215E2743971700ADABAE /* CreateDealTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDealTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B21612745243F00ADABAE /* PlacesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewCell.swift; sourceTree = "<group>"; };
 		535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadTableViewCellViewModel.swift; sourceTree = "<group>"; };
@@ -297,28 +289,6 @@
 			path = SplashScreen;
 			sourceTree = "<group>";
 		};
-		5322FB60275A7DEA00809C1F /* CreateDeal */ = {
-			isa = PBXGroup;
-			children = (
-				535B215A274396CC00ADABAE /* CreateDealViewController.swift */,
-				535B215C274396EE00ADABAE /* CreateDealViewModel.swift */,
-				535B2158274396B300ADABAE /* CreateDealTableViewCell.swift */,
-				535B215E2743971700ADABAE /* CreateDealTableViewCellViewModel.swift */,
-			);
-			path = CreateDeal;
-			sourceTree = "<group>";
-		};
-		5322FB61275A7DF900809C1F /* CreateMission */ = {
-			isa = PBXGroup;
-			children = (
-				53184539274BCFA600DC57CF /* CreateMissionViewController.swift */,
-				5318453B274BD11700DC57CF /* CreateMissionViewModel.swift */,
-				5318453D274BD1A800DC57CF /* CreateMissionTableViewCell.swift */,
-				5318453F274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift */,
-			);
-			path = CreateMission;
-			sourceTree = "<group>";
-		};
 		5322FB62275A7E1300809C1F /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +316,17 @@
 				53184535274BC72D00DC57CF /* MissionTableViewCellViewModel.swift */,
 			);
 			path = Mission;
+			sourceTree = "<group>";
+		};
+		532BC725282AAEC1005FC6FA /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				533B5BD32827CF4D00C1427D /* LocationViewController.swift */,
+				533B5BD52827DA6B00C1427D /* LocationViewModel.swift */,
+				535B21612745243F00ADABAE /* PlacesTableViewCell.swift */,
+				535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		532E6588277F252300CC96D6 /* CreateOutcome */ = {
@@ -443,11 +424,10 @@
 		535B21602743973200ADABAE /* CreateEvent */ = {
 			isa = PBXGroup;
 			children = (
-				5322FB60275A7DEA00809C1F /* CreateDeal */,
-				5322FB61275A7DF900809C1F /* CreateMission */,
+				533B5BCF281ED5F200C1427D /* CreateEventViewController.swift */,
+				533B5BD128215C9000C1427D /* CreateEventViewModel.swift */,
+				532BC725282AAEC1005FC6FA /* Location */,
 				5322FB62275A7E1300809C1F /* Reminder */,
-				535B21612745243F00ADABAE /* PlacesTableViewCell.swift */,
-				535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */,
 			);
 			path = CreateEvent;
 			sourceTree = "<group>";
@@ -784,7 +764,6 @@
 				532E65932791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift in Sources */,
 				53184544275A05A700DC57CF /* ReminderTableViewCell.swift in Sources */,
 				535B21642745302500ADABAE /* PlacesTableViewCellViewModel.swift in Sources */,
-				5318453A274BCFA600DC57CF /* CreateMissionViewController.swift in Sources */,
 				5312CFA8272A9576007001A5 /* CalendarViewController.swift in Sources */,
 				5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */,
 				53184536274BC72D00DC57CF /* MissionTableViewCellViewModel.swift in Sources */,
@@ -793,6 +772,7 @@
 				535B21452741481800ADABAE /* EditLeadSummryViewModel.swift in Sources */,
 				535B21622745243F00ADABAE /* PlacesTableViewCell.swift in Sources */,
 				532E6583277EEA7800CC96D6 /* Outcome.swift in Sources */,
+				533B5BD0281ED5F200C1427D /* CreateEventViewController.swift in Sources */,
 				532E6581277EE63B00CC96D6 /* CreateOutcomeViewModel.swift in Sources */,
 				535B5F78272C209F00992283 /* Lead.swift in Sources */,
 				5312CFA4272A937D007001A5 /* TabBarViewController.swift in Sources */,
@@ -813,17 +793,17 @@
 				53184538274BCBAD00DC57CF /* MissionTableViewCell.swift in Sources */,
 				53AF2A8F2726A29A001A359B /* RegestrationViewModel.swift in Sources */,
 				53120D8327284DF2002CB090 /* ATCTextfield.swift in Sources */,
-				535B215B274396CC00ADABAE /* CreateDealViewController.swift in Sources */,
 				530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */,
 				5312CFAE272AA8E4007001A5 /* SOTabBar.swift in Sources */,
-				5318453C274BD11700DC57CF /* CreateMissionViewModel.swift in Sources */,
 				535B215027427F8300ADABAE /* LeadManager.swift in Sources */,
+				533B5BD228215C9000C1427D /* CreateEventViewModel.swift in Sources */,
 				53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */,
 				535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */,
 				532E658F2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift in Sources */,
 				5312CFB0272AA91D007001A5 /* SOTabBarController.swift in Sources */,
 				53184546275A05C700DC57CF /* ReminderViewController.swift in Sources */,
 				5312CFB2272AA94D007001A5 /* SOTabBarItem.swift in Sources */,
+				533B5BD62827DA6B00C1427D /* LocationViewModel.swift in Sources */,
 				535B2157274394AA00ADABAE /* Deal.swift in Sources */,
 				532E65912791A8CE00CC96D6 /* GoalsTableViewCell.swift in Sources */,
 				532E6585277EF54600CC96D6 /* OutcomeTableViewCell.swift in Sources */,
@@ -832,6 +812,7 @@
 				532E6587277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift in Sources */,
 				538769EC2763948C007AA7E1 /* CreateIncomeViewController.swift in Sources */,
 				53184534274BC65D00DC57CF /* Mission.swift in Sources */,
+				533B5BD42827CF4D00C1427D /* LocationViewController.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				5318454A275A072E00DC57CF /* ReminderTime.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
@@ -839,17 +820,13 @@
 				535B215527428F8700ADABAE /* DealTableViewCellViewModel.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,
 				53E029182746566D00405D64 /* EventsManager.swift in Sources */,
-				535B215F2743971700ADABAE /* CreateDealTableViewCellViewModel.swift in Sources */,
 				530FC96F272BD5900098407F /* LeadTableViewCell.swift in Sources */,
 				535B2148274255E600ADABAE /* CalendarViewModel.swift in Sources */,
 				5318452F274A4FAB00DC57CF /* SplashScreenViewController.swift in Sources */,
 				535B215327428F0B00ADABAE /* DealTableViewCell.swift in Sources */,
 				535B21432741480800ADABAE /* EditLeadSummryViewController.swift in Sources */,
 				5325664127634C5400DF302E /* FinanceViewModel.swift in Sources */,
-				53184540274BD1C100DC57CF /* CreateMissionTableViewCellViewModel.swift in Sources */,
-				535B215D274396EE00ADABAE /* CreateDealViewModel.swift in Sources */,
 				5318454227537AB000DC57CF /* Event.swift in Sources */,
-				5318453E274BD1A800DC57CF /* CreateMissionTableViewCell.swift in Sources */,
 				530FC96A272AC38A0098407F /* LeadViewModel.swift in Sources */,
 				5340B1162726D223002E5672 /* VerifcationViewModel.swift in Sources */,
 				53AF2A5727268216001A359B /* SceneDelegate.swift in Sources */,
@@ -860,7 +837,6 @@
 				535B213C2738008D00ADABAE /* CreateLeadViewModel.swift in Sources */,
 				53184548275A06DB00DC57CF /* ReminderViewModel.swift in Sources */,
 				53AF2A8927268665001A359B /* UIViewExtension.swift in Sources */,
-				535B2159274396B300ADABAE /* CreateDealTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,6 +1025,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Independent/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "רוצה לגשת אל הלוח שנה שלך";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "יש לאשר על מנת לבצע שימוש במיקום המכשיר";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1081,6 +1058,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Independent/Info.plist;
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "רוצה לגשת אל הלוח שנה שלך";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "יש לאשר על מנת לבצע שימוש במיקום המכשיר";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

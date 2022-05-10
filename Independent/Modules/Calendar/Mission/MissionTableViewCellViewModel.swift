@@ -27,7 +27,7 @@ class MissionTableViewCellViewModel {
         return mission.name
     }
     
-    var missionID: Int {
+    var missionID: String {
         return mission.missionID
     }
     

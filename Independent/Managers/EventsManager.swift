@@ -19,17 +19,14 @@ class EventsManager {
     var allMissions = [Mission]()
     var allDeals = [Deal]()
     static let shared = EventsManager()
-    private var eventID: Int = 0
     private let db = Firestore.firestore()
     private let store = EKEventStore()
     private var storeEvents = [EKEvent]()
 
-    private init() {
-        updateEventID()
-    }
+    private init() {}
     
     func saveDeal(deal: Deal, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Events").document(userName).collection("deal").document(String(deal.dealID)).setData(["name": deal.name, "phone": deal.phone, "location": deal.location, "startDate": deal.startDate, "endDate": deal.endDate, "price": deal.price, "notes": deal.notes, "eventStoreID": deal.eventStoreID, "reminder": deal.reminder]) { error in
+        db.collection(userName).document("Events").collection("deal").document(deal.dealID).setData(["name": deal.name, "phone": deal.phone, "location": deal.location, "startDate": deal.startDate, "endDate": deal.endDate, "isAllDay": deal.isAllDay, "price": deal.price, "notes": deal.notes, "eventStoreID": deal.eventStoreID, "reminder": deal.reminder]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -41,7 +38,7 @@ class EventsManager {
     }
     
     func saveMission(mission: Mission, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Events").document(userName).collection("mission").document(String(mission.missionID)).setData(["name": mission.name, "location": mission.location, "startDate": mission.startDate, "endDate": mission.endDate, "notes": mission.notes, "eventStoreID": mission.eventStoreID, "reminder": mission.reminder]) { error in
+        db.collection(userName).document("Events").collection("mission").document(mission.missionID).setData(["name": mission.name, "location": mission.location, "startDate": mission.startDate, "endDate": mission.endDate, "notes": mission.notes, "eventStoreID": mission.eventStoreID, "reminder": mission.reminder]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -53,7 +50,7 @@ class EventsManager {
     }
     
     func editDeal(deal: Deal, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Events").document(userName).collection("deal").document(String(deal.dealID)).updateData(["name": deal.name, "phone": deal.phone, "location": deal.location, "startDate": deal.startDate, "endDate": deal.endDate, "price": deal.price, "notes": deal.notes, "eventStoreID": deal.eventStoreID, "reminder": deal.reminder]) { error in
+        db.collection(userName).document("Events").collection("deal").document(deal.dealID).updateData(["name": deal.name, "phone": deal.phone, "location": deal.location, "startDate": deal.startDate, "endDate": deal.endDate, "isAllDay": deal.isAllDay, "price": deal.price, "notes": deal.notes, "eventStoreID": deal.eventStoreID, "reminder": deal.reminder]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -65,7 +62,7 @@ class EventsManager {
     }
     
     func editMission(mission: Mission, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Events").document(userName).collection("mission").document(String(mission.missionID)).updateData(["name": mission.name, "location": mission.location, "startDate": mission.startDate, "endDate": mission.endDate, "notes": mission.notes, "eventStoreID": mission.eventStoreID, "reminder": mission.reminder]) { error in
+        db.collection(userName).document("Events").collection("mission").document(mission.missionID).updateData(["name": mission.name, "location": mission.location, "startDate": mission.startDate, "endDate": mission.endDate, "notes": mission.notes, "eventStoreID": mission.eventStoreID, "reminder": mission.reminder]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -93,7 +90,7 @@ class EventsManager {
         complition()
     }
     
-    func saveEventToStore(name: String, location: String, start: Date, end: Date, notes: String, reminder: Int?, complition: @escaping (Result<String, Error>)-> Void) {
+    func saveEventToStore(name: String, location: String, start: Date, end: Date, notes: String, isAllDay: Bool, reminder: Int?, complition: @escaping (Result<String, Error>)-> Void) {
         self.store.requestAccess(to: .event) { [weak self] succes, error in
             guard let self = self else {return}
                     if succes, error == nil {
@@ -103,6 +100,7 @@ class EventsManager {
                             newEvent.location = location
                             newEvent.startDate = start
                             newEvent.endDate = end
+                            newEvent.isAllDay = isAllDay
                             newEvent.notes = notes
                             if let reminderTime = reminder {
                             guard let alarmTime = Calendar.current.date(byAdding: .minute, value: -reminderTime, to: newEvent.startDate) else {return}
@@ -122,13 +120,14 @@ class EventsManager {
                 }
     }
     
-    func updateDealToStore(deal: Deal, name: String, location: String, start: Date, end: Date, notes: String, reminder: Int?, complition: @escaping (Result<String, Error>)-> Void) {
-            guard let event = store.event(withIdentifier: deal.eventStoreID) else {return}
-            event.title = name
-            event.location = location
-            event.startDate = start
-            event.endDate = end
-            event.notes = notes
+    func updateDealToStore(deal: Deal, name: String, location: String, start: Date, end: Date, isAllDay: Bool, notes: String, reminder: Int?, complition: @escaping (Result<String, Error>)-> Void) {
+        guard let event = store.event(withIdentifier: deal.eventStoreID) else {return}
+        event.title = name
+        event.location = location
+        event.startDate = start
+        event.endDate = end
+        event.isAllDay = isAllDay
+        event.notes = notes
         if let reminder = reminder {
             if let eventAlarms = event.alarms {
                 guard let alarmTime = Calendar.current.date(byAdding: .minute, value: -reminder, to: event.startDate) else {return}
@@ -145,15 +144,15 @@ class EventsManager {
                 }
             }
         }
-            event.calendar = self.store.defaultCalendarForNewEvents
-            do {
-                try self.store.save(event, span: .thisEvent, commit: true)
-                complition(.success(event.eventIdentifier))
-            } catch {
-                complition(.failure(error))
-                return
-            }
+        event.calendar = self.store.defaultCalendarForNewEvents
+        do {
+            try self.store.save(event, span: .thisEvent, commit: true)
+            complition(.success(event.eventIdentifier))
+        } catch {
+            complition(.failure(error))
+            return
         }
+    }
     
     func updateMissionToStore(mission: Mission, name: String, location: String, start: Date, end: Date, notes: String, reminder: Int?, complition: @escaping (Result<String, Error>)-> Void) {
         guard let event = store.event(withIdentifier: mission.eventStoreID) else {return}
@@ -189,7 +188,7 @@ class EventsManager {
     }
         
     func loadDeals(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection("Events").document(userId).collection("deal").getDocuments { [weak self] (querySnapshot, error) in
+        db.collection(userId).document("Events").collection("deal").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 if let error = error {
@@ -204,13 +203,14 @@ class EventsManager {
                            let location = document.get("location") as? String,
                            let price = document.get("price") as? String,
                            let notes = document.get("notes") as? String,
+                           let isAllDay = document.get("isAllDay") as? Bool,
                            let eventStoreID = document.get("eventStoreID") as? String,
                            let reminder = document.get("reminder") as? String,
                            let startTimeStamp = document.get("startDate") as? Timestamp,
                            let endTimeStamp = document.get("endDate") as? Timestamp {
                            let startDate = startTimeStamp.dateValue()
                             let endDate = endTimeStamp.dateValue()
-                            let newDeal = Deal(name: name, phone: phone, location: location, startDate: startDate, endDate: endDate, price: price, notes: notes, dealID: Int(dealID) ?? 0, eventStoreID: eventStoreID, reminder: reminder)
+                            let newDeal = Deal(name: name, phone: phone, location: location, startDate: startDate, endDate: endDate, price: price, notes: notes, dealID: dealID, eventStoreID: eventStoreID, reminder: reminder, isAllDay: isAllDay)
                             if newDeal.endDate < Date() {
                                 self.storeEvents.removeAll(where: {$0.eventIdentifier == newDeal.eventStoreID})
                                 self.deleteEvent(eventStoreID: newDeal.eventStoreID, Id: String(newDeal.dealID), userID: userId, collection: "deal") { result in
@@ -234,7 +234,7 @@ class EventsManager {
     
     func loadMissions(userId: String, complition: @escaping (Result<Void, Error>)-> Void) {
         var missions = [Mission]()
-        db.collection("Events").document(userId).collection("mission").getDocuments { [weak self] (querySnapshot, error) in
+        db.collection(userId).document("Events").collection("mission").getDocuments { [weak self] (querySnapshot, error) in
             guard let self = self else {return}
             DispatchQueue.main.async {
                 if let error = error {
@@ -253,7 +253,7 @@ class EventsManager {
                            let endTimeStamp = document.get("endDate") as? Timestamp {
                            let startDate = startTimeStamp.dateValue()
                             let endDate = endTimeStamp.dateValue()
-                            let newMission = Mission(name: name, location: location, startDate: startDate, endDate: endDate, notes: notes, missionID: Int(missionID) ?? 0, eventStoreID: eventStoreID, reminder: reminder)
+                            let newMission = Mission(name: name, location: location, startDate: startDate, endDate: endDate, notes: notes, missionID: missionID, eventStoreID: eventStoreID, reminder: reminder)
                             if newMission.endDate < Date() {
                                 self.storeEvents.removeAll(where: {$0.eventIdentifier == newMission.eventStoreID})
                                 self.deleteEvent(eventStoreID: newMission.eventStoreID, Id: String(newMission.missionID), userID: userId, collection: "mission") { result in
@@ -281,7 +281,7 @@ class EventsManager {
         guard let storeEvent = store.event(withIdentifier: eventStoreID) else {return}
         do {
             try self.store.remove(storeEvent, span: .thisEvent, commit: true)
-            db.collection("Events").document(userID).collection(collection).document(Id).delete() { error in
+            db.collection(userID).document("Events").collection(collection).document(Id).delete() { error in
                 if let error = error {
                     complition(.failure(error))
                 } else {
@@ -326,7 +326,7 @@ class EventsManager {
                                          startDate: event.startDate,
                                          endDate: event.endDate,
                                          notes: event.notes,
-                                         missionID: self.genrateEventID(),
+                                         missionID: UUID().uuidString,
                                          eventStoreID: event.eventIdentifier,
                                          reminder: reminder)
                 updatedMissions.append(newMission)
@@ -397,31 +397,5 @@ class EventsManager {
             }
         }
         return "ללא"
-    }
-    
-    private func updateEventID() {
-        if let eventID = UserDefaults.standard.value(forKey: "eventID") as? Int {
-            self.eventID = eventID
-        } else {
-            var allEventIds = [Int]()
-            for event in allEvents {
-                switch event {
-                case .deal(viewModel: let viewModel):
-                    allEventIds.append(viewModel.dealID)
-                case .mission(viewModel: let viewModel):
-                    allEventIds.append(viewModel.missionID)
-                }
-            }
-            if let maxID = allEventIds.max() {
-                eventID = maxID
-            }
-        }
-    }
-    
-    func genrateEventID()-> Int {
-        let newId = eventID + 1
-        eventID = newId
-        UserDefaults.standard.set(newId, forKey: "eventID")
-        return eventID
     }
 }
