@@ -12,11 +12,15 @@ protocol CreateLeadViewModelDelegate: AnyObject {
     func returnToLeadVC(with newLead: Lead)
     func presentAlert(message: String)
     func restartPhoneTextField()
+    func changeDatePickerVisability(isHidden: Bool)
+    func updateDateButtonTitle(title: String)
 }
 
 class CreateLeadViewModel {
     
     weak var delegate: CreateLeadViewModelDelegate?
+    private var isDatePickerPresented = false
+    private var fuSelectedDate: Date?
     var nameFromContact: String?
     var phoneFromContact: String?
     
@@ -26,7 +30,7 @@ class CreateLeadViewModel {
     
     func didTapAdd(name: String, date: Date, summary: String?, phoneNumber: String) {
         guard let currentUser = Auth.auth().currentUser?.uid else {return}
-        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: UUID().uuidString, status: .open)
+        let lead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phoneNumber, leadID: UUID().uuidString, status: .open, fuDate: fuSelectedDate)
         LeadManager.shared.saveLead(lead: lead, userName: currentUser) { [weak self] result in
             guard let self = self else {return}
             DispatchQueue.main.async {
@@ -49,5 +53,18 @@ class CreateLeadViewModel {
                 self.delegate?.restartPhoneTextField()
             }
         }
+    }
+    
+    func didSelectDate(date: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "He")
+        dateFormatter.dateFormat = "EEEE, d MMMM"
+        delegate?.updateDateButtonTitle(title: dateFormatter.string(from: date))
+        self.fuSelectedDate = date
+    }
+    
+    func didTapFuDate() {
+        delegate?.changeDatePickerVisability(isHidden: isDatePickerPresented)
+        isDatePickerPresented.toggle()
     }
 }

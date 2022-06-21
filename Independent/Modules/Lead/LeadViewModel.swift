@@ -22,11 +22,13 @@ protocol LeadViewModelDelegate: AnyObject {
     func changeNewLeadButtonState(isEnabled: Bool)
     func changePresentByButtonUI(currentSelectedButton: String)
     func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath)
-    func expandUpdatedCell(lead: Lead)
+    func presentUpdatedCell(lead: Lead)
     func moveToCreateDealVC(lead: Lead)
+    func moveToFuDate(lead: Lead)
     func moveToContactsVC()
     func changeMonthlyViewVisability(toPresent: Bool)
     func reloadData()
+    func addNewLeadToTableView()
 }
 
 class LeadViewModel {
@@ -172,6 +174,10 @@ class LeadViewModel {
         delegate?.changeCreateLeadButtonsVisability(toPresent: false)
     }
     
+    func didTapFu(at indexPath: IndexPath) {
+        delegate?.moveToFuDate(lead: currentMonthLeads[indexPath.row])
+    }
+    
     func didTapCall(at indexPath: IndexPath) {
         guard let phoneCallURL = URL(string: "tel://\(currentMonthLeads[indexPath.row].phoneNumber)") else { return }
         if UIApplication.shared.canOpenURL(phoneCallURL) {
@@ -268,10 +274,10 @@ class LeadViewModel {
     }
     
     func didPickNewLead(lead: Lead) {
-        self.currentMonthLeads.append(lead)
+        self.currentMonthLeads.insert(lead, at: 0)
         self.leadsHolder.append(lead)
         LeadManager.shared.allLeads.append(lead)
-        delegate?.reloadData()
+        delegate?.addNewLeadToTableView()
     }
     
     func didPickUpdatedLead(lead: Lead, indexPath: IndexPath) {
@@ -280,7 +286,7 @@ class LeadViewModel {
         LeadManager.shared.allLeads.append(lead)
         leadsHolder.append(lead)
         delegate?.reloadData()
-        delegate?.expandUpdatedCell(lead: currentMonthLeads[indexPath.row])
+        delegate?.presentUpdatedCell(lead: currentMonthLeads[indexPath.row])
     }
     
     func didTapEditLeadSummry(at indexPath: IndexPath) {

@@ -14,6 +14,7 @@ struct Lead {
     var phoneNumber: String
     var leadID: String
     var status: Status
+    var fuDate: Date?
 }
 
 enum Status {

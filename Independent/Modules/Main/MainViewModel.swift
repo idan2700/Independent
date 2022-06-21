@@ -10,6 +10,7 @@ import Firebase
 
 protocol MainViewModelDelegate: AnyObject {
     func reloadData()
+    func presentAlert(message: String)
 }
 
 class MainViewModel {
@@ -25,6 +26,7 @@ class MainViewModel {
     func start() {
         sections.append(Section(title: "מצב פיננסי", items: [.finance(viewModel: FinanceTableViewCellViewModel())]))
         sections.append(Section(title: "יעדים", items: [.goals(viewModel: GoalsTableViewCellViewModel())]))
+        sections.append(Section(title: "שיחות מעקב להיום", items: [.fu(viewModel: FuSectionTableViewCellViewModel())]))
         delegate?.reloadData()
     }
     
@@ -65,9 +67,21 @@ class MainViewModel {
     func numberOfRaws(at section: Int)-> Int {
         return sections[section].items.count
     }
-    
+        
     func getItemForCell(at indexPath: IndexPath)-> MainItem {
         return sections[indexPath.section].items[indexPath.row]
+    }
+    
+    func didPickUpdatedLead(lead: Lead) {
+        guard let index = LeadManager.shared.todaysFu.firstIndex(where: {$0.leadID == lead.leadID}) else {return}
+        LeadManager.shared.todaysFu[index].fuDate = lead.fuDate
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        if let updatedDate = lead.fuDate {
+            if dateFormatter.string(from: updatedDate) != dateFormatter.string(from: Date()) {
+                LeadManager.shared.todaysFu.remove(at: index)
+            }
+        }
+        delegate?.reloadData()
     }
 }
 
@@ -81,4 +95,7 @@ enum MainItem: CaseIterable {
     
     case finance(viewModel: FinanceTableViewCellViewModel)
     case goals(viewModel: GoalsTableViewCellViewModel)
+    case fu(viewModel: FuSectionTableViewCellViewModel)
 }
+
+

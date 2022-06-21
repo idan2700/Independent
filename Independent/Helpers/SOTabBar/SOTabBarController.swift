@@ -66,6 +66,7 @@ open class SOTabBarController: UIViewController, SOTabBarDelegate {
         constraints += [containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                         containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                         containerView.topAnchor.constraint(equalTo: view.topAnchor),
+                        containerView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
                         tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                         tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                         tabBar.heightAnchor.constraint(equalToConstant: SOTabBarSetting.tabBarHeight),
@@ -93,6 +94,5 @@ open class SOTabBarController: UIViewController, SOTabBarDelegate {
         vc.didMove(toParent: self)
         
     }
-    
 }
 

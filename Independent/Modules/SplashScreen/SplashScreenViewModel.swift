@@ -75,12 +75,27 @@ class SplashScreenViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success():
-                    self.fetchIncomes()
+                    self.setTodaysFu {
+                        self.fetchIncomes()
+                    }
                 case .failure(_):
                     self.delegate?.presentAlert(message: "נוצרה בעיה בטעינה מול השרת, אנא נסה שנית")
                 }
             }
         }
+    }
+    
+    private func setTodaysFu(completion: ()->()) {
+        let dateFormmater = DateFormatter()
+        dateFormmater.dateFormat = "dd/MM/yyyy"
+        for lead in LeadManager.shared.allLeads {
+            if let fuDate = lead.fuDate {
+                if dateFormmater.string(from: fuDate) == dateFormmater.string(from: Date()) {
+                    LeadManager.shared.todaysFu.append(lead)
+                }
+            }
+        }
+        completion()
     }
     
     private func fetchIncomes() {

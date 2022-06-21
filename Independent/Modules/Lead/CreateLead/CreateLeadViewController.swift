@@ -19,6 +19,12 @@ class CreateLeadViewController: UIViewController {
     @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var summryTextView: UITextView!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var fuView: UIView!
+    @IBOutlet weak var fuDateButton: UIButton!
+    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var datePickerHeight: NSLayoutConstraint!
+    @IBOutlet weak var seprator: UIView!
+    
     weak var delegate: CreateLeadViewControllerDelegate?
     var viewModel: CreateLeadViewModel!
     
@@ -52,21 +58,50 @@ class CreateLeadViewController: UIViewController {
        viewModel.didEditPhone(phone: sender.text ?? "")
     }
     
+    @IBAction func didTapFuDateButton(_ sender: UIButton) {
+        viewModel.didTapFuDate()
+    }
+    
     private func updateUI() {
         summryTextView.layer.cornerRadius = 10
         nameTextField.layer.cornerRadius = 10
         phoneTextField.layer.cornerRadius = 10
         addLeadButton.makeRoundCorners(radius: 10)
         addLeadView.makeRoundCorners(radius: 10)
+        fuView.makeRoundCorners(radius: 5)
+        fuDateButton.makeRoundCorners(radius: 5)
+        datePicker.overrideUserInterfaceStyle = .dark
+        datePicker.minimumDate = Date()
+        datePickerHeight.constant = 0
+        datePicker.alpha = 0
         nameTextField.attributedPlaceholder = NSAttributedString(string: "שם מלא", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
         phoneTextField.attributedPlaceholder = NSAttributedString(string: "טלפון", attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "30white")!])
+        datePicker.addTarget(self, action: #selector(didSelectDate), for: .valueChanged)
+    }
+    
+    @objc private func didSelectDate() {
+        viewModel.didSelectDate(date: datePicker.date)
     }
 }
 
 extension CreateLeadViewController: CreateLeadViewModelDelegate {
+    func updateDateButtonTitle(title: String) {
+        fuDateButton.setTitle(title, for: .normal)
+    }
+    
+    func changeDatePickerVisability(isHidden: Bool) {
+        datePickerHeight.constant = isHidden ? 0 : 280
+        seprator.isHidden = isHidden
+        UIView.animate(withDuration: 0.1) {
+            self.datePicker.alpha = isHidden ? 0 : 1
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     func returnToLeadVC(with newLead: Lead) {
-        self.delegate?.didPick(newLead: newLead)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            self.delegate?.didPick(newLead: newLead)
+        }
     }
     
     func presentAlert(message: String) {

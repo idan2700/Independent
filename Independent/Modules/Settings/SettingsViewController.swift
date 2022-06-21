@@ -16,6 +16,14 @@ class SettingsViewController: UIViewController {
      
     }
 
+    @IBAction func tap(_ sender: Any) {
+        let createDealVC: CreateEventViewController = storyBoard.instantiateViewController()
+        createDealVC.viewModel = CreateEventViewModel(delegate: createDealVC, isLaunchedFromLead: true, isNewEvent: true, currentDate: Date(), eventType: .deal)
+//        createDealVC.viewModel.name = lead.fullName
+//        createDealVC.viewModel.phone = lead.phoneNumber
+        createDealVC.modalPresentationStyle = .overFullScreen
+        self.present(createDealVC, animated: true, completion: nil)
+    }
     
     
     /*

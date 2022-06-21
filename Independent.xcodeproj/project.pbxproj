@@ -39,6 +39,13 @@
 		532566492763848200DF302E /* IncomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532566482763848200DF302E /* IncomeTableViewCell.swift */; };
 		5325664B2763849A00DF302E /* IncomeTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */; };
 		5325664D2763917800DF302E /* FinanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5325664C2763917800DF302E /* FinanceManager.swift */; };
+		532641DE2861AFDD0080915A /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641DD2861AFDD0080915A /* UIColorExtension.swift */; };
+		532641E02861B5A50080915A /* FuDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641DF2861B5A50080915A /* FuDateViewController.swift */; };
+		532641E22861B7830080915A /* FuDateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641E12861B7830080915A /* FuDateViewModel.swift */; };
+		532641E52861C6810080915A /* FuTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641E42861C6810080915A /* FuTableViewCellViewModel.swift */; };
+		532641E72861CBD40080915A /* FuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641E62861CBD40080915A /* FuTableViewCell.swift */; };
+		532641E92861D0EF0080915A /* FuSectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641E82861D0EF0080915A /* FuSectionTableViewCell.swift */; };
+		532641EB2861D1110080915A /* FuSectionTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532641EA2861D1110080915A /* FuSectionTableViewCellViewModel.swift */; };
 		53286BB5279AE92B0009F079 /* ContextualActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53286BB4279AE92B0009F079 /* ContextualActions.swift */; };
 		532A362E2775122700CD42E8 /* CreateOutcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */; };
 		532E6581277EE63B00CC96D6 /* CreateOutcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */; };
@@ -76,6 +83,7 @@
 		535B21642745302500ADABAE /* PlacesTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */; };
 		535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */; };
 		535B5F78272C209F00992283 /* Lead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B5F77272C209F00992283 /* Lead.swift */; };
+		535C76C22833E0520061A432 /* Glow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535C76C12833E0520061A432 /* Glow.swift */; };
 		538769EC2763948C007AA7E1 /* CreateIncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538769EB2763948C007AA7E1 /* CreateIncomeViewController.swift */; };
 		538769EE276394A1007AA7E1 /* CreateIncomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538769ED276394A1007AA7E1 /* CreateIncomeViewModel.swift */; };
 		53AF2A5527268216001A359B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AF2A5427268216001A359B /* AppDelegate.swift */; };
@@ -147,6 +155,13 @@
 		532566482763848200DF302E /* IncomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCell.swift; sourceTree = "<group>"; };
 		5325664A2763849A00DF302E /* IncomeTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		5325664C2763917800DF302E /* FinanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceManager.swift; sourceTree = "<group>"; };
+		532641DD2861AFDD0080915A /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		532641DF2861B5A50080915A /* FuDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuDateViewController.swift; sourceTree = "<group>"; };
+		532641E12861B7830080915A /* FuDateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuDateViewModel.swift; sourceTree = "<group>"; };
+		532641E42861C6810080915A /* FuTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		532641E62861CBD40080915A /* FuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuTableViewCell.swift; sourceTree = "<group>"; };
+		532641E82861D0EF0080915A /* FuSectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuSectionTableViewCell.swift; sourceTree = "<group>"; };
+		532641EA2861D1110080915A /* FuSectionTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuSectionTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		53286BB4279AE92B0009F079 /* ContextualActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualActions.swift; sourceTree = "<group>"; };
 		532A362D2775122700CD42E8 /* CreateOutcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewController.swift; sourceTree = "<group>"; };
 		532E6580277EE63B00CC96D6 /* CreateOutcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOutcomeViewModel.swift; sourceTree = "<group>"; };
@@ -185,6 +200,7 @@
 		535B21632745302500ADABAE /* PlacesTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		535B5F77272C209F00992283 /* Lead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lead.swift; sourceTree = "<group>"; };
+		535C76C12833E0520061A432 /* Glow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Glow.swift; sourceTree = "<group>"; };
 		538769EB2763948C007AA7E1 /* CreateIncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIncomeViewController.swift; sourceTree = "<group>"; };
 		538769ED276394A1007AA7E1 /* CreateIncomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateIncomeViewModel.swift; sourceTree = "<group>"; };
 		53AF2A5127268216001A359B /* Independent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Independent.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -263,6 +279,7 @@
 				535B5F75272C1F6E00992283 /* LeadTableViewCellViewModel.swift */,
 				535B213D273A5ECF00ADABAE /* CreateLead */,
 				535B21462741481D00ADABAE /* EditLeadSummry */,
+				532641E32861C5380080915A /* FuDate */,
 			);
 			path = Lead;
 			sourceTree = "<group>";
@@ -271,10 +288,12 @@
 			isa = PBXGroup;
 			children = (
 				53AF2A8A272695ED001A359B /* GradientView.swift */,
+				535C76C12833E0520061A432 /* Glow.swift */,
 				53AF2A8C27269B1C001A359B /* GradientButton.swift */,
 				53120D8227284DF2002CB090 /* ATCTextfield.swift */,
 				535B214B27426EDD00ADABAE /* ViewControllers.swift */,
 				53AF2A8827268665001A359B /* UIViewExtension.swift */,
+				532641DD2861AFDD0080915A /* UIColorExtension.swift */,
 				530FC966272AAAA50098407F /* SOTabBar */,
 			);
 			path = Helpers;
@@ -316,6 +335,52 @@
 				53184535274BC72D00DC57CF /* MissionTableViewCellViewModel.swift */,
 			);
 			path = Mission;
+			sourceTree = "<group>";
+		};
+		532641E32861C5380080915A /* FuDate */ = {
+			isa = PBXGroup;
+			children = (
+				532641DF2861B5A50080915A /* FuDateViewController.swift */,
+				532641E12861B7830080915A /* FuDateViewModel.swift */,
+			);
+			path = FuDate;
+			sourceTree = "<group>";
+		};
+		532641EC2861FD5C0080915A /* FuSection */ = {
+			isa = PBXGroup;
+			children = (
+				532641E82861D0EF0080915A /* FuSectionTableViewCell.swift */,
+				532641EA2861D1110080915A /* FuSectionTableViewCellViewModel.swift */,
+				532641EF2861FD960080915A /* FuCell */,
+			);
+			path = FuSection;
+			sourceTree = "<group>";
+		};
+		532641ED2861FD750080915A /* GoalsSection */ = {
+			isa = PBXGroup;
+			children = (
+				532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */,
+				532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */,
+			);
+			path = GoalsSection;
+			sourceTree = "<group>";
+		};
+		532641EE2861FD810080915A /* FinanceSection */ = {
+			isa = PBXGroup;
+			children = (
+				532E658C2788A5E000CC96D6 /* FinanceTableViewCell.swift */,
+				532E658E2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift */,
+			);
+			path = FinanceSection;
+			sourceTree = "<group>";
+		};
+		532641EF2861FD960080915A /* FuCell */ = {
+			isa = PBXGroup;
+			children = (
+				532641E42861C6810080915A /* FuTableViewCellViewModel.swift */,
+				532641E62861CBD40080915A /* FuTableViewCell.swift */,
+			);
+			path = FuCell;
 			sourceTree = "<group>";
 		};
 		532BC725282AAEC1005FC6FA /* Location */ = {
@@ -451,10 +516,9 @@
 			children = (
 				5340B11B2726D7BD002E5672 /* MainViewController.swift */,
 				532E658A27889C8D00CC96D6 /* MainViewModel.swift */,
-				532E658C2788A5E000CC96D6 /* FinanceTableViewCell.swift */,
-				532E658E2788A5ED00CC96D6 /* FinanceTableViewCellViewModel.swift */,
-				532E65902791A8CE00CC96D6 /* GoalsTableViewCell.swift */,
-				532E65922791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift */,
+				532641EE2861FD810080915A /* FinanceSection */,
+				532641ED2861FD750080915A /* GoalsSection */,
+				532641EC2861FD5C0080915A /* FuSection */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -764,10 +828,12 @@
 				532E65932791A8E600CC96D6 /* GoalsTableViewCellViewModel.swift in Sources */,
 				53184544275A05A700DC57CF /* ReminderTableViewCell.swift in Sources */,
 				535B21642745302500ADABAE /* PlacesTableViewCellViewModel.swift in Sources */,
+				532641E02861B5A50080915A /* FuDateViewController.swift in Sources */,
 				5312CFA8272A9576007001A5 /* CalendarViewController.swift in Sources */,
 				5340B10F2726BD14002E5672 /* DataBaseManager.swift in Sources */,
 				53184536274BC72D00DC57CF /* MissionTableViewCellViewModel.swift in Sources */,
 				535B214E27427BAE00ADABAE /* ErrorAlertViewController.swift in Sources */,
+				532641E72861CBD40080915A /* FuTableViewCell.swift in Sources */,
 				5340B1112726BD93002E5672 /* AuthManager.swift in Sources */,
 				535B21452741481800ADABAE /* EditLeadSummryViewModel.swift in Sources */,
 				535B21622745243F00ADABAE /* PlacesTableViewCell.swift in Sources */,
@@ -786,6 +852,7 @@
 				53AF2A5927268216001A359B /* RegestrationViewController.swift in Sources */,
 				5340B11C2726D7BD002E5672 /* MainViewController.swift in Sources */,
 				53286BB5279AE92B0009F079 /* ContextualActions.swift in Sources */,
+				532641DE2861AFDD0080915A /* UIColorExtension.swift in Sources */,
 				533D5B96272A7DDC00B2A48D /* AnimationManager.swift in Sources */,
 				530FC96C272AC3B40098407F /* LeadCollectionViewCellViewModel.swift in Sources */,
 				5340B1132726CECD002E5672 /* VerifcationViewController.swift in Sources */,
@@ -796,6 +863,7 @@
 				530FC968272ABC9A0098407F /* LeadCollectionViewCell.swift in Sources */,
 				5312CFAE272AA8E4007001A5 /* SOTabBar.swift in Sources */,
 				535B215027427F8300ADABAE /* LeadManager.swift in Sources */,
+				532641E22861B7830080915A /* FuDateViewModel.swift in Sources */,
 				533B5BD228215C9000C1427D /* CreateEventViewModel.swift in Sources */,
 				53AF2A8D27269B1C001A359B /* GradientButton.swift in Sources */,
 				535B5F76272C1F6E00992283 /* LeadTableViewCellViewModel.swift in Sources */,
@@ -809,13 +877,16 @@
 				532E6585277EF54600CC96D6 /* OutcomeTableViewCell.swift in Sources */,
 				5333ACC8272E979700CC89B1 /* CreateLeadViewController.swift in Sources */,
 				5325664D2763917800DF302E /* FinanceManager.swift in Sources */,
+				532641E92861D0EF0080915A /* FuSectionTableViewCell.swift in Sources */,
 				532E6587277EF58600CC96D6 /* OutcomeTableViewCellViewModel.swift in Sources */,
+				532641E52861C6810080915A /* FuTableViewCellViewModel.swift in Sources */,
 				538769EC2763948C007AA7E1 /* CreateIncomeViewController.swift in Sources */,
 				53184534274BC65D00DC57CF /* Mission.swift in Sources */,
 				533B5BD42827CF4D00C1427D /* LocationViewController.swift in Sources */,
 				5312CF66272A91C3007001A5 /* LeadViewController.swift in Sources */,
 				5318454A275A072E00DC57CF /* ReminderTime.swift in Sources */,
 				53AF2A5527268216001A359B /* AppDelegate.swift in Sources */,
+				532641EB2861D1110080915A /* FuSectionTableViewCellViewModel.swift in Sources */,
 				532E658D2788A5E000CC96D6 /* FinanceTableViewCell.swift in Sources */,
 				535B215527428F8700ADABAE /* DealTableViewCellViewModel.swift in Sources */,
 				53AF2A8B272695ED001A359B /* GradientView.swift in Sources */,
@@ -836,6 +907,7 @@
 				5318454C275A0A1100DC57CF /* ReminderTableViewCellViewModel.swift in Sources */,
 				535B213C2738008D00ADABAE /* CreateLeadViewModel.swift in Sources */,
 				53184548275A06DB00DC57CF /* ReminderViewModel.swift in Sources */,
+				535C76C22833E0520061A432 /* Glow.swift in Sources */,
 				53AF2A8927268665001A359B /* UIViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1031,6 +1103,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1064,6 +1137,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

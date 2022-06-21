@@ -18,12 +18,15 @@ class LeadManager {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "AllLeadsChanged"), object: nil)
         }
     }
+    
+    var todaysFu = [Lead]()
+    
     static let shared = LeadManager()
     
     private init() {}
     
     func saveLead(lead: Lead, userName: String, complition: @escaping (Result<Void, Error>)-> Void) {
-        db.collection(userName).document("leads").collection("lead").document(lead.leadID).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date, "status": lead.status.statusString]) { error in
+        db.collection(userName).document("leads").collection("lead").document(lead.leadID).setData(["name": lead.fullName, "phone": lead.phoneNumber, "summry": lead.summary, "date": lead.date, "status": lead.status.statusString, "fuDate": lead.fuDate]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -36,6 +39,18 @@ class LeadManager {
     
     func updateLeadStatus(lead: Lead, userName: String, status: String, complition: @escaping (Result<Void, Error>)-> Void) {
         db.collection(userName).document("leads").collection("lead").document(lead.leadID).updateData(["status": status]) { error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    complition(.failure(error))
+                } else {
+                    complition(.success(()))
+                }
+            }
+        }
+    }
+    
+    func updateLeadFuDate(lead:Lead, userName: String, fuDate: Date?, complition: @escaping (Result<Void, Error>)-> Void) {
+        db.collection(userName).document("leads").collection("lead").document(lead.leadID).updateData(["fuDate": fuDate]) { error in
             DispatchQueue.main.async {
                 if let error = error {
                     complition(.failure(error))
@@ -69,12 +84,14 @@ class LeadManager {
                 if let query = querySnapshot {
                     for document in query.documents {
                         let leadID = document.documentID
+                        let fuTimestamp = document.get("fuDate") as? Timestamp
                         if let name = document.get("name") as? String,
                            let phone = document.get("phone") as? String,
                            let summary = document.get("summry") as? String,
                            let statusString = document.get("status") as? String,
                            let timeStamp = document.get("date") as? Timestamp {
                            let date = timeStamp.dateValue()
+                            let fuDate = fuTimestamp?.dateValue()
                             var status = Status.open
                             if statusString == "פתוח" {
                                 status = .open
@@ -83,7 +100,7 @@ class LeadManager {
                             } else if statusString == "עסקה" {
                                 status = .deal
                             }
-                            let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: leadID, status: status)
+                            let newLead = Lead(fullName: name, date: date, summary: summary, phoneNumber: phone, leadID: leadID, status: status, fuDate: fuDate)
                             self.allLeads.append(newLead)
                         }
                     }

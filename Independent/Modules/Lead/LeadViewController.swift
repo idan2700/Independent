@@ -25,7 +25,6 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var noLeadsLabel: UILabel!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var addleadButtonsWidth: NSLayoutConstraint!
-    @IBOutlet weak var searchBarWidth: NSLayoutConstraint!
     @IBOutlet weak var presentByButtonsView: UIStackView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var presentByButtons: [UIButton]!
@@ -35,6 +34,8 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
     var viewModel: LeadViewModel!
+    
+    var tabBarVC: SOTabBarController!
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +100,6 @@ class LeadViewController: UIViewController, UIGestureRecognizerDelegate {
         addFromContactsButton.layer.cornerRadius = 10
         collectionViewHeight.constant = (view.frame.width - 31) / 3
         addleadButtonsWidth.constant = 0
-        searchBarWidth.constant = self.view.frame.width - 60
         presentByButtonsView.makeRoundCorners(radius: 10)
         if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
             let atrbString = NSAttributedString(string: "חפש ליד", attributes: [.foregroundColor : UIColor(named: "30white")!, .font : UIFont.systemFont(ofSize: 10)])
@@ -170,8 +170,7 @@ extension LeadViewController: UITableViewDelegate {
         let lock = createTableViewAction(title: "סגור ליד", image: UIImage(systemName: "lock")!) {
             self.viewModel.didTapLockLead(at: indexPath)
         }
-        UIButton.appearance().setTitleColor(.black, for: .normal)
-        closeDeal.backgroundColor = UIColor(named: "gold")!
+        closeDeal.backgroundColor = .gold
         
         if viewModel.currentMonthLeads[indexPath.row].status == .closed {
             return UISwipeActionsConfiguration()
@@ -193,6 +192,33 @@ extension LeadViewController: UITableViewDelegate {
         }
         return UISwipeActionsConfiguration(actions: [delete])
     }
+    
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+
+        if #available(iOS 13.0, *) {
+            for subview in tableView.subviews {
+                if NSStringFromClass(type(of: subview)) == "_UITableViewCellSwipeContainerView" {
+                    for swipeContainerSubview in subview.subviews {
+                        if NSStringFromClass(type(of: swipeContainerSubview)) == "UISwipeActionPullView" {
+                            for case let button as UIButton in swipeContainerSubview.subviews {
+                                button.titleLabel?.font = .systemFont(ofSize: 12)
+                                button.setTitleColor(.black, for: .normal)
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            for subview in tableView.subviews {
+                if NSStringFromClass(type(of: subview)) == "UISwipeActionPullView" {
+                    for case let button as UIButton in subview.subviews {
+                        button.titleLabel?.font = .systemFont(ofSize: 12)
+                        button.setTitleColor(.black, for: .normal)
+                    }
+                }
+            }
+        }
+     }
 }
 
 extension LeadViewController: CNContactPickerDelegate {
@@ -212,6 +238,14 @@ extension LeadViewController: UISearchBarDelegate {
 }
 
 extension LeadViewController: LeadViewModelDelegate {
+    func moveToFuDate(lead: Lead) {
+        let fuDateVC: FuDateViewController = storyBoard.instantiateViewController()
+        fuDateVC.delegate = self
+        fuDateVC.viewModel = FuDateViewModel(delegate: fuDateVC, lead: lead)
+        fuDateVC.modalPresentationStyle = .overFullScreen
+        self.present(fuDateVC, animated: true, completion: nil)
+    }
+    
    
     func moveToCreateDealVC(lead: Lead) {
         let createDealVC: CreateEventViewController = storyBoard.instantiateViewController()
@@ -222,11 +256,12 @@ extension LeadViewController: LeadViewModelDelegate {
         self.present(createDealVC, animated: true, completion: nil)
     }
     
-    func expandUpdatedCell(lead: Lead) {
-        guard let index = viewModel.currentMonthLeads.firstIndex(where: {$0.phoneNumber == lead.phoneNumber}) else {return}
+    func presentUpdatedCell(lead: Lead) {
+        guard let index = viewModel.currentMonthLeads.firstIndex(where: {$0.leadID == lead.leadID}) else {return}
         let indexPath = IndexPath(row: index, section: 0)
         guard let cell = tableView.cellForRow(at: indexPath) as? LeadTableViewCell else {return}
-        cell.didTapInfo(cell.infoButton)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        cell.cellView.glowOnce()
     }
     
     func moveToEditSummryLeadVC(with lead: Lead, indexPath: IndexPath) {
@@ -302,7 +337,6 @@ extension LeadViewController: LeadViewModelDelegate {
     func changeCreateLeadButtonsVisability(toPresent: Bool) {
         if toPresent {
             addleadButtonsWidth.constant = 150
-            searchBarWidth.constant = self.view.frame.width - 70 - addleadButtonsWidth.constant - 5
             UIView.animate(withDuration: 0.5) {
                 self.newLeadButton.transform = CGAffineTransform(rotationAngle: -150)
                 self.addManualyButton.alpha = 1
@@ -311,7 +345,6 @@ extension LeadViewController: LeadViewModelDelegate {
             }
         } else {
             addleadButtonsWidth.constant = 0
-            searchBarWidth.constant = self.view.frame.width - 70
             UIView.animate(withDuration: 0.5) {
                 self.newLeadButton.transform = CGAffineTransform(rotationAngle: ( -Double.pi) * 3)
                 self.addManualyButton.alpha = 0
@@ -336,9 +369,22 @@ extension LeadViewController: LeadViewModelDelegate {
             }
         }
     }
+    
+    func addNewLeadToTableView() {
+        self.tableView.beginUpdates()
+        self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .right)
+        self.tableView.endUpdates()
+        guard let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? LeadTableViewCell else {return}
+        cell.cellView.glowOnce()
+    }
 }
 
 extension LeadViewController: LeadTableViewCellDelegate {
+    func didTapFu(cell: LeadTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {return}
+        viewModel.didTapFu(at: indexPath)
+    }
+    
     func didTapEditSummry(cell: LeadTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {return}
         viewModel.didTapEditLeadSummry(at: indexPath)
@@ -372,3 +418,13 @@ extension LeadViewController: EditLeadSummryViewControllerDelegate {
         viewModel.didPickUpdatedLead(lead: updatedLead, indexPath: indexPath)
     }
 }
+
+extension LeadViewController: FuDateViewControllerDelegate {
+    func didPick(updatedLead: Lead) {
+        guard let index = viewModel.currentMonthLeads.firstIndex(where: {$0.leadID == updatedLead.leadID}) else {return}
+        let indexPath = IndexPath(row: index, section: 0)
+        viewModel.didPickUpdatedLead(lead: updatedLead, indexPath: indexPath)
+    }
+}
+
+

@@ -12,6 +12,7 @@ protocol LeadTableViewCellDelegate: AnyObject {
     func didTapInfo(cell: LeadTableViewCell, isInfoButtonOpen: Bool)
     func didTapOpenLead(cell: LeadTableViewCell)
     func didTapEditSummry(cell: LeadTableViewCell)
+    func didTapFu(cell: LeadTableViewCell)
 }
 
 class LeadTableViewCell: UITableViewCell {
@@ -22,6 +23,9 @@ class LeadTableViewCell: UITableViewCell {
     @IBOutlet weak var summryLabel: UILabel!
     @IBOutlet weak var summaryLabelView: UIStackView!
     @IBOutlet weak var statusImageView: UIImageView!
+    @IBOutlet weak var fuStackView: UIStackView!
+    @IBOutlet weak var fuButton: UIButton!
+    
     weak var delegate: LeadTableViewCellDelegate?
     private var isInfoButtonOpen: Bool = false
   
@@ -32,6 +36,9 @@ class LeadTableViewCell: UITableViewCell {
         updateUI()
     }
     
+    @IBAction func didTapFu(_ sender: UIButton) {
+        delegate?.didTapFu(cell: self)
+    }
     
     @IBAction func didTapInfo(_ sender: UIButton) {
         isInfoButtonOpen = !isInfoButtonOpen
@@ -44,10 +51,12 @@ class LeadTableViewCell: UITableViewCell {
         nameLabel.text = viewModel.name
         dateLabel.text = viewModel.date
         let summryAttributed = NSMutableAttributedString(string: viewModel.summry)
+        let space = NSMutableAttributedString(string: "  ")
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(systemName: "pencil")
-        imageAttachment.image = imageAttachment.image?.withTintColor(UIColor(named: "gold")!)
+        imageAttachment.image = imageAttachment.image?.withTintColor(.gold)
         let imageString = NSAttributedString(attachment: imageAttachment)
+        summryAttributed.append(space)
         summryAttributed.append(imageString)
         self.summryLabel.attributedText = summryAttributed
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTextEditTap))
@@ -76,14 +85,18 @@ class LeadTableViewCell: UITableViewCell {
         case .open:
             statusImageView.image = nil
             infoButton.backgroundColor = .systemOrange
+            fuStackView.isHidden = false
+            fuButton.tintColor = viewModel.lead.fuDate != nil ? .systemPink : .veryDarkGray
         case .closed:
             statusImageView.image = UIImage(systemName: "lock")
-            statusImageView.tintColor = UIColor(named: "ired") ?? .red
-            infoButton.backgroundColor = UIColor(named: "ired") ?? .red
+            statusImageView.tintColor = .iRed
+            infoButton.backgroundColor = .iRed
+            fuStackView.isHidden = true
         case .deal:
             statusImageView.image = UIImage(systemName: "checkmark")
-            statusImageView.tintColor = UIColor(named: "igreen") ?? .green
-            infoButton.backgroundColor = UIColor(named: "igreen") ?? .green
+            statusImageView.tintColor = .iGreen
+            infoButton.backgroundColor = .iGreen
+            fuStackView.isHidden = true
         }
     }
     

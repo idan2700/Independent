@@ -43,34 +43,8 @@ class CreateEventViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        detailsView.makeRoundCorners(radius: 5)
-        locationView.makeRoundCorners(radius: 5)
-        dateView.makeRoundCorners(radius: 5)
-        reminderView.makeRoundCorners(radius: 5)
-        startTimeButton.makeRoundCorners(radius: 5)
-        startDateButton.makeRoundCorners(radius: 5)
-        endDateButton.makeRoundCorners(radius: 5)
-        endTimeButton.makeRoundCorners(radius: 5)
-        reminderButton.makeRoundCorners(radius: 5)
-        notesTextView.makeRoundCorners(radius: 5)
-        startDatePicker.addTarget(self, action: #selector(didSelectStartDate), for: .valueChanged)
-        endDatePicker.addTarget(self, action: #selector(didSelectEndDate), for: .valueChanged)
-        startDateButton.makeRoundCorners(radius: 5)
-        endDateButton.makeRoundCorners(radius: 5)
-        startTimeButton.makeRoundCorners(radius: 5)
-        endTimeButton.makeRoundCorners(radius: 5)
-        startDateButton.setTitle(viewModel.startDate, for: .normal)
-        endDateButton.setTitle(viewModel.endDate, for: .normal)
-        startTimeButton.setTitle(viewModel.startTime, for: .normal)
-        endTimeButton.setTitle(viewModel.endTime, for: .normal)
-        startDatePicker.overrideUserInterfaceStyle = .dark
-        endDatePicker.overrideUserInterfaceStyle = .dark
-        startDatePicker.minimumDate = Date()
-        endDatePicker.minimumDate = Date()
-        startDatePicker.date = Calendar.current.date(byAdding: .minute , value: 15, to: Date()) ?? Date()
-        viewModel.didSelectStartDate(date: startDatePicker.date)
-        endDatePicker.date = Calendar.current.date(byAdding: .hour, value: 1, to: startDatePicker.date) ?? Date()
         setTextFields()
+        updateUI()
         viewModel.checkForExisitingEvent()
         viewModel.start()
     }
@@ -144,6 +118,37 @@ class CreateEventViewController: UIViewController {
         phoneTextField.text = viewModel.phone
         nameTextField.text = viewModel.name
     }
+    
+    private func updateUI() {
+        detailsView.makeRoundCorners(radius: 5)
+        locationView.makeRoundCorners(radius: 5)
+        dateView.makeRoundCorners(radius: 5)
+        reminderView.makeRoundCorners(radius: 5)
+        startTimeButton.makeRoundCorners(radius: 5)
+        startDateButton.makeRoundCorners(radius: 5)
+        endDateButton.makeRoundCorners(radius: 5)
+        endTimeButton.makeRoundCorners(radius: 5)
+        reminderButton.makeRoundCorners(radius: 5)
+        notesTextView.makeRoundCorners(radius: 5)
+        startDatePicker.addTarget(self, action: #selector(didSelectStartDate), for: .valueChanged)
+        endDatePicker.addTarget(self, action: #selector(didSelectEndDate), for: .valueChanged)
+        startDateButton.makeRoundCorners(radius: 5)
+        endDateButton.makeRoundCorners(radius: 5)
+        startTimeButton.makeRoundCorners(radius: 5)
+        endTimeButton.makeRoundCorners(radius: 5)
+        startDateButton.setTitle(viewModel.startDate, for: .normal)
+        endDateButton.setTitle(viewModel.endDate, for: .normal)
+        startTimeButton.setTitle(viewModel.startTime, for: .normal)
+        endTimeButton.setTitle(viewModel.endTime, for: .normal)
+        startDatePicker.overrideUserInterfaceStyle = .dark
+        endDatePicker.overrideUserInterfaceStyle = .dark
+        startDatePicker.minimumDate = Date()
+        endDatePicker.minimumDate = Date()
+        startDatePicker.date = Calendar.current.date(byAdding: .minute , value: 15, to: Date()) ?? Date()
+        viewModel.didSelectStartDate(date: startDatePicker.date)
+        endDatePicker.date = Calendar.current.date(byAdding: .hour, value: 1, to: startDatePicker.date) ?? Date()
+    }
+    
 }
 
 extension CreateEventViewController: UITextFieldDelegate {
